@@ -1,4 +1,4 @@
-package com.example.ivisitmobile
+package com.tnetic.ivisit
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -8,7 +8,7 @@
 PRODUCT_NAME = ivisitmobile
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.ivisitmobile
+PRODUCT_BUNDLE_IDENTIFIER = com.tnetic.ivisit
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 com.example. All rights reserved.
