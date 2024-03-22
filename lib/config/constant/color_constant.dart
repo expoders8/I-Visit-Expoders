@@ -2,8 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 const kAppBarColor = Color(0xFF11294D);
-const kButtonColor = Color(0XFF186ADE);
-const kPrimaryColor = Color.fromARGB(255, 29, 29, 29);
+const kButtonColor = Color(0xFF000000);
+const kPrimaryColor = Color(0xFF000000);
 const kTitleColor = Color(0XFF3E5463);
 const kTitleSecondColor = Color.fromARGB(255, 144, 141, 139);
 const kErrorColor = Color(0xFFC8352A);
@@ -15,6 +15,7 @@ const kSectionColor = Color(0xFF2C9BD9);
 const kTextSecondaryColor = Color(0xFF99A5BD);
 const kCardColor = Color(0XFFFFFFFF);
 const kDividerColor = Color(0XFFBFC5CC);
+const kDiscriptionColor = Color(0xFF999999);
 
 const kTransparentColor = Color(0x00000000);
 const kWhiteColor = Color(0XFFFFFFFF);

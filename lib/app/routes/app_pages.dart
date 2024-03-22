@@ -1,6 +1,10 @@
 import 'package:get/get.dart';
 
+import '../ui/AccessPoint/access_point.dart';
 import '../ui/Auth/login.dart';
+import '../ui/ForgotBadgeId/forgot_badge_id.dart';
+import '../ui/QR Scanner/qr_scanner.dart';
+import '../ui/Welcome Screen/welcome_screen.dart';
 
 part 'app_routes.dart';
 
@@ -13,6 +17,22 @@ class AppPages {
     GetPage(
       name: _Paths.loginPage,
       page: () => const LoginPage(),
+    ),
+    GetPage(
+      name: _Paths.accessPointPage,
+      page: () => const AccessPointPage(),
+    ),
+    GetPage(
+      name: _Paths.welcomePage,
+      page: () => const WelcomePage(),
+    ),
+    GetPage(
+      name: _Paths.qrScannerPage,
+      page: () => const QrScannerPage(),
+    ),
+    GetPage(
+      name: _Paths.forgotbadgeIdPage,
+      page: () => const ForgotbadgeIdPage(),
     ),
   ];
 }

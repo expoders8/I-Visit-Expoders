@@ -39,6 +39,7 @@ dependencies:
   flutter_overlay_loader: ^2.0.0
   lottie: ^2.7.0
   provider: ^6.0.3
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +82,30 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: CircularStdBlack
+      fonts:
+        - asset: assets/fonts/CircularStd-Black.ttf
+
+    - family: CircularStdBold
+      fonts:
+        - asset: assets/fonts/CircularStd-Bold.ttf
+
+    - family: CircularStdBook
+      fonts:
+        - asset: assets/fonts/CircularStd-Book.ttf
+
+    - family: CircularStdMedium
+      fonts:
+        - asset: assets/fonts/CircularStd-Medium.ttf
+
+    - family: WorkSans
+      fonts:
+        - asset: assets/fonts/work-sans-medium.ttf
+
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

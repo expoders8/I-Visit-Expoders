@@ -41,19 +41,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   validateInput(value) {
     if (isTouched || widget.formSubmitted) {
       if (value != null && value?.toString() != '') {
-        // if (widget.name == 'email') {
-        //   if (value.isEmpty) {
-        //     widget.validationMsg;
-        //   } else {
-        //     const pattern =
-        //         r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9-.]+$)';
-        //     final regExp = RegExp(pattern);
+        if (widget.name == 'email') {
+          if (value.isEmpty) {
+            widget.validationMsg;
+          } else {
+            const pattern =
+                r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9-.]+$)';
+            final regExp = RegExp(pattern);
 
-        //     if (!regExp.hasMatch(value.toString())) {
-        //       return "Please enter valid email";
-        //     }
-        //   }
-        // }
+            if (!regExp.hasMatch(value.toString())) {
+              return "Please enter valid email";
+            }
+          }
+        }
         // if (widget.name == "password") {
         //   if (value.isEmpty) {
         //     widget.validationMsg;
@@ -81,8 +81,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       decoration: InputDecoration(
         hintText: widget.hintText,
         filled: true,
-        fillColor: kWhiteColor,
-        contentPadding: const EdgeInsets.fromLTRB(38, 0, 10, 0),
+        fillColor: kTransparentColor,
+        contentPadding: const EdgeInsets.fromLTRB(18, 0, 10, 0),
         hintStyle: const TextStyle(color: kGreyColor),
         labelStyle: const TextStyle(color: kBlackColor),
         prefixIcon: widget.prefixIcon,
@@ -92,7 +92,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 highlightColor: kTransparentColor,
                 icon: Icon(
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: kPrimaryColor,
+                  color: kIconColor,
                   size: 18,
                 ),
                 onPressed: () {
@@ -104,28 +104,28 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             : null,
         border: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: Colors.grey, // Default border color
+            color: Color(0xFFD8DFEB),
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(25),
         ),
         errorBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: kErrorColor, // Default border color
+            color: kErrorColor,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(25),
         ),
         errorStyle: const TextStyle(color: kErrorColor),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: Colors.grey, // Default border color
+            color: Color(0xFFD8DFEB),
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(25),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: Colors.grey, // Default border color
+            color: Color(0xFFD8DFEB),
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(25),
         ),
       ),
       maxLines: widget.maxLines,
