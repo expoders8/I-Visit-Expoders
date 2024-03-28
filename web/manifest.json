@@ -1,6 +1,6 @@
 {
-    "name": "ivisitmobile",
-    "short_name": "ivisitmobile",
+    "name": "ivisit",
+    "short_name": "ivisit",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

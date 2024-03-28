@@ -1,20 +1,23 @@
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:face_camera/face_camera.dart';
 
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../routes/app_pages.dart';
 
-class QrScannerPage extends StatefulWidget {
-  const QrScannerPage({super.key});
+class TakePhotoPage extends StatefulWidget {
+  const TakePhotoPage({super.key});
 
   @override
-  State<QrScannerPage> createState() => _QrScannerPageState();
+  State<TakePhotoPage> createState() => _TakePhotoPageState();
 }
 
-class _QrScannerPageState extends State<QrScannerPage> {
-  final qrKey = GlobalKey(debugLabel: 'QR');
+class _TakePhotoPageState extends State<TakePhotoPage> {
+  File? imageFile;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,45 +63,49 @@ class _QrScannerPageState extends State<QrScannerPage> {
               scale: 1.5,
             ),
             const SizedBox(height: 80),
-            const Text("WELCOME TO DREAMWORKS!",
+            const Text("We need to take your photo. Smile!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: kPrimaryColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 16)),
             const SizedBox(height: 10),
-            const Text("Scan Below",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: kDiscriptionColor,
-                    fontFamily: kCircularStdMedium,
-                    fontSize: 14)),
-            const SizedBox(height: 10),
             Expanded(
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: onQRViewCreated,
-                overlay: QrScannerOverlayShape(
-                    borderColor: kWhiteColor,
-                    borderRadius: 14,
-                    borderLength: 20,
-                    borderWidth: 5,
-                    cutOutHeight: 260,
-                    cutOutWidth: 260),
-              ),
+              child: imageFile == null
+                  ? SmartFaceCamera(
+                      defaultCameraLens: CameraLens.front,
+                      onCapture: (File? image) {
+                        setState(() {
+                          imageFile = File(image!.path);
+                        });
+                        Get.toNamed(Routes.thankYouPage);
+                      },
+                    )
+                  : Stack(
+                      children: [
+                        Image.file(
+                          imageFile!,
+                          fit: BoxFit.cover,
+                        ),
+                        Positioned(
+                            child: IconButton(
+                          icon: const Icon(
+                            Icons.delete_rounded,
+                            color: kWhiteColor,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              imageFile = null;
+                            });
+                          },
+                        ))
+                      ],
+                    ),
             ),
             const SizedBox(height: 10),
           ],
         ),
       ),
-    );
-  }
-
-  void onQRViewCreated(QRViewController controller) {
-    controller.scannedDataStream.listen(
-      (scanData) {
-        controller.dispose();
-      },
     );
   }
 }

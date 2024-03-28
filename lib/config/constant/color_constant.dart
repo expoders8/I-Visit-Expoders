@@ -8,12 +8,13 @@ const kTitleColor = Color(0XFF3E5463);
 const kTitleSecondColor = Color.fromARGB(255, 144, 141, 139);
 const kErrorColor = Color(0xFFC8352A);
 const kSecondaryPrimaryColor = Color(0xFF666670);
-const kIconColor = Color(0xFF7D8CA3);
+const kIconColor = Color(0xFF485462);
 const kBackGroundColor = Color(0XFFF4F6F7);
 const kSelectedIconColor = Color(0xFF08415C);
 const kSectionColor = Color(0xFF2C9BD9);
 const kTextSecondaryColor = Color(0xFF99A5BD);
 const kCardColor = Color(0XFFFFFFFF);
+const kBorderColor = Color(0xFFD8DFEB);
 const kDividerColor = Color(0XFFBFC5CC);
 const kDiscriptionColor = Color(0xFF999999);
 

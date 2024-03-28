@@ -1,23 +1,22 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../routes/app_pages.dart';
-import '../widgets/custom_textfield.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/imagepicker_provider.dart';
+import '../../routes/app_pages.dart';
 
-class ForgotbadgeIdPage extends StatefulWidget {
-  const ForgotbadgeIdPage({super.key});
+class ReviewDocumentPage extends StatefulWidget {
+  const ReviewDocumentPage({super.key});
 
   @override
-  State<ForgotbadgeIdPage> createState() => _ForgotbadgeIdPageState();
+  State<ReviewDocumentPage> createState() => _ReviewDocumentPageState();
 }
 
-class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController badgeIdController = TextEditingController();
-  bool isFormSubmitted = false;
+class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,12 +54,12 @@ class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
                       style: TextStyle(
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,
-                          fontSize: 13)),
+                          fontSize: 14)),
                   const Text("Today is Saturday, October 28, 2022 at 8:30 am.",
                       style: TextStyle(
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,
-                          fontSize: 13)),
+                          fontSize: 14)),
                   const SizedBox(height: 52),
                   Image.asset(
                     "assets/i-Visits_logo.png",
@@ -68,56 +67,24 @@ class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
                     scale: 1.5,
                   ),
                   const SizedBox(height: 80),
-                  const Text("WELCOME TO DREAMWORKS!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: kPrimaryColor,
-                          fontFamily: kCircularStdMedium,
-                          fontSize: 16)),
-                  const SizedBox(height: 10),
-                  const Text("Please provide the following:",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: kDiscriptionColor,
-                          fontFamily: kCircularStdMedium,
-                          fontSize: 14)),
-                  const SizedBox(height: 30),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      builsTitleWidget("Email"),
-                      const SizedBox(height: 5.0),
-                      SizedBox(
-                        width: Get.width > 500 ? 600 : Get.width,
-                        child: CustomTextFormField(
-                          hintText: 'Email',
-                          maxLines: 1,
-                          ctrl: emailController,
-                          name: "email",
-                          formSubmitted: isFormSubmitted,
-                          validationMsg: 'Email is Required',
-                        ),
-                      ),
                       const SizedBox(height: 12.0),
-                      builsTitleWidget("Badge ID"),
-                      const SizedBox(height: 5.0),
-                      SizedBox(
-                        width: Get.width > 500 ? 600 : Get.width,
-                        child: CustomTextFormField(
-                          hintText: 'Badge ID',
-                          maxLines: 1,
-                          ctrl: badgeIdController,
-                          name: "badgeid",
-                          formSubmitted: isFormSubmitted,
-                          validationMsg: 'Badge ID is Required',
-                        ),
+                      builsTitleWidget("Read and review the document  below."),
+                      SizedBox(height: 25),
+                      const Text(
+                        "Scroll down to sign",
+                        style: TextStyle(
+                            color: kPrimaryColor,
+                            fontFamily: kCircularStdMedium,
+                            fontSize: 14),
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 10.0,
+                    height: 190.0,
                   ),
-                  const SizedBox(height: 30),
                 ],
               ),
               SizedBox(
@@ -132,7 +99,7 @@ class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
                           fontFamily: kCircularStdMedium,
                           fontSize: 14)),
                   onPressed: () {
-                    Get.toNamed(Routes.processFlowPage);
+                    Get.toNamed(Routes.takePhotoPage);
                   },
                 ),
               ),

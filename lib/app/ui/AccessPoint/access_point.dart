@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:ivisitmobile/app/routes/app_pages.dart';
-import 'package:ivisitmobile/config/constant/font_constant.dart';
-import 'package:ivisitmobile/config/constant/color_constant.dart';
+
+import '../../../config/constant/color_constant.dart';
+import '../../../config/constant/font_constant.dart';
+import '../../routes/app_pages.dart';
 
 class AccessPointPage extends StatefulWidget {
   const AccessPointPage({super.key});

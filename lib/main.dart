@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:face_camera/face_camera.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'app/routes/app_pages.dart';
@@ -12,6 +13,7 @@ int? isviewed = 0;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  await FaceCamera.initialize();
 
   if (getStorage.read('firstTimeLaunch') == null) {
     getStorage.erase();

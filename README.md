@@ -1,4 +1,4 @@
-# ivisitmobile
+# ivisit
 
 A new Flutter project.
 
