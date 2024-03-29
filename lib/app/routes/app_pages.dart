@@ -7,6 +7,7 @@ import '../ui/ProcessFlow/process_flow.dart';
 import '../ui/QR Scanner/qr_scanner.dart';
 import '../ui/Question/question.dart';
 import '../ui/ReviewDocument/review_document.dart';
+import '../ui/SplasScreen/splas.dart';
 import '../ui/TakePhoto/take_photo.dart';
 import '../ui/ThankYou/thank_you.dart';
 import '../ui/Welcome Screen/welcome_screen.dart';
@@ -16,9 +17,13 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const initial = Routes.loginPage;
+  static const initial = Routes.splashScreen;
 
   static final routes = [
+    GetPage(
+      name: _Paths.splashScreen,
+      page: () => const SplashScreen(),
+    ),
     GetPage(
       name: _Paths.loginPage,
       page: () => const LoginPage(),

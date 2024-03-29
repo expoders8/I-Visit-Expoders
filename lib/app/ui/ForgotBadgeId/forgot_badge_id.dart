@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
+import '../../../config/constant/constant.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/custom_textfield.dart';
 import '../../../config/constant/font_constant.dart';
@@ -18,8 +20,22 @@ class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController badgeIdController = TextEditingController();
   bool isFormSubmitted = false;
+  String accessPoint = "";
+  @override
+  void initState() {
+    var data = getStorage.read('accessPoint') ?? "";
+    setState(() {
+      accessPoint = data;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('MMMM dd yyyy').format(now);
+    String formattedTime = DateFormat('hh:mm a').format(now);
+    String day = DateFormat('EEEE').format(now);
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: AppBar(
@@ -51,13 +67,13 @@ class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 10),
-                  const Text("FRONT DESK",
-                      style: TextStyle(
+                  Text(accessPoint,
+                      style: const TextStyle(
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,
                           fontSize: 13)),
-                  const Text("Today is Saturday, October 28, 2022 at 8:30 am.",
-                      style: TextStyle(
+                  Text("Today is $day, $formattedDate at $formattedTime.",
+                      style: const TextStyle(
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,
                           fontSize: 13)),

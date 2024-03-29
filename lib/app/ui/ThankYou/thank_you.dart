@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../AccessPoint/access_point.dart';
 
 class ThankYouPage extends StatefulWidget {
   const ThankYouPage({super.key});
@@ -17,12 +20,17 @@ class ThankYouPage extends StatefulWidget {
 
 class _ThankYouPageState extends State<ThankYouPage> {
   File? imageFile;
+  String accessPoint = "";
   late VideoPlayerController _controller;
   bool showOverlay = false, _isPlaying = false, isBuffering = false;
   double _sliderValue = 0.0;
   @override
   void initState() {
     super.initState();
+    var data = getStorage.read('accessPoint') ?? "";
+    setState(() {
+      accessPoint = data;
+    });
     Future.delayed(const Duration(milliseconds: 180), () async {
       showOverlay = false;
       _isPlaying = true;
@@ -54,6 +62,10 @@ class _ThankYouPageState extends State<ThankYouPage> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('MMMM dd yyyy').format(now);
+    String formattedTime = DateFormat('hh:mm a').format(now);
+    String day = DateFormat('EEEE').format(now);
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: AppBar(
@@ -80,13 +92,13 @@ class _ThankYouPageState extends State<ThankYouPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
-            const Text("FRONT DESK",
-                style: TextStyle(
+            Text(accessPoint,
+                style: const TextStyle(
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 14)),
-            const Text("Today is Saturday, October 28, 2022 at 8:30 am.",
-                style: TextStyle(
+            Text("Today is $day, $formattedDate at $formattedTime.",
+                style: const TextStyle(
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 14)),
@@ -137,7 +149,9 @@ class _ThankYouPageState extends State<ThankYouPage> {
                         color: kWhiteColor,
                         fontFamily: kCircularStdMedium,
                         fontSize: 14)),
-                onPressed: () {},
+                onPressed: () {
+                  Get.offAll(() => const AccessPointPage());
+                },
               ),
             ),
           ],

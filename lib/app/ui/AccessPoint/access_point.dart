@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/constant/color_constant.dart';
+import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../routes/app_pages.dart';
 
@@ -55,6 +56,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
           ),
         ),
         onPressed: () {
+          getStorage.write('accessPoint', name);
           Get.toNamed(Routes.welcomePage);
         },
         child: Text(
