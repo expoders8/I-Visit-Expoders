@@ -9,7 +9,6 @@ import 'app/routes/app_pages.dart';
 import 'config/constant/constant.dart';
 import 'config/provider/theme_provider.dart';
 
-int? isviewed = 0;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
@@ -22,7 +21,6 @@ void main() async {
     getStorage.write('firstTimeLaunch', true);
     getStorage.write('onBoard', 0);
   }
-  isviewed = getStorage.read('onBoard');
   return runApp(
     ChangeNotifierProvider<ThemeProvider>(
       child: const MyApp(),

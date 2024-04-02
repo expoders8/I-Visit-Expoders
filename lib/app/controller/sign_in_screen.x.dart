@@ -7,7 +7,6 @@ class SignInScreenX extends GetxController {
   final organizationId = ''.obs;
   var email = ''.obs;
   final password = ''.obs;
-  final fcmToken = ''.obs;
 
   final isSigningIn = false.obs;
 
@@ -15,7 +14,7 @@ class SignInScreenX extends GetxController {
     isSigningIn(true);
     try {
       await authService.login(
-          organizationId.value, email.value, password.value, fcmToken.value);
+          organizationId.value, email.value, password.value);
     } finally {
       isSigningIn(false);
     }

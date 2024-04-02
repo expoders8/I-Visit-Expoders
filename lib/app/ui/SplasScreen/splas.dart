@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ivisit/config/constant/color_constant.dart';
 
+import '../../../config/constant/constant.dart';
+import '../../controller/accesspoint_controller.dart';
+import '../AccessPoint/access_point.dart';
 import '../Auth/login.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,10 +15,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final GetAllAccessPointController getAllAccessPointController =
+      Get.put(GetAllAccessPointController());
   @override
   void initState() {
+    var isviewed = getStorage.read('onBoard') ?? 0;
+    getAllAccessPointController.fetchAllAccessPoint();
     Future.delayed(const Duration(seconds: 2), () {
-      Get.offAll(() => const LoginPage());
+      if (isviewed == 0) {
+        Get.offAll(() => const LoginPage());
+      } else {
+        Get.offAll(() => const AccessPointPage());
+      }
     });
     super.initState();
   }

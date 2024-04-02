@@ -112,8 +112,8 @@ class LoginPageState extends State<LoginPage> {
                         ),
                         child: CupertinoButton(
                           onPressed: () {
-                            // onLoginButtonPress();
-                            Get.toNamed(Routes.accessPointPage);
+                            onLoginButtonPress();
+                            // Get.toNamed(Routes.accessPointPage);
                           },
                           borderRadius: BorderRadius.circular(25),
                           padding: EdgeInsets.zero,
