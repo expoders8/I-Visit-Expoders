@@ -12,7 +12,9 @@ abstract class Routes {
   static const qrScannerPage = _Paths.qrScannerPage;
   static const accessPointPage = _Paths.accessPointPage;
   static const processFlowPage = _Paths.processFlowPage;
+  static const tapYourCardPage = _Paths.tapYourCardPage;
   static const forgotbadgeIdPage = _Paths.forgotbadgeIdPage;
+  static const thankyouRFIEADSPage = _Paths.thankyouRFIEADSPage;
   static const reviewDocumentPage = _Paths.reviewDocumentPage;
 }
 
@@ -26,6 +28,8 @@ abstract class _Paths {
   static const qrScannerPage = '/qrScannerPage';
   static const accessPointPage = '/accessPointPage';
   static const processFlowPage = '/processFlowPage';
+  static const tapYourCardPage = '/tapYourCardPage';
   static const forgotbadgeIdPage = '/forgotbadgeIdPage';
+  static const thankyouRFIEADSPage = '/thankyouRFIEADSPage';
   static const reviewDocumentPage = '/reviewDocumentPage';
 }

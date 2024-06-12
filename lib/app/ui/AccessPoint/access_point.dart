@@ -27,7 +27,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 130),
+            const SizedBox(height: 130),
             const Text(
                 "Tap below on the Access Point this device \nwill be located in.",
                 style: TextStyle(

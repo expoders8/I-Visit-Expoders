@@ -9,6 +9,8 @@ import '../ui/Question/question.dart';
 import '../ui/ReviewDocument/review_document.dart';
 import '../ui/SplasScreen/splas.dart';
 import '../ui/TakePhoto/take_photo.dart';
+import '../ui/TapYourCard/tap_your_card.dart';
+import '../ui/TapYourCard/thankyou.dart';
 import '../ui/ThankYou/thank_you.dart';
 import '../ui/Welcome Screen/welcome_screen.dart';
 
@@ -63,6 +65,14 @@ class AppPages {
     GetPage(
       name: _Paths.thankYouPage,
       page: () => const ThankYouPage(),
+    ),
+    GetPage(
+      name: _Paths.tapYourCardPage,
+      page: () => const TapYourCardPage(),
+    ),
+    GetPage(
+      name: _Paths.thankyouRFIEADSPage,
+      page: () => const ThankyouRFIEADSPage(),
     ),
   ];
 }

@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../routes/app_pages.dart';
 import '../widgets/custom_textfield.dart';
 import '../../controller/sign_in_screen.x.dart';
 import '../../../config/constant/font_constant.dart';
@@ -29,113 +28,124 @@ class LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      body: Form(
-        key: _loginFormKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: SingleChildScrollView(
-          child: SizedBox(
-            width: Get.width,
-            height: Get.height,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(height: 60),
-                  Image.asset(
-                    "assets/i-Visits_logo.png",
-                    fit: BoxFit.cover,
-                    scale: 1.5,
-                  ),
-                  const SizedBox(height: 5),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      builsTitleWidget("Organization ID"),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      SizedBox(
-                        width: size.width > 500 ? 600 : size.width,
-                        child: CustomTextFormField(
-                          hintText: 'Organization ID',
-                          maxLines: 1,
-                          ctrl: organizationController,
-                          name: "otgid",
-                          formSubmitted: isFormSubmitted,
-                          validationMsg: 'Organization ID is Required',
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Form(
+          key: _loginFormKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: SingleChildScrollView(
+            child: SizedBox(
+              width: Get.width,
+              height: Get.height,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(height: 60),
+                    Image.asset(
+                      "assets/i-Visits_logo.png",
+                      fit: BoxFit.cover,
+                      scale: 1.5,
+                    ),
+                    const SizedBox(height: 5),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            builsTitleWidget("Organization ID"),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            SizedBox(
+                              width: size.width > 500 ? 600 : size.width,
+                              child: CustomTextFormField(
+                                hintText: 'Organization ID',
+                                maxLines: 1,
+                                ctrl: organizationController,
+                                name: "otgid",
+                                formSubmitted: isFormSubmitted,
+                                validationMsg: 'Organization ID is Required',
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            builsTitleWidget("Username"),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            SizedBox(
+                              width: size.width > 500 ? 600 : size.width,
+                              child: CustomTextFormField(
+                                hintText: 'Username',
+                                maxLines: 1,
+                                ctrl: userNameController,
+                                name: "username",
+                                formSubmitted: isFormSubmitted,
+                                validationMsg: 'Username is Required',
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            builsTitleWidget("Password"),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            SizedBox(
+                              width: size.width > 500 ? 600 : size.width,
+                              child: CustomTextFormField(
+                                hintText: 'Password',
+                                maxLines: 1,
+                                ctrl: passwordController,
+                                name: "password",
+                                formSubmitted: isFormSubmitted,
+                                validationMsg: 'Password is Required',
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      builsTitleWidget("Username"),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      SizedBox(
-                        width: size.width > 500 ? 600 : size.width,
-                        child: CustomTextFormField(
-                          hintText: 'Username',
-                          maxLines: 1,
-                          ctrl: userNameController,
-                          name: "username",
-                          formSubmitted: isFormSubmitted,
-                          validationMsg: 'Username is Required',
+                        const SizedBox(
+                          height: 35.0,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      builsTitleWidget("Password"),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      SizedBox(
-                        width: size.width > 500 ? 600 : size.width,
-                        child: CustomTextFormField(
-                          hintText: 'Password',
-                          maxLines: 1,
-                          ctrl: passwordController,
-                          name: "password",
-                          formSubmitted: isFormSubmitted,
-                          validationMsg: 'Password is Required',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 35.0,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: kButtonColor,
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: CupertinoButton(
-                          onPressed: () {
-                            onLoginButtonPress();
-                            // Get.toNamed(Routes.accessPointPage);
-                          },
-                          borderRadius: BorderRadius.circular(25),
-                          padding: EdgeInsets.zero,
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 24),
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  letterSpacing: 1.2,
-                                  fontFamily: kCircularStdMedium),
+                        Container(
+                          width: size.width > 500 ? 600 : size.width,
+                          decoration: BoxDecoration(
+                            color: kButtonColor,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: CupertinoButton(
+                            onPressed: () {
+                              onLoginButtonPress();
+                              // Get.toNamed(Routes.accessPointPage);
+                            },
+                            borderRadius: BorderRadius.circular(25),
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 24),
+                              child: const Text(
+                                'Login',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    letterSpacing: 1.2,
+                                    fontFamily: kCircularStdMedium),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 80)
-                    ],
-                  ),
-                ],
+                        const SizedBox(height: 80)
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

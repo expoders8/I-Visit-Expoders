@@ -20,6 +20,10 @@ const kDiscriptionColor = Color(0xFF999999);
 
 const kTransparentColor = Color(0x00000000);
 const kWhiteColor = Color(0XFFFFFFFF);
+const kTapColor = Color(0xFF254336);
+const kTapColor1 = Color(0xFF6B8A7A);
+const kTapColor2 = Color(0xFFB7B597);
+const kTapColor3 = Color(0xFFDAD3BE);
 const kBlackColor = Color(0XFF000000);
 const kBlack12Color = Color(0x1F000000);
 const kBlack26Color = Color(0x42000000);

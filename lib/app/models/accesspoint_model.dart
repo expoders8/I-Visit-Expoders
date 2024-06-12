@@ -29,7 +29,7 @@ class GetAllAccessPointDataModel {
   int? locationID;
   String? name;
   String? description;
-  bool? checkOut;
+  int? checkOut;
   int? isEnable;
   String? createDte;
   int? isActive;

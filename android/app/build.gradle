@@ -52,6 +52,12 @@ android {
         multiDexEnabled true
     }
 
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -66,5 +72,7 @@ flutter {
 }
 
 dependencies {
+    implementation(name: 'pcProxAPI', ext: 'aar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.multidex:multidex:2.0.1'
 }
