@@ -106,27 +106,27 @@ class _WelcomePageState extends State<WelcomePage> {
                       color: kBlueColor,
                       fontFamily: kCircularStdMedium,
                       fontSize: 13)),
-              const SizedBox(height: 70),
+              const SizedBox(height: 15),
               Image.asset(
                 "assets/i-Visits_logo.png",
                 fit: BoxFit.cover,
                 scale: 1.5,
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 25),
               const Text("WELCOME TO DREAMWORKS!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: kPrimaryColor,
                       fontFamily: kCircularStdMedium,
                       fontSize: 16)),
-              const SizedBox(height: 10),
-              const Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: kDiscriptionColor,
-                      fontFamily: kCircularStdMedium,
-                      fontSize: 14)),
+              // const SizedBox(height: 10),
+              // const Text(
+              //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(
+              //         color: kDiscriptionColor,
+              //         fontFamily: kCircularStdMedium,
+              //         fontSize: 14)),
               const SizedBox(height: 20),
               const Text(
                   "If you have a QR Code, tap on the SCAN button to check-in.",
@@ -137,7 +137,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       fontSize: 15)),
               const SizedBox(height: 20),
               SizedBox(
-                width: Get.width - 95,
+                width: Get.width > 500 ? 600 : Get.width - 95,
                 child: CupertinoButton(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   borderRadius: BorderRadius.circular(25),
@@ -155,7 +155,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                width: Get.width - 95,
+                width: Get.width > 500 ? 600 : Get.width - 95,
                 child: CupertinoButton(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   borderRadius: BorderRadius.circular(25),
@@ -180,7 +180,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       fontSize: 15)),
               const SizedBox(height: 6),
               SizedBox(
-                width: Get.width - 95,
+                width: Get.width > 500 ? 600 : Get.width - 95,
                 child: CupertinoButton(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   borderRadius: BorderRadius.circular(25),

@@ -75,63 +75,43 @@ class _AccessPointPageState extends State<AccessPointPage> {
           ),
         ),
       ),
-      body: SizedBox(
-        width: Get.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 130),
-            const Text(
-                "Tap below on the Access Point this device \nwill be located in.",
-                style: TextStyle(
-                    color: kPrimaryColor,
-                    fontFamily: kCircularStdMedium,
-                    fontSize: 15),
-                textAlign: TextAlign.center),
-            const SizedBox(height: 50),
-            Expanded(
-              child: Obx(
-                () {
-                  if (getAllAccessPointController.isLoading.value) {
-                    return Container(
-                      color: kBackGroundColor,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: kSelectedIconColor,
-                        ),
-                      ),
-                    );
-                  } else {
-                    if (getAllAccessPointController.accessPointList.isEmpty) {
-                      return Center(
-                        child: SizedBox(
-                          width: Get.width - 80,
-                          child: const Text(
-                            "No AccessPoint",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 15,
-                                fontFamily: kCircularStdMedium),
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: Get.width > 500 ? 600 : Get.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 15),
+                const Text(
+                    "Tap below on the Access Point this device \nwill be located in.",
+                    style: TextStyle(
+                        color: kPrimaryColor,
+                        fontFamily: kCircularStdMedium,
+                        fontSize: 15),
+                    textAlign: TextAlign.center),
+                const SizedBox(height: 15),
+                Expanded(
+                  child: Obx(
+                    () {
+                      if (getAllAccessPointController.isLoading.value) {
+                        return Container(
+                          color: kBackGroundColor,
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: kSelectedIconColor,
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: getAllAccessPointController
-                            .accessPointList[0].accesspoints!.length,
-                        itemBuilder: (context, index) {
-                          var accessPointData = getAllAccessPointController
-                              .accessPointList[0].accesspoints;
-
-                          if (accessPointData!.isNotEmpty) {
-                            var data = accessPointData[index];
-                            return buildButtonWidget(data.name.toString());
-                          } else {
-                            return const Center(
-                              child: Text(
+                        );
+                      } else {
+                        if (getAllAccessPointController
+                            .accessPointList.isEmpty) {
+                          return Center(
+                            child: SizedBox(
+                              width: Get.width - 80,
+                              child: const Text(
                                 "No AccessPoint",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -139,22 +119,48 @@ class _AccessPointPageState extends State<AccessPointPage> {
                                     fontSize: 15,
                                     fontFamily: kCircularStdMedium),
                               ),
-                            );
-                          }
-                        },
-                      );
-                    }
-                  }
-                },
-              ),
+                            ),
+                          );
+                        } else {
+                          return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: getAllAccessPointController
+                                .accessPointList[0].accesspoints!.length,
+                            itemBuilder: (context, index) {
+                              var accessPointData = getAllAccessPointController
+                                  .accessPointList[0].accesspoints;
+
+                              if (accessPointData!.isNotEmpty) {
+                                var data = accessPointData[index];
+                                return buildButtonWidget(data.name.toString());
+                              } else {
+                                return const Center(
+                                  child: Text(
+                                    "No AccessPoint",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: kPrimaryColor,
+                                        fontSize: 15,
+                                        fontFamily: kCircularStdMedium),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ),
+                // buildButtonWidget("FRONT DESK"),
+                // const SizedBox(height: 25),
+                // buildButtonWidget("SECURITY DESK"),
+                // const SizedBox(height: 25),
+                // buildButtonWidget("DELIVERY LOBBY")
+              ],
             ),
-            // buildButtonWidget("FRONT DESK"),
-            // const SizedBox(height: 25),
-            // buildButtonWidget("SECURITY DESK"),
-            // const SizedBox(height: 25),
-            // buildButtonWidget("DELIVERY LOBBY")
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

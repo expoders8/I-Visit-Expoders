@@ -31,7 +31,8 @@ class _QuestionPageState extends State<QuestionPage> {
   List<String> list = <String>['One', 'Two', 'Three', 'Four'];
   String dropdownValue = "One";
   String accessPoint = "";
-  List<bool> isCheckedList = [];
+  Map<int, List<bool>> isCheckedMap = {};
+
   @override
   void initState() {
     var ttt = widget.accessPointData;
@@ -125,74 +126,36 @@ class _QuestionPageState extends State<QuestionPage> {
                       color: kBlueColor,
                       fontFamily: kCircularStdMedium,
                       fontSize: 13)),
-              const SizedBox(height: 52),
+              const SizedBox(height: 15),
               Image.asset(
                 "assets/i-Visits_logo.png",
                 fit: BoxFit.cover,
                 scale: 1.5,
               ),
-              const SizedBox(height: 80),
-              SizedBox(
-                height: Get.height - 390,
-                width: Get.width,
-                child: Obx(
-                  () {
-                    if (getAllProcessflowController.isLoading.value) {
-                      return Container(
-                        color: kBackGroundColor,
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: kSelectedIconColor,
-                          ),
-                        ),
-                      );
-                    } else {
-                      if (getAllProcessflowController.processflowList.isEmpty) {
-                        return Center(
-                          child: SizedBox(
-                            width: Get.width - 80,
-                            child: const Text(
-                              "No ProcessFlow",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: 15,
-                                  fontFamily: kCircularStdMedium),
+              const SizedBox(height: 25),
+              Column(
+                children: [
+                  SizedBox(
+                    height: Get.height - 300,
+                    width: Get.width > 500 ? 600 : Get.width,
+                    child: Obx(
+                      () {
+                        if (getAllProcessflowController.isLoading.value) {
+                          return Container(
+                            color: kBackGroundColor,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: kSelectedIconColor,
+                              ),
                             ),
-                          ),
-                        );
-                      } else {
-                        return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: getAllProcessflowController
-                              .processflowList[0].questionsData!.length,
-                          itemBuilder: (context, index) {
-                            var accessPointData = getAllProcessflowController
-                                .processflowList[0].questionsData;
-                            if (accessPointData!.isNotEmpty) {
-                              var data = accessPointData[index];
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: 12.0),
-                                      builsTitleWidget(
-                                          data.questionText.toString()),
-                                      const SizedBox(height: 12.0),
-                                      data.inputType == "checkbox"
-                                          ? buildCheckBoxwidget(data.choice)
-                                          : buildDropdownwidget(data.choice)
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                ],
-                              );
-                            } else {
-                              return const Center(
-                                child: Text(
+                          );
+                        } else {
+                          if (getAllProcessflowController
+                              .processflowList.isEmpty) {
+                            return Center(
+                              child: SizedBox(
+                                width: Get.width - 80,
+                                child: const Text(
                                   "No ProcessFlow",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -200,40 +163,84 @@ class _QuestionPageState extends State<QuestionPage> {
                                       fontSize: 15,
                                       fontFamily: kCircularStdMedium),
                                 ),
-                              );
-                            }
-                          },
-                        );
-                      }
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: Get.width - 20,
-                child: CupertinoButton(
-                  borderRadius: BorderRadius.circular(25),
-                  color: kPrimaryColor,
-                  child: const Text("Next",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: kWhiteColor,
-                          fontFamily: kCircularStdMedium,
-                          fontSize: 14)),
-                  onPressed: () {
-                    if (processFlowData!.isDocument == 1) {
-                      Get.to(() => ReviewDocumentPage(
-                            accessPointData: processFlowData,
-                          ));
-                    } else if (processFlowData.isPhoto == 1) {
-                      Get.toNamed(Routes.takePhotoPage);
-                    }
-                  },
-                ),
+                              ),
+                            );
+                          } else {
+                            return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: getAllProcessflowController
+                                  .processflowList[0].questionsData!.length,
+                              itemBuilder: (context, index) {
+                                var accessPointData =
+                                    getAllProcessflowController
+                                        .processflowList[0].questionsData;
+                                if (accessPointData!.isNotEmpty) {
+                                  var data = accessPointData[index];
+                                  return Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 5.0),
+                                            builsTitleWidget(
+                                                data.questionText.toString()),
+                                            const SizedBox(height: 5.0),
+                                            data.inputType == "checkbox"
+                                                ? buildCheckBoxwidget(
+                                                    data.choice, index)
+                                                : buildDropdownwidget(
+                                                    data.choice)
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  return const Center(
+                                    child: Text(
+                                      "No ProcessFlow",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: kPrimaryColor,
+                                          fontSize: 15,
+                                          fontFamily: kCircularStdMedium),
+                                    ),
+                                  );
+                                }
+                              },
+                            );
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: Get.width > 500 ? 600 : Get.width - 20,
+                    child: CupertinoButton(
+                      borderRadius: BorderRadius.circular(25),
+                      color: kPrimaryColor,
+                      child: const Text("Next",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: kWhiteColor,
+                              fontFamily: kCircularStdMedium,
+                              fontSize: 14)),
+                      onPressed: () {
+                        if (processFlowData!.isDocument == 1) {
+                          Get.to(() => ReviewDocumentPage(
+                                accessPointData: processFlowData,
+                              ));
+                        } else if (processFlowData.isPhoto == 1) {
+                          Get.toNamed(Routes.takePhotoPage);
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -305,10 +312,24 @@ class _QuestionPageState extends State<QuestionPage> {
     );
   }
 
-  Widget buildCheckBoxwidget(dueData) {
+  Widget buildCheckBoxwidget(dueData, int index) {
     List<String> checkBoxList = dueData.split(',');
-    isCheckedList ??= List<bool>.filled(checkBoxList.length, false);
+
+    // Initialize isCheckedList for the specific index if not already initialized
+    if (!isCheckedMap.containsKey(index)) {
+      isCheckedMap[index] = List<bool>.filled(checkBoxList.length, false);
+    }
+
+    // late List<String> checkBoxList;
+    // late List<bool> isCheckedList;
+
+    // checkBoxList = dueData.split(',');
     // isCheckedList = List<bool>.filled(checkBoxList.length, false);
+
+    // List<String> checkBoxList = dueData.split(',');
+    // //List<bool> isCheckedList = [];
+    // List<bool> isCheckedList = List<bool>.filled(checkBoxList.length, false);
+    // // isCheckedList = List<bool>.filled(checkBoxList.length, false);
 
     return SizedBox(
         height: 50,
@@ -316,21 +337,21 @@ class _QuestionPageState extends State<QuestionPage> {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: checkBoxList.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (context, checkBoxIndex) {
             if (checkBoxList.isNotEmpty) {
               return Row(
                 children: [
                   Checkbox(
-                    value: isCheckedList[index],
+                    value: isCheckedMap[index]![checkBoxIndex],
                     activeColor: kPrimaryColor,
                     onChanged: (value) {
                       setState(() {
-                        isCheckedList[index] = value ?? false;
+                        isCheckedMap[index]![checkBoxIndex] = value ?? false;
                       });
                     },
                   ),
                   Text(
-                    checkBoxList[index],
+                    checkBoxList[checkBoxIndex],
                     style: const TextStyle(
                         fontSize: 14.0, fontFamily: kCircularStdNormal),
                   ),

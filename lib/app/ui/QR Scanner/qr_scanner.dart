@@ -110,13 +110,13 @@ class _QrScannerPageState extends State<QrScannerPage> {
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 14)),
-            const SizedBox(height: 52),
+            const SizedBox(height: 15),
             Image.asset(
               "assets/i-Visits_logo.png",
               fit: BoxFit.cover,
               scale: 1.5,
             ),
-            const SizedBox(height: 80),
+            const SizedBox(height: 25),
             const Text("WELCOME TO DREAMWORKS!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -138,16 +138,20 @@ class _QrScannerPageState extends State<QrScannerPage> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: onQRViewCreated,
-                overlay: QrScannerOverlayShape(
-                    borderColor: kWhiteColor,
-                    borderRadius: 14,
-                    borderLength: 20,
-                    borderWidth: 5,
-                    cutOutHeight: 260,
-                    cutOutWidth: 260),
+              child: SizedBox(
+                width: Get.width > 500 ? 350 : Get.width,
+                height: Get.height,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: onQRViewCreated,
+                  overlay: QrScannerOverlayShape(
+                      borderColor: kWhiteColor,
+                      borderRadius: 14,
+                      borderLength: 20,
+                      borderWidth: 5,
+                      cutOutHeight: Get.width > 500 ? 400 : 260,
+                      cutOutWidth: Get.width > 500 ? 350 : 260),
+                ),
               ),
             ),
             const SizedBox(height: 10),

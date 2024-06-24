@@ -141,15 +141,15 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,
                           fontSize: 14)),
-                  const SizedBox(height: 52),
+                  const SizedBox(height: 15),
                   Image.asset(
                     "assets/i-Visits_logo.png",
                     fit: BoxFit.cover,
                     scale: 1.5,
                   ),
-                  SizedBox(height: Get.width > 500 ? 10 : 80),
+                  const SizedBox(height: 25),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 12.0),
                       builsTitleWidget("Read and review the document  below."),
@@ -160,6 +160,9 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                             color: kPrimaryColor,
                             fontFamily: kCircularStdMedium,
                             fontSize: 14),
+                      ),
+                      const SizedBox(
+                        height: 5,
                       ),
                       Stack(
                         children: [
@@ -172,7 +175,7 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                           ),
                           signCheck
                               ? Positioned(
-                                  right: 0,
+                                  right: Get.width > 500 ? 240 : 0,
                                   child: IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () {

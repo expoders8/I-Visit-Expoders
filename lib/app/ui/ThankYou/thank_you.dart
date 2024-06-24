@@ -139,13 +139,13 @@ class _ThankYouPageState extends State<ThankYouPage> {
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 14)),
-            SizedBox(height: Get.width > 500 ? 30 : 52),
+            SizedBox(height: Get.width > 500 ? 15 : 52),
             Image.asset(
               "assets/i-Visits_logo.png",
               fit: BoxFit.cover,
               scale: 1.5,
             ),
-            SizedBox(height: Get.width > 500 ? 10 : 80),
+            SizedBox(height: Get.width > 500 ? 25 : 80),
             const Text("You have checked-in! ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -172,7 +172,9 @@ class _ThankYouPageState extends State<ThankYouPage> {
                   ),
                 ),
                 SizedBox(
-                    width: Get.width, height: 220, child: _buildControls()),
+                    width: Get.width > 500 ? 600 : Get.width,
+                    height: 220,
+                    child: _buildControls()),
               ],
             ),
             const SizedBox(height: 10),
