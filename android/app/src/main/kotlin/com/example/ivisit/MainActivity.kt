@@ -6,6 +6,7 @@ import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import com.rfideas.pcproxapisdk.Enumerate
 
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.tnetic.ivisit"
@@ -16,7 +17,7 @@ class MainActivity : FlutterActivity() {
             when (call.method) {
                 "connectUSB" -> {
                     val readers = connectUSB()
-                    if (readers["error"] == null) {
+                    if (readers != null) {
                         result.success(readers)
                     } else {
                         result.error("UNAVAILABLE", readers["error"] as String?, null)
@@ -24,7 +25,7 @@ class MainActivity : FlutterActivity() {
                 }
                 "disConnectUSB" -> {
                     val readers = disConnectUSB()
-                    if (readers != null && readers.isNotEmpty()) {
+                    if (readers != null) {
                         result.success(readers.toString())
                     } else {
                         result.error("UNAVAILABLE", "USB not Disconnected", null)
@@ -37,7 +38,7 @@ class MainActivity : FlutterActivity() {
     private fun connectUSB(): Map<String, Any?> {
         return try {
             val readers = Enumerate.USBConnect(applicationContext)
-            if (readers != null && readers.isNotEmpty()) {
+            if (readers != null) {
                 val buffer = IntArray(64)
                 val activeID = readers[0].GetActiveID(buffer, 64)
                 mapOf(
@@ -52,29 +53,26 @@ class MainActivity : FlutterActivity() {
                     "error" to "No USB readers found"
                 )
             }
-        } catch (e: SDKException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             Log.e("USB_DEBUG", "SDKException: ${e.message}")
             mapOf(
                 "readers" to null,
                 "activeID" to null,
-                "error" to "SDKException: ${e.message}"
+                "error" to "Exception: ${e.message}"
             )
         }
     }
-    private fun disConnectUSB(): String? {
+    private fun disConnectUSB(): String? { 
         return try {
-            val readers = Enumerate.USBDisConnect(applicationContext)
+            val readers = Enumerate.USBDisconnect()
             Log.d("USB_DEBUG", "DisConnected readers: $readers")
-            if (readers != null && readers.isNotEmpty()) {
-                val buffer = IntArray(64)
-                val activeID = readers[0].GetActiveID(buffer, 64)
-                Log.d("USB_DEBUG", "DisConnected activeID: $activeID")
+            if (readers != null) {
                 readers.toString()
             } else {
-                null
+                "USB DisConnect else"
             }
-        } catch (e: SDKException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             e.toString()
         }

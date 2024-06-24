@@ -66,22 +66,59 @@ class _ThankYouPageState extends State<ThankYouPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
+    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        leadingWidth: 100,
-        leading: CupertinoButton(
-          child: const Text(
-            "BACK",
-            style: TextStyle(
-                color: kWhiteColor,
-                fontFamily: kCircularStdMedium,
-                fontSize: 14),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: kTapColor3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            width: width / 2,
+                            color: kTapColor,
+                            child: const Center(
+                                child: Text(
+                              "Back",
+                              style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            )),
+                          ),
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor1,
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor2,
+                        ),
+                        Container(
+                          color: kTapColor3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          onPressed: () {
-            Get.back();
-          },
         ),
       ),
       body: Container(
@@ -102,13 +139,13 @@ class _ThankYouPageState extends State<ThankYouPage> {
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 14)),
-            const SizedBox(height: 52),
+            SizedBox(height: Get.width > 500 ? 30 : 52),
             Image.asset(
               "assets/i-Visits_logo.png",
               fit: BoxFit.cover,
               scale: 1.5,
             ),
-            const SizedBox(height: 80),
+            SizedBox(height: Get.width > 500 ? 10 : 80),
             const Text("You have checked-in! ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -121,11 +158,12 @@ class _ThankYouPageState extends State<ThankYouPage> {
                     color: kPrimaryColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 16)),
-            const SizedBox(height: 120),
+            SizedBox(height: Get.width > 500 ? 20 : 120),
             Stack(
+              alignment: Alignment.center,
               children: [
                 SizedBox(
-                  width: Get.width,
+                  width: Get.width > 500 ? 600 : Get.width,
                   height: 220,
                   child: Center(
                     child: _controller.value.isInitialized
@@ -139,7 +177,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
             ),
             const SizedBox(height: 10),
             SizedBox(
-              width: Get.width - 20,
+              width: Get.width > 500 ? 600 : Get.width - 20,
               child: CupertinoButton(
                 borderRadius: BorderRadius.circular(25),
                 color: kPrimaryColor,

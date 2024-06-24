@@ -2,15 +2,19 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:ivisit/app/ui/ReviewDocument/review_document.dart';
 
 import '../../../config/constant/constant.dart';
+import '../../controller/processflow_conroller.dart';
+import '../../models/processflow_model.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/custom_textfield.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 
 class QuestionPage extends StatefulWidget {
-  const QuestionPage({super.key});
+  final ProcessFlowData? accessPointData;
+  const QuestionPage({super.key, this.accessPointData});
 
   @override
   State<QuestionPage> createState() => _QuestionPageState();
@@ -21,12 +25,17 @@ class _QuestionPageState extends State<QuestionPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController badgeIdController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  bool isFormSubmitted = false;
+  final GetAllProcessflowController getAllProcessflowController =
+      Get.put(GetAllProcessflowController());
+  bool isFormSubmitted = false, valuefirst = false;
   List<String> list = <String>['One', 'Two', 'Three', 'Four'];
   String dropdownValue = "One";
   String accessPoint = "";
+  List<bool> isCheckedList = [];
   @override
   void initState() {
+    var ttt = widget.accessPointData;
+    print(ttt);
     var data = getStorage.read('accessPoint') ?? "";
     setState(() {
       accessPoint = data;
@@ -40,22 +49,61 @@ class _QuestionPageState extends State<QuestionPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
+    final double width = Get.width;
+    var processFlowData =
+        getAllProcessflowController.processflowList[0].processFlowData;
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        leadingWidth: 100,
-        leading: CupertinoButton(
-          child: const Text(
-            "BACK",
-            style: TextStyle(
-                color: kWhiteColor,
-                fontFamily: kCircularStdMedium,
-                fontSize: 14),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: kTapColor3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            width: width / 2,
+                            color: kTapColor,
+                            child: const Center(
+                                child: Text(
+                              "Back",
+                              style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            )),
+                          ),
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor1,
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor2,
+                        ),
+                        Container(
+                          color: kTapColor3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          onPressed: () {
-            Get.back();
-          },
         ),
       ),
       body: SingleChildScrollView(
@@ -84,133 +132,82 @@ class _QuestionPageState extends State<QuestionPage> {
                 scale: 1.5,
               ),
               const SizedBox(height: 80),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 12.0),
-                  builsTitleWidget(
-                      "Do you have any of the following symptoms?"),
-                  const SizedBox(height: 12.0),
-                  Row(
-                    children: [
-                      const SizedBox(width: 10),
-                      buildradiosymptomsWidget("Headache", 0),
-                      const SizedBox(width: 10),
-                      buildradiosymptomsWidget("Flu", 1),
-                      const SizedBox(width: 10),
-                      buildradiosymptomsWidget("Cough", 2),
-                    ],
-                  ),
-                  const SizedBox(height: 12.0),
-                  builsTitleWidget("Are you vaccinated?"),
-                  const SizedBox(height: 12.0),
-                  Row(
-                    children: [
-                      const SizedBox(width: 10),
-                      buildradioVaccinatedWidget("Partially", 0),
-                      const SizedBox(width: 10),
-                      buildradioVaccinatedWidget("Fully", 1),
-                      const SizedBox(width: 10),
-                      buildradioVaccinatedWidget("No", 2),
-                    ],
-                  ),
-                  const SizedBox(height: 12.0),
-                  builsTitleWidget("When you got vaccinated?"),
-                  const SizedBox(height: 5.0),
-                  SizedBox(
-                    width: Get.width > 500 ? 600 : Get.width,
-                    child: CustomTextFormField(
-                      hintText: 'When you got vaccinated?',
-                      maxLines: 1,
-                      ctrl: emailController,
-                      name: "vaccinated",
-                      formSubmitted: isFormSubmitted,
-                      validationMsg: 'Vaccinated is Required',
-                    ),
-                  ),
-                  const SizedBox(height: 12.0),
-                  builsTitleWidget("Who are you visiting?"),
-                  const SizedBox(height: 5.0),
-                  Container(
-                    width: Get.width > 500 ? 600 : Get.width - 30,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: kBorderColor),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: DropdownButton<String>(
-                      value: dropdownValue,
-                      isExpanded: true,
-                      icon: Image.asset(
-                        "assets/icons/arrow-bottom-outline.png",
-                        color: kIconColor,
-                        scale: 1.4,
-                      ),
-                      style: const TextStyle(color: kPrimaryColor),
-                      underline: Container(
-                        height: 0,
-                      ),
-                      padding: const EdgeInsets.fromLTRB(15, 0, 19, 0),
-                      onChanged: (String? value) {
-                        setState(() {
-                          dropdownValue = value!;
-                        });
-                      },
-                      items: list.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+              SizedBox(
+                height: Get.height - 390,
+                width: Get.width,
+                child: Obx(
+                  () {
+                    if (getAllProcessflowController.isLoading.value) {
+                      return Container(
+                        color: kBackGroundColor,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: kSelectedIconColor,
+                          ),
+                        ),
+                      );
+                    } else {
+                      if (getAllProcessflowController.processflowList.isEmpty) {
+                        return Center(
+                          child: SizedBox(
+                            width: Get.width - 80,
+                            child: const Text(
+                              "No ProcessFlow",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 15,
+                                  fontFamily: kCircularStdMedium),
+                            ),
+                          ),
                         );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(height: 12.0),
-                  builsTitleWidget("Describe about yourself"),
-                  const SizedBox(height: 5.0),
-                  TextFormField(
-                    style: const TextStyle(color: kPrimaryColor, fontSize: 15),
-                    controller: descriptionController,
-                    decoration: InputDecoration(
-                      hintText: 'Describe about yourself',
-                      filled: true,
-                      fillColor: kTransparentColor,
-                      contentPadding: const EdgeInsets.fromLTRB(18, 25, 10, 0),
-                      hintStyle: const TextStyle(color: kGreyColor),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xFFD8DFEB),
-                        ),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: kErrorColor,
-                        ),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      errorStyle: const TextStyle(color: kErrorColor),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xFFD8DFEB),
-                        ),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xFFD8DFEB),
-                        ),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Description is Required';
+                      } else {
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: getAllProcessflowController
+                              .processflowList[0].questionsData!.length,
+                          itemBuilder: (context, index) {
+                            var accessPointData = getAllProcessflowController
+                                .processflowList[0].questionsData;
+                            if (accessPointData!.isNotEmpty) {
+                              var data = accessPointData[index];
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 12.0),
+                                      builsTitleWidget(
+                                          data.questionText.toString()),
+                                      const SizedBox(height: 12.0),
+                                      data.inputType == "checkbox"
+                                          ? buildCheckBoxwidget(data.choice)
+                                          : buildDropdownwidget(data.choice)
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                ],
+                              );
+                            } else {
+                              return const Center(
+                                child: Text(
+                                  "No ProcessFlow",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontSize: 15,
+                                      fontFamily: kCircularStdMedium),
+                                ),
+                              );
+                            }
+                          },
+                        );
                       }
-                      return null;
-                    },
-                    maxLines: 4,
-                    onSaved: (value) {},
-                  ),
-                ],
+                    }
+                  },
+                ),
               ),
               const SizedBox(
                 height: 10.0,
@@ -228,7 +225,13 @@ class _QuestionPageState extends State<QuestionPage> {
                           fontFamily: kCircularStdMedium,
                           fontSize: 14)),
                   onPressed: () {
-                    Get.toNamed(Routes.reviewDocumentPage);
+                    if (processFlowData!.isDocument == 1) {
+                      Get.to(() => ReviewDocumentPage(
+                            accessPointData: processFlowData,
+                          ));
+                    } else if (processFlowData.isPhoto == 1) {
+                      Get.toNamed(Routes.takePhotoPage);
+                    }
                   },
                 ),
               ),
@@ -237,6 +240,116 @@ class _QuestionPageState extends State<QuestionPage> {
         ),
       ),
     );
+  }
+
+  Widget buildDropdownwidget(dueData) {
+    List<String> dropDownList = dueData.split(',');
+    return SizedBox(
+      height: 50,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 1,
+        itemBuilder: (context, index) {
+          if (dropDownList.isNotEmpty) {
+            List<String> uniqueDropDownList = dropDownList.toSet().toList();
+            if (!uniqueDropDownList.contains(dropdownValue)) {
+              dropdownValue = uniqueDropDownList.first;
+            }
+            return Container(
+              width: Get.width > 500 ? 600 : Get.width - 30,
+              decoration: BoxDecoration(
+                border: Border.all(color: kBorderColor),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: DropdownButton<String>(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                value: dropdownValue,
+                isExpanded: true,
+                icon: Image.asset(
+                  "assets/icons/arrow-bottom-outline.png",
+                  color: kIconColor,
+                  scale: 1.4,
+                ),
+                style: const TextStyle(color: kPrimaryColor),
+                underline: Container(
+                  height: 0,
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    dropdownValue = value!;
+                  });
+                },
+                items: uniqueDropDownList
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            );
+          } else {
+            return const Center(
+              child: Text(
+                "No dropdown",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: kPrimaryColor,
+                    fontSize: 15,
+                    fontFamily: kCircularStdMedium),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildCheckBoxwidget(dueData) {
+    List<String> checkBoxList = dueData.split(',');
+    isCheckedList ??= List<bool>.filled(checkBoxList.length, false);
+    // isCheckedList = List<bool>.filled(checkBoxList.length, false);
+
+    return SizedBox(
+        height: 50,
+        width: Get.width,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: checkBoxList.length,
+          itemBuilder: (context, index) {
+            if (checkBoxList.isNotEmpty) {
+              return Row(
+                children: [
+                  Checkbox(
+                    value: isCheckedList[index],
+                    activeColor: kPrimaryColor,
+                    onChanged: (value) {
+                      setState(() {
+                        isCheckedList[index] = value ?? false;
+                      });
+                    },
+                  ),
+                  Text(
+                    checkBoxList[index],
+                    style: const TextStyle(
+                        fontSize: 14.0, fontFamily: kCircularStdNormal),
+                  ),
+                ],
+              );
+            } else {
+              return const Center(
+                child: Text(
+                  "No dropdown",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 15,
+                      fontFamily: kCircularStdMedium),
+                ),
+              );
+            }
+          },
+        ));
   }
 
   buildradiosymptomsWidget(String text, int index) {

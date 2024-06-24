@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../../../config/constant/color_constant.dart';
+import '../../routes/app_pages.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
+import '../../../config/constant/color_constant.dart';
 import '../../controller/accesspoint_controller.dart';
-import '../../routes/app_pages.dart';
 
 class AccessPointPage extends StatefulWidget {
   const AccessPointPage({super.key});
@@ -17,10 +18,63 @@ class AccessPointPage extends StatefulWidget {
 class _AccessPointPageState extends State<AccessPointPage> {
   final GetAllAccessPointController getAllAccessPointController =
       Get.put(GetAllAccessPointController());
+  final double width = Get.width;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackGroundColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: kTapColor3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            width: width / 2,
+                            color: kTapColor,
+                            child: const Center(
+                                child: Text(
+                              "Back",
+                              style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            )),
+                          ),
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor1,
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor2,
+                        ),
+                        Container(
+                          color: kTapColor3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       body: SizedBox(
         width: Get.width,
         child: Column(
@@ -106,11 +160,13 @@ class _AccessPointPageState extends State<AccessPointPage> {
   }
 
   buildButtonWidget(String name) {
+    Size size = MediaQuery.of(context).size;
+
     return Padding(
       padding:
           const EdgeInsets.only(left: 18.0, right: 18.0, top: 10, bottom: 25),
       child: SizedBox(
-        width: Get.width - 50,
+        width: size.width > 500 ? 100 : Get.width - 50,
         height: 70,
         child: OutlinedButton(
           style: ButtonStyle(

@@ -35,22 +35,59 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
+    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        leadingWidth: 100,
-        leading: CupertinoButton(
-          child: const Text(
-            "BACK",
-            style: TextStyle(
-                color: kWhiteColor,
-                fontFamily: kCircularStdMedium,
-                fontSize: 14),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: kTapColor3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            width: width / 2,
+                            color: kTapColor,
+                            child: const Center(
+                                child: Text(
+                              "Back",
+                              style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            )),
+                          ),
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor1,
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor2,
+                        ),
+                        Container(
+                          color: kTapColor3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          onPressed: () {
-            Get.back();
-          },
         ),
       ),
       body: Container(

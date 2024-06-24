@@ -72,7 +72,12 @@ flutter {
 }
 
 dependencies {
-    implementation(name: 'pcProxAPI', ext: 'aar')
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+    implementation 'com.android.support:support-v4:28.0.0' // Add other dependencies if required
     implementation 'androidx.multidex:multidex:2.0.1'
+}
+configurations.all {
+    resolutionStrategy {
+        force 'com.rfideas:pcproxapisdk:2.0.0'
+    }
 }

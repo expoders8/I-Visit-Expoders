@@ -1,15 +1,20 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:signature/signature.dart';
 
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../models/processflow_model.dart';
 import '../../routes/app_pages.dart';
 
 class ReviewDocumentPage extends StatefulWidget {
-  const ReviewDocumentPage({super.key});
+  final ProcessFlowData? accessPointData;
+  const ReviewDocumentPage({super.key, this.accessPointData});
 
   @override
   State<ReviewDocumentPage> createState() => _ReviewDocumentPageState();
@@ -17,8 +22,28 @@ class ReviewDocumentPage extends StatefulWidget {
 
 class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
   String accessPoint = "";
+  bool signCheck = false;
+  final SignatureController _controller = SignatureController(
+    penStrokeWidth: 1,
+    penColor: kPrimaryColor,
+    onDrawStart: () => {
+      log('onDrawStart called!'),
+    },
+    onDrawEnd: () => log('onDrawEnd called!'),
+  );
+
   @override
   void initState() {
+    _controller
+      ..addListener(() => setState(
+            () {
+              signCheck = true;
+              log('Value changed');
+            },
+          ))
+      ..onDrawEnd = () => setState(
+            () {},
+          );
     var data = getStorage.read('accessPoint') ?? "";
     setState(() {
       accessPoint = data;
@@ -27,27 +52,70 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
+    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        leadingWidth: 100,
-        leading: CupertinoButton(
-          child: const Text(
-            "BACK",
-            style: TextStyle(
-                color: kWhiteColor,
-                fontFamily: kCircularStdMedium,
-                fontSize: 14),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: kTapColor3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            width: width / 2,
+                            color: kTapColor,
+                            child: const Center(
+                                child: Text(
+                              "Back",
+                              style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            )),
+                          ),
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor1,
+                        ),
+                        Container(
+                          width: width / 5,
+                          color: kTapColor2,
+                        ),
+                        Container(
+                          color: kTapColor3,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          onPressed: () {
-            Get.back();
-          },
         ),
       ),
       body: SingleChildScrollView(
@@ -79,13 +147,13 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                     fit: BoxFit.cover,
                     scale: 1.5,
                   ),
-                  const SizedBox(height: 80),
+                  SizedBox(height: Get.width > 500 ? 10 : 80),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 12.0),
                       builsTitleWidget("Read and review the document  below."),
-                      const SizedBox(height: 25),
+                      SizedBox(height: Get.width > 500 ? 10 : 25),
                       const Text(
                         "Scroll down to sign",
                         style: TextStyle(
@@ -93,15 +161,36 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                             fontFamily: kCircularStdMedium,
                             fontSize: 14),
                       ),
+                      Stack(
+                        children: [
+                          Signature(
+                            key: const Key('signature'),
+                            controller: _controller,
+                            height: Get.width > 500 ? 200 : 300,
+                            width: Get.width > 500 ? 500 : Get.width,
+                            backgroundColor: Colors.grey[300]!,
+                          ),
+                          signCheck
+                              ? Positioned(
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      setState(() {
+                                        _controller.clear();
+                                        signCheck = false;
+                                      });
+                                    },
+                                  ))
+                              : Container()
+                        ],
+                      ),
                     ],
-                  ),
-                  const SizedBox(
-                    height: 190.0,
                   ),
                 ],
               ),
               SizedBox(
-                width: Get.width - 20,
+                width: Get.width > 500 ? 600 : Get.width - 20,
                 child: CupertinoButton(
                   borderRadius: BorderRadius.circular(25),
                   color: kPrimaryColor,
@@ -112,7 +201,11 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                           fontFamily: kCircularStdMedium,
                           fontSize: 14)),
                   onPressed: () {
-                    Get.toNamed(Routes.takePhotoPage);
+                    if (widget.accessPointData!.isPhoto == 1) {
+                      Get.toNamed(Routes.takePhotoPage);
+                    } else {
+                      Get.toNamed(Routes.thankYouPage);
+                    }
                   },
                 ),
               ),
