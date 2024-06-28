@@ -17,6 +17,8 @@ class ProcessFlowService {
       );
       if (response.statusCode == 200) {
         var accesspointdata = jsonDecode(response.body);
+        getStorage.write('IsAuthenticate',
+            accesspointdata['processFlowData']['IsAuthenticate']);
         return GetProcessflowModel.fromJson(accesspointdata);
       } else {
         LoaderX.hide();

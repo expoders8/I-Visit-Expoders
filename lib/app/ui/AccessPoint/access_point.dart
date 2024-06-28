@@ -1,12 +1,15 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ivisit/app/ui/TapYourCard/tap_your_card.dart';
 
+import '../../controller/processflow_conroller.dart';
 import '../../routes/app_pages.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../controller/accesspoint_controller.dart';
+import '../Auth/login.dart';
 
 class AccessPointPage extends StatefulWidget {
   const AccessPointPage({super.key});
@@ -18,7 +21,10 @@ class AccessPointPage extends StatefulWidget {
 class _AccessPointPageState extends State<AccessPointPage> {
   final GetAllAccessPointController getAllAccessPointController =
       Get.put(GetAllAccessPointController());
+  final GetAllProcessflowController getAllProcessflowController =
+      Get.put(GetAllProcessflowController());
   final double width = Get.width;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +53,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
                             color: kTapColor,
                             child: const Center(
                                 child: Text(
-                              "Back",
+                              "i-Visit",
                               style: TextStyle(
                                   color: kWhiteColor,
                                   fontWeight: FontWeight.bold,
@@ -64,7 +70,29 @@ class _AccessPointPageState extends State<AccessPointPage> {
                           color: kTapColor2,
                         ),
                         Container(
+                          height: 80,
                           color: kTapColor3,
+                          child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: logoutConfirmationDialog,
+                            child: const Row(
+                              children: [
+                                SizedBox(width: 3),
+                                Icon(
+                                  Icons.logout_rounded,
+                                  color: kPrimaryColor,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  "LogOut",
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontFamily: kCircularStdMedium,
+                                      fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -183,8 +211,20 @@ class _AccessPointPageState extends State<AccessPointPage> {
             ),
           ),
           onPressed: () {
+            getAllProcessflowController.fetchAllProcessFlow();
             getStorage.write('accessPoint', name);
-            Get.toNamed(Routes.welcomePage);
+            Future.delayed(const Duration(seconds: 2), () async {
+              var accessPoint = getStorage.read("IsAuthenticate") ?? 0;
+              if (accessPoint == 1) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const TapYourCardPage(),
+                  ),
+                );
+              } else {
+                Get.toNamed(Routes.welcomePage);
+              }
+            });
           },
           child: Text(
             name,
@@ -194,6 +234,43 @@ class _AccessPointPageState extends State<AccessPointPage> {
                 fontFamily: kCircularStdMedium),
           ),
         ),
+      ),
+    );
+  }
+
+  logoutConfirmationDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Alert !"),
+        elevation: 5,
+        titleTextStyle: const TextStyle(fontSize: 18, color: kRedColor),
+        content: const Text("Are you sure want to logout?"),
+        contentPadding: const EdgeInsets.only(left: 25, top: 10),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              getStorage.remove('user');
+              getStorage.remove('authToken');
+              getStorage.write('onBoard', 0);
+              Get.offAll(() => const LoginPage());
+            },
+            child: const Text(
+              'Yes',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              'No',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+        ],
       ),
     );
   }

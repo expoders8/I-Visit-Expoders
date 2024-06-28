@@ -39,13 +39,16 @@ class MainActivity : FlutterActivity() {
         return try {
             val readers = Enumerate.USBConnect(applicationContext)
             if (readers != null) {
+                Log.d("readers", readers.joinToString(", "))
                 val buffer = IntArray(64)
                 val activeID = readers[0].GetActiveID(buffer, 64)
+                Log.d("activeID", activeID.toString())
                 mapOf(
                     "readers" to readers.map { it.toString() },
                     "activeID" to activeID
                 )
             } else {
+                Log.d("readers", "null")
                 Log.d("USB_DEBUG", "No USB readers found")
                 mapOf(
                     "readers" to null,

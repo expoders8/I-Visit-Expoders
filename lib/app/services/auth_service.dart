@@ -58,11 +58,11 @@ class AuthService {
             var data = getStorage.read('user');
             var getUserData = jsonDecode(data);
             var orgId = getUserData['OrganizationID'] ?? "";
-            if (orgId == "RFIDEAS") {
-              Get.offAll(() => const TapYourCardPage());
-            } else {
-              Get.offAll(() => const AccessPointPage());
-            }
+            // if (orgId == "RFIDEAS") {
+            //   Get.offAll(() => const TapYourCardPage());
+            // } else {
+            Get.offAll(() => const AccessPointPage());
+            // }
           }
         } else {
           LoaderX.hide();

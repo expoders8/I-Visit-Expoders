@@ -32,11 +32,11 @@ class _SplashScreenState extends State<SplashScreen> {
         if (isviewed == 0) {
           Get.offAll(() => const LoginPage());
         } else {
-          if (orgId == "RFIDEAS") {
-            Get.offAll(() => const TapYourCardPage());
-          } else {
-            Get.offAll(() => const AccessPointPage());
-          }
+          // if (orgId == "RFIDEAS") {
+          //   Get.offAll(() => const TapYourCardPage());
+          // } else {
+          Get.offAll(() => const AccessPointPage());
+          // }
         }
       });
     } else {

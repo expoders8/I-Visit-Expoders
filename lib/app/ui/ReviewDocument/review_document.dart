@@ -11,6 +11,7 @@ import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../models/processflow_model.dart';
 import '../../routes/app_pages.dart';
+import '../Auth/login.dart';
 
 class ReviewDocumentPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
@@ -87,15 +88,25 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                           },
                           child: Container(
                             width: width / 2,
+                            height: 80,
                             color: kTapColor,
-                            child: const Center(
-                                child: Text(
-                              "Back",
-                              style: TextStyle(
+                            child: const Row(
+                              children: [
+                                SizedBox(width: 15),
+                                Icon(
+                                  Icons.arrow_back,
                                   color: kWhiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            )),
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  "Back",
+                                  style: TextStyle(
+                                      color: kWhiteColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Container(
@@ -107,7 +118,29 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                           color: kTapColor2,
                         ),
                         Container(
+                          height: 80,
                           color: kTapColor3,
+                          child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: logoutConfirmationDialog,
+                            child: const Row(
+                              children: [
+                                SizedBox(width: 3),
+                                Icon(
+                                  Icons.logout_rounded,
+                                  color: kPrimaryColor,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  "LogOut",
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontFamily: kCircularStdMedium,
+                                      fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -226,6 +259,43 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
         title,
         style: const TextStyle(
             color: kPrimaryColor, fontFamily: kCircularStdMedium, fontSize: 14),
+      ),
+    );
+  }
+
+  logoutConfirmationDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Alert !"),
+        elevation: 5,
+        titleTextStyle: const TextStyle(fontSize: 18, color: kRedColor),
+        content: const Text("Are you sure want to logout?"),
+        contentPadding: const EdgeInsets.only(left: 25, top: 10),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              getStorage.remove('user');
+              getStorage.remove('authToken');
+              getStorage.write('onBoard', 0);
+              Get.offAll(() => const LoginPage());
+            },
+            child: const Text(
+              'Yes',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              'No',
+              style: TextStyle(fontSize: 16, color: kPrimaryColor),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -90,15 +90,25 @@ class _ThankYouPageState extends State<ThankYouPage> {
                           },
                           child: Container(
                             width: width / 2,
+                            height: 80,
                             color: kTapColor,
-                            child: const Center(
-                                child: Text(
-                              "Back",
-                              style: TextStyle(
+                            child: const Row(
+                              children: [
+                                SizedBox(width: 15),
+                                Icon(
+                                  Icons.arrow_back,
                                   color: kWhiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            )),
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  "Back",
+                                  style: TextStyle(
+                                      color: kWhiteColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Container(

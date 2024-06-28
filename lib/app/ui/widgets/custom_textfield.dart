@@ -11,6 +11,7 @@ class CustomTextFormField extends StatefulWidget {
   final String? validationMsg;
   final int? maxLines;
   final bool formSubmitted;
+  final FocusNode? focusNode;
 
   const CustomTextFormField(
       {Key? key,
@@ -21,6 +22,7 @@ class CustomTextFormField extends StatefulWidget {
       this.maxLines,
       this.formSubmitted = false,
       this.name,
+      this.focusNode,
       this.validationMsg})
       : super(key: key);
 
@@ -73,6 +75,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       controller: widget.ctrl,
       keyboardType: widget.keyboardType,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      focusNode: widget.focusNode,
       validator: (value) {
         return validateInput(value);
       },
