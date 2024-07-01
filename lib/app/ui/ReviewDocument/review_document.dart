@@ -12,6 +12,7 @@ import '../../../config/constant/color_constant.dart';
 import '../../models/processflow_model.dart';
 import '../../routes/app_pages.dart';
 import '../Auth/login.dart';
+import '../widgets/comman_appbar.dart';
 
 class ReviewDocumentPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
@@ -69,86 +70,17 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: kTapColor3,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Container(
-                            width: width / 2,
-                            height: 80,
-                            color: kTapColor,
-                            child: const Row(
-                              children: [
-                                SizedBox(width: 15),
-                                Icon(
-                                  Icons.arrow_back,
-                                  color: kWhiteColor,
-                                ),
-                                SizedBox(width: 6),
-                                Text(
-                                  "Back",
-                                  style: TextStyle(
-                                      color: kWhiteColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: width / 5,
-                          color: kTapColor1,
-                        ),
-                        Container(
-                          width: width / 5,
-                          color: kTapColor2,
-                        ),
-                        Container(
-                          height: 80,
-                          color: kTapColor3,
-                          child: CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: logoutConfirmationDialog,
-                            child: const Row(
-                              children: [
-                                SizedBox(width: 3),
-                                Icon(
-                                  Icons.logout_rounded,
-                                  color: kPrimaryColor,
-                                ),
-                                SizedBox(width: 6),
-                                Text(
-                                  "LogOut",
-                                  style: TextStyle(
-                                      color: kPrimaryColor,
-                                      fontFamily: kCircularStdMedium,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        child: CommonAppBar(
+          width: MediaQuery.of(context).size.width,
+          showBackButton: true,
+          text: "Back",
+          onBackPressed: () {
+            Navigator.of(context).pop();
+          },
+          showLogoutButton: true,
+          onLogoutPressed: () {
+            logoutConfirmationDialog();
+          },
         ),
       ),
       body: SingleChildScrollView(

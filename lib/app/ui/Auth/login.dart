@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ivisit/config/constant/constant.dart';
 
 import '../widgets/custom_textfield.dart';
 import '../../controller/sign_in_screen.x.dart';
@@ -22,6 +23,23 @@ class LoginPageState extends State<LoginPage> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isFormSubmitted = false;
+
+  @override
+  void initState() {
+    initalvalue();
+    super.initState();
+  }
+
+  initalvalue() {
+    var orgId = getStorage.read("orgId") ?? "";
+    var email = getStorage.read("email") ?? "";
+    var password = getStorage.read("password") ?? "";
+    setState(() {
+      organizationController.text = orgId;
+      userNameController.text = email;
+      passwordController.text = password;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

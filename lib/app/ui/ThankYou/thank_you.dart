@@ -10,6 +10,7 @@ import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../AccessPoint/access_point.dart';
+import '../widgets/comman_appbar.dart';
 
 class ThankYouPage extends StatefulWidget {
   const ThankYouPage({super.key});
@@ -71,64 +72,14 @@ class _ThankYouPageState extends State<ThankYouPage> {
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: kTapColor3,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Container(
-                            width: width / 2,
-                            height: 80,
-                            color: kTapColor,
-                            child: const Row(
-                              children: [
-                                SizedBox(width: 15),
-                                Icon(
-                                  Icons.arrow_back,
-                                  color: kWhiteColor,
-                                ),
-                                SizedBox(width: 6),
-                                Text(
-                                  "Back",
-                                  style: TextStyle(
-                                      color: kWhiteColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: width / 5,
-                          color: kTapColor1,
-                        ),
-                        Container(
-                          width: width / 5,
-                          color: kTapColor2,
-                        ),
-                        Container(
-                          color: kTapColor3,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        child: CommonAppBar(
+          width: MediaQuery.of(context).size.width,
+          showBackButton: true,
+          text: "Back",
+          onBackPressed: () {
+            Navigator.of(context).pop();
+          },
+          showLogoutButton: true,
         ),
       ),
       body: Container(

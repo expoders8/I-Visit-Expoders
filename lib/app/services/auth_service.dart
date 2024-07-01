@@ -20,6 +20,9 @@ class AuthService {
           headers: {'Content-type': 'application/json'});
       var decodedUser = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        getStorage.write('orgId', organizationId);
+        getStorage.write('email', email);
+        getStorage.write('password', password);
         if (decodedUser['success']) {
           getStorage.write('authToken', decodedUser['api_token']);
           getUserByToken(decodedUser['api_token']);

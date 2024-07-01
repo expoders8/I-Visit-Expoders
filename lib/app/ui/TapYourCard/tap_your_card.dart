@@ -1,17 +1,18 @@
 import 'dart:async';
 
+// import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ivisit/app/ui/TapYourCard/thankyou.dart';
 import 'package:ivisit/config/constant/color_constant.dart';
-
 import '../../../config/constant/constant.dart';
-import '../../../config/constant/font_constant.dart';
+import '../../services/visiterlog.dart';
 import '../Auth/login.dart';
 
-//tirth
+import '../widgets/comman_appbar.dart';
+
 class TapYourCardPage extends StatefulWidget {
   const TapYourCardPage({super.key});
 
@@ -22,14 +23,23 @@ class TapYourCardPage extends StatefulWidget {
 class _TapYourCardPageState extends State<TapYourCardPage> {
   String usbStatus = "";
   String activeID = "";
+  String rederCode = "";
   String usbDisConnectStatus = "";
   TextEditingController redersCodeController = TextEditingController();
   final FocusNode focusNode = FocusNode();
+  VisiterService visiterService = VisiterService();
+  bool _isOtgConnected = false;
+  Timer? _timer;
 
   @override
   void dispose() {
-    focusNode.dispose();
+    _timer?.cancel(); // Cancel timer when widget is disposed
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   void onCodeScanned(String code) {
@@ -46,6 +56,13 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
     );
   }
 
+  // Future<void> openKeyboardSettings() async {
+  //   const AndroidIntent intent = AndroidIntent(
+  //     action: 'android.settings.INPUT_METHOD_SETTINGS',
+  //   );
+  //   await intent.launch();
+  // }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -53,86 +70,17 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: kTapColor3,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Container(
-                            width: width / 2,
-                            height: 80,
-                            color: kTapColor,
-                            child: const Row(
-                              children: [
-                                SizedBox(width: 15),
-                                Icon(
-                                  Icons.arrow_back,
-                                  color: kWhiteColor,
-                                ),
-                                SizedBox(width: 6),
-                                Text(
-                                  "Back",
-                                  style: TextStyle(
-                                      color: kWhiteColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: width / 5,
-                          color: kTapColor1,
-                        ),
-                        Container(
-                          width: width / 5,
-                          color: kTapColor2,
-                        ),
-                        Container(
-                          height: 80,
-                          color: kTapColor3,
-                          child: CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: logoutConfirmationDialog,
-                            child: const Row(
-                              children: [
-                                SizedBox(width: 3),
-                                Icon(
-                                  Icons.logout_rounded,
-                                  color: kPrimaryColor,
-                                ),
-                                SizedBox(width: 6),
-                                Text(
-                                  "LogOut",
-                                  style: TextStyle(
-                                      color: kPrimaryColor,
-                                      fontFamily: kCircularStdMedium,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        child: CommonAppBar(
+          width: MediaQuery.of(context).size.width,
+          showBackButton: true,
+          text: "Back",
+          onBackPressed: () {
+            Navigator.of(context).pop();
+          },
+          showLogoutButton: true,
+          onLogoutPressed: () {
+            logoutConfirmationDialog();
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -149,12 +97,12 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.center,
               //   children: [
-              //     CupertinoButton(
-              //       onPressed: () {
-              //         _connectUSB();
-              //       },
-              //       child: Text("Connect"),
-              //     ),
+              // CupertinoButton(
+              //   onPressed: () {
+              //     _connectUSB();
+              //   },
+              //   child: Text("Connect"),
+              // ),
               //     CupertinoButton(
               //       onPressed: () {
               //         _disConnectUSB();
@@ -168,22 +116,59 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                   width: 280, // 350
                   child: Image.asset("assets/images/rfid2.png")),
               Container(
-                  width: size.width > 500 ? 600 : size.width,
-                  height: 41,
-                  padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey), // Border color
-                    borderRadius: BorderRadius.circular(25.0), // Border radius
-                  ),
-                  child: TextFieldWithNoKeyboard(
-                    cursorColor: kPrimaryColor,
-                    style: const TextStyle(color: kPrimaryColor),
-                    controller: redersCodeController,
-                    autofocus: true,
-                    onValueUpdated: (value) {
-                      onCodeScanned(value);
-                    },
-                  )),
+                width: 0,
+                height: 0,
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey), // Border color
+                  borderRadius: BorderRadius.circular(25.0), // Border radius
+                ),
+                child: TextField(
+                  maxLines: 2,
+                  autofocus: true,
+                  controller: redersCodeController,
+                  keyboardType: TextInputType.multiline,
+                  inputFormatters: <TextInputFormatter>[
+                    // FilteringTextInputFormatter.digitsOnly,
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    // FilteringTextInputFormatter.allow(RegExp(r'[^\da-zA-Z]')),
+                  ],
+                  onChanged: (value) {
+                    //Future.delayed(const Duration(seconds: 2), () async {
+                    //if (int.tryParse(value) != null) {
+                    setState(() {
+                      rederCode = redersCodeController.text;
+                    });
+                    if (_timer?.isActive ?? false) _timer?.cancel();
+                    _timer = Timer(const Duration(seconds: 2), () {
+                      //if (redersCodeController.text.endsWith('\n')) {
+                      String badgeID = redersCodeController.text.trim();
+                      visiterService.getVisiterLog(badgeID).then((value) {
+                        if (value) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  ThankyouRFIEADSPage(),
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            redersCodeController.clear();
+                            rederCode = "";
+                          });
+                        }
+                      });
+                      //}
+                      //}
+                    });
+
+                    //});
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(rederCode),
             ],
           ),
         ),
