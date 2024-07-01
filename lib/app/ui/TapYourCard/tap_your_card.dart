@@ -1,15 +1,14 @@
 import 'dart:async';
 
 // import 'package:android_intent_plus/android_intent.dart';
-import 'package:flutter/cupertino.dart';
+import '../Auth/login.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import '../../services/visiterlog.dart';
+import '../../../config/constant/constant.dart';
 import 'package:ivisit/app/ui/TapYourCard/thankyou.dart';
 import 'package:ivisit/config/constant/color_constant.dart';
-import '../../../config/constant/constant.dart';
-import '../../services/visiterlog.dart';
-import '../Auth/login.dart';
 
 import '../widgets/comman_appbar.dart';
 
@@ -28,7 +27,6 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
   TextEditingController redersCodeController = TextEditingController();
   final FocusNode focusNode = FocusNode();
   VisiterService visiterService = VisiterService();
-  bool _isOtgConnected = false;
   Timer? _timer;
 
   @override
@@ -65,8 +63,6 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final double width = size.width;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
@@ -149,7 +145,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  ThankyouRFIEADSPage(),
+                                  const ThankyouRFIEADSPage(),
                             ),
                           );
                         } else {
@@ -167,7 +163,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(rederCode),
             ],
           ),
@@ -213,14 +209,10 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
     );
   }
 
-  Function _function = () {
-    print("do stuff here After returning back to setting page!");
-  };
-
   static const MethodChannel platform = MethodChannel('com.tnetic.ivisit');
 
   // Function to call native method
-  Future<void> _connectUSB() async {
+  Future<void> connectUSB() async {
     try {
       final Map<dynamic, dynamic> result =
           await platform.invokeMethod('connectUSB');
@@ -232,25 +224,20 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
           usbStatus = result['readers'].toString();
         }
       });
-      print("usbConnect $usbStatus");
-      print("activeID $activeID");
     } on PlatformException catch (e) {
       usbStatus = "Failed to connect to USB: '${e.message}'.";
     }
-    print(usbStatus);
   }
 
-  Future<void> _disConnectUSB() async {
+  Future<void> disConnectUSB() async {
     try {
       final String result = await platform.invokeMethod('disConnectUSB');
       setState(() {
         usbDisConnectStatus = result;
       });
-      print("usbDisConnectStatus $result");
     } on PlatformException catch (e) {
       usbStatus = "Failed to connect to USB: '${e.message}'.";
     }
-    print(usbStatus);
     // setState(() {
     //   _usbStatus = usbStatus;
     // });

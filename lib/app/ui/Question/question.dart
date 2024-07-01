@@ -1,16 +1,15 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:ivisit/app/ui/ReviewDocument/review_document.dart';
 
+import '../Auth/login.dart';
+import '../../routes/app_pages.dart';
+import '../widgets/comman_appbar.dart';
+import '../../models/processflow_model.dart';
 import '../../../config/constant/constant.dart';
 import '../../controller/processflow_conroller.dart';
-import '../../models/processflow_model.dart';
-import '../../routes/app_pages.dart';
-import '../Auth/login.dart';
-import '../widgets/comman_appbar.dart';
-import '../widgets/custom_textfield.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 
@@ -37,8 +36,6 @@ class _QuestionPageState extends State<QuestionPage> {
 
   @override
   void initState() {
-    var ttt = widget.accessPointData;
-    print(ttt);
     var data = getStorage.read('accessPoint') ?? "";
     setState(() {
       accessPoint = data;
@@ -52,7 +49,6 @@ class _QuestionPageState extends State<QuestionPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
-    final double width = Get.width;
     var processFlowData =
         getAllProcessflowController.processflowList[0].processFlowData;
     return Scaffold(

@@ -1,16 +1,15 @@
 import 'dart:io';
-
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
+import '../widgets/comman_appbar.dart';
+import '../AccessPoint/access_point.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
-import '../AccessPoint/access_point.dart';
-import '../widgets/comman_appbar.dart';
 
 class ThankYouPage extends StatefulWidget {
   const ThankYouPage({super.key});
@@ -67,7 +66,6 @@ class _ThankYouPageState extends State<ThankYouPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
-    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(

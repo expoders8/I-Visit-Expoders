@@ -34,7 +34,6 @@ class _WelcomePageState extends State<WelcomePage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
-    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(

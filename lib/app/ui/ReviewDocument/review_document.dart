@@ -1,18 +1,17 @@
 import 'dart:developer';
-
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:signature/signature.dart';
 
+import '../Auth/login.dart';
+import '../../routes/app_pages.dart';
+import '../widgets/comman_appbar.dart';
+import '../../models/processflow_model.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
-import '../../models/processflow_model.dart';
-import '../../routes/app_pages.dart';
-import '../Auth/login.dart';
-import '../widgets/comman_appbar.dart';
 
 class ReviewDocumentPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
@@ -65,7 +64,6 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
-    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(

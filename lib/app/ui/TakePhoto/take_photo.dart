@@ -1,16 +1,15 @@
 import 'dart:io';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:face_camera/face_camera.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:face_camera/face_camera.dart';
 
+import '../Auth/login.dart';
+import '../../routes/app_pages.dart';
+import '../widgets/comman_appbar.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
-import '../../routes/app_pages.dart';
-import '../Auth/login.dart';
-import '../widgets/comman_appbar.dart';
 
 class TakePhotoPage extends StatefulWidget {
   const TakePhotoPage({super.key});
@@ -37,7 +36,6 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
-    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(

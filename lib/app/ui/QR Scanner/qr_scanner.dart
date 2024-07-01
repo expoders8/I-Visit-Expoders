@@ -1,16 +1,16 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../Auth/login.dart';
+import '../../routes/app_pages.dart';
+import '../widgets/comman_appbar.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
-import '../../../config/constant/color_constant.dart';
 import '../../controller/processflow_conroller.dart';
-import '../../routes/app_pages.dart';
-import '../Auth/login.dart';
-import '../widgets/comman_appbar.dart';
+import '../../../config/constant/color_constant.dart';
 
 class QrScannerPage extends StatefulWidget {
   const QrScannerPage({super.key});
@@ -39,7 +39,6 @@ class _QrScannerPageState extends State<QrScannerPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
-    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(

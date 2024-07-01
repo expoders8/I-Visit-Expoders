@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 import '../../../config/constant/constant.dart';
-import '../../routes/app_pages.dart';
 import '../Auth/login.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/custom_textfield.dart';
@@ -38,7 +37,6 @@ class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
-    final double width = Get.width;
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(

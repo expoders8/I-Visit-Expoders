@@ -1,14 +1,11 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:ivisit/config/constant/color_constant.dart';
 
+import '../Auth/login.dart';
+import '../AccessPoint/access_point.dart';
 import '../../../config/constant/constant.dart';
 import '../../controller/accesspoint_controller.dart';
-import '../AccessPoint/access_point.dart';
-import '../Auth/login.dart';
-import '../TapYourCard/tap_your_card.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,8 +23,6 @@ class _SplashScreenState extends State<SplashScreen> {
     getAllAccessPointController.fetchAllAccessPoint();
     var data = getStorage.read('user');
     if (data != null) {
-      var getUserData = jsonDecode(data);
-      var orgId = getUserData['OrganizationID'] ?? "";
       Future.delayed(const Duration(seconds: 2), () {
         if (isviewed == 0) {
           Get.offAll(() => const LoginPage());

@@ -6,7 +6,6 @@ import '../../config/constant/constant.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
 import '../ui/AccessPoint/access_point.dart';
-import '../ui/TapYourCard/tap_your_card.dart';
 
 class AuthService {
   login(String organizationId, String email, String password) async {
@@ -58,9 +57,6 @@ class AuthService {
             getStorage.write('user', jsonEncode(decodedUser["user"]));
             getStorage.write('onBoard', 1);
             LoaderX.hide();
-            var data = getStorage.read('user');
-            var getUserData = jsonDecode(data);
-            var orgId = getUserData['OrganizationID'] ?? "";
             // if (orgId == "RFIDEAS") {
             //   Get.offAll(() => const TapYourCardPage());
             // } else {
