@@ -69,7 +69,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 14)),
-            Text("Today is $day, $formattedDate at $formattedTime.",
+            Text("Today is $day, $formattedDate",
                 style: const TextStyle(
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,

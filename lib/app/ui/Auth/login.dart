@@ -33,11 +33,9 @@ class LoginPageState extends State<LoginPage> {
   initalvalue() {
     var orgId = getStorage.read("orgId") ?? "";
     var email = getStorage.read("email") ?? "";
-    var password = getStorage.read("password") ?? "";
     setState(() {
       organizationController.text = orgId;
       userNameController.text = email;
-      passwordController.text = password;
     });
   }
 

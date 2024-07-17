@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:signature/signature.dart';
 
+import '../../controller/processflow_conroller.dart';
+import '../../controller/visiter_controller.dart';
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/comman_appbar.dart';
@@ -12,6 +16,7 @@ import '../../models/processflow_model.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../widgets/thankyou_widget.dart';
 
 class ReviewDocumentPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
@@ -24,6 +29,9 @@ class ReviewDocumentPage extends StatefulWidget {
 class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
   String accessPoint = "";
   bool signCheck = false;
+  final visitorController = Get.put(VisiterController());
+  final GetAllProcessflowController getAllProcessflowController =
+      Get.put(GetAllProcessflowController());
   final SignatureController _controller = SignatureController(
     penStrokeWidth: 1,
     penColor: kPrimaryColor,
@@ -99,7 +107,7 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,
                           fontSize: 14)),
-                  Text("Today is $day, $formattedDate at $formattedTime.",
+                  Text("Today is $day, $formattedDate",
                       style: const TextStyle(
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,
@@ -166,11 +174,41 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                           color: kWhiteColor,
                           fontFamily: kCircularStdMedium,
                           fontSize: 14)),
-                  onPressed: () {
-                    if (widget.accessPointData!.isPhoto == 1) {
-                      Get.toNamed(Routes.takePhotoPage);
+                  onPressed: () async {
+                    if (_controller.isNotEmpty) {
+                      final Uint8List? data = await _controller.toPngBytes();
+                      if (data != null) {
+                        final String base64Signature = base64Encode(data);
+                        // Save the signature to your desired location
+                        // For example: visitorController.saveDoc(base64Signature);
+
+                        if (widget.accessPointData!.isPhoto == 1) {
+                          Get.toNamed(Routes.takePhotoPage);
+                        } else {
+                          if (getAllProcessflowController
+                                  .processflowList[0].successMsgData ==
+                              null) {
+                            Get.to(() => const ThankyouWidget());
+                          } else {
+                            Get.toNamed(Routes.thankYouPage);
+                          }
+                        }
+                      }
                     } else {
-                      Get.toNamed(Routes.thankYouPage);
+                      // Show a message to the user indicating that the signature is required
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Signature Required'),
+                              Text(
+                                  'Please provide a signature before proceeding'),
+                            ],
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
                     }
                   },
                 ),

@@ -72,7 +72,7 @@ class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,
                           fontSize: 13)),
-                  Text("Today is $day, $formattedDate at $formattedTime.",
+                  Text("Today is $day, $formattedDate",
                       style: const TextStyle(
                           color: kBlueColor,
                           fontFamily: kCircularStdMedium,

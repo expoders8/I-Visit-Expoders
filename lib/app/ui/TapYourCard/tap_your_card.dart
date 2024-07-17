@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
 // import 'package:android_intent_plus/android_intent.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+
 import '../Auth/login.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +14,7 @@ import '../../../config/constant/constant.dart';
 import 'package:ivisit/app/ui/TapYourCard/thankyou.dart';
 import 'package:ivisit/config/constant/color_constant.dart';
 
+import '../widgets/ble_utils.dart';
 import '../widgets/comman_appbar.dart';
 
 class TapYourCardPage extends StatefulWidget {
@@ -28,6 +33,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
   final FocusNode focusNode = FocusNode();
   VisiterService visiterService = VisiterService();
   Timer? _timer;
+  final flutterReactiveBle = FlutterReactiveBle();
 
   @override
   void dispose() {
@@ -37,7 +43,28 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
 
   @override
   void initState() {
+    _checkPermission();
     super.initState();
+  }
+
+  Future<void> _checkPermission() async {
+    if (!(await BleUtils.checkBluetoothPermission())) {
+      return;
+    }
+
+    if (!(await BleUtils.checkLocationPermissions())) {
+      return;
+    }
+    flutterReactiveBle
+        .scanForDevices(
+            requireLocationServicesEnabled: false,
+            withServices: [],
+            scanMode: ScanMode.lowLatency)
+        .listen((scanResult) async {
+      setState(() {
+        usbStatus = scanResult.name;
+      });
+    });
   }
 
   void onCodeScanned(String code) {
@@ -63,6 +90,9 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (usbStatus == "") {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
@@ -87,15 +117,28 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
               const SizedBox(
                 height: 25,
               ),
-              // Text("USBConnect: $usbStatus"),
+              // Text("usbStatus: $usbStatus"),
               // Text("GetActiveID :$activeID"),
               // Text("USBDisconnect :$usbDisConnectStatus"),
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.center,
               //   children: [
               // CupertinoButton(
-              //   onPressed: () {
-              //     _connectUSB();
+              //   onPressed: () async {
+              //     var ddd = flutterReactiveBle
+              //         .scanForDevices(
+              //             requireLocationServicesEnabled: false,
+              //             withServices: [],
+              //             scanMode: ScanMode.lowLatency)
+              //         .listen((scanResult) async {
+              //       setState(() {
+              //         usbStatus = scanResult.name;
+              //       });
+              //       debugger();
+              //     }, onDone: () {
+              //       debugPrint("BLE-5 onDone");
+              //       debugPrint("BLE-6");
+              //     }, onError: (e) {}, cancelOnError: true);
               //   },
               //   child: Text("Connect"),
               // ),
@@ -120,15 +163,10 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                   borderRadius: BorderRadius.circular(25.0), // Border radius
                 ),
                 child: TextField(
-                  maxLines: 2,
+                  // maxLines: 2,
                   autofocus: true,
+                  focusNode: FocusNode(),
                   controller: redersCodeController,
-                  keyboardType: TextInputType.multiline,
-                  inputFormatters: <TextInputFormatter>[
-                    // FilteringTextInputFormatter.digitsOnly,
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    // FilteringTextInputFormatter.allow(RegExp(r'[^\da-zA-Z]')),
-                  ],
                   onChanged: (value) {
                     //Future.delayed(const Duration(seconds: 2), () async {
                     //if (int.tryParse(value) != null) {

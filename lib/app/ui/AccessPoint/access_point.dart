@@ -10,6 +10,7 @@ import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../controller/accesspoint_controller.dart';
 import '../Auth/login.dart';
+import '../widgets/thankyou_widget.dart';
 
 class AccessPointPage extends StatefulWidget {
   const AccessPointPage({super.key});
@@ -53,7 +54,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
                             color: kTapColor,
                             child: const Center(
                                 child: Text(
-                              "i-Visit",
+                              "i-Visits",
                               style: TextStyle(
                                   color: kWhiteColor,
                                   fontWeight: FontWeight.bold,
@@ -160,7 +161,8 @@ class _AccessPointPageState extends State<AccessPointPage> {
 
                               if (accessPointData!.isNotEmpty) {
                                 var data = accessPointData[index];
-                                return buildButtonWidget(data.name.toString());
+                                return buildButtonWidget(
+                                    data.name.toString(), data.iD);
                               } else {
                                 return const Center(
                                   child: Text(
@@ -193,7 +195,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
     );
   }
 
-  buildButtonWidget(String name) {
+  buildButtonWidget(String name, id) {
     Size size = MediaQuery.of(context).size;
 
     return Padding(
@@ -211,8 +213,9 @@ class _AccessPointPageState extends State<AccessPointPage> {
             ),
           ),
           onPressed: () {
-            getAllProcessflowController.fetchAllProcessFlow();
             getStorage.write('accessPoint', name);
+            getStorage.write('accessPointId', id);
+            getAllProcessflowController.fetchAllProcessFlow();
             Future.delayed(const Duration(seconds: 2), () async {
               var accessPoint = getStorage.read("IsAuthenticate") ?? 0;
               if (accessPoint == 1) {
@@ -221,6 +224,34 @@ class _AccessPointPageState extends State<AccessPointPage> {
                     builder: (context) => const TapYourCardPage(),
                   ),
                 );
+              } else if (getAllProcessflowController
+                      .processflowList[0].welcomeMsgData ==
+                  null) {
+                if (getAllProcessflowController
+                            .processflowList[0].processFlowData!.isName ==
+                        0 &&
+                    getAllProcessflowController
+                            .processflowList[0].processFlowData!.isCompany ==
+                        0 &&
+                    getAllProcessflowController
+                            .processflowList[0].processFlowData!.isEmail ==
+                        0 &&
+                    getAllProcessflowController
+                            .processflowList[0].processFlowData!.isPhone ==
+                        0 &&
+                    getAllProcessflowController
+                            .processflowList[0].processFlowData!.isTitle ==
+                        0) {
+                  if (getAllProcessflowController
+                          .processflowList[0].successMsgData ==
+                      null) {
+                    Get.to(() => const ThankyouWidget());
+                  } else {
+                    Get.toNamed(Routes.thankYouPage);
+                  }
+                } else {
+                  Get.toNamed(Routes.processFlowPage);
+                }
               } else {
                 Get.toNamed(Routes.welcomePage);
               }

@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ivisit/app/ui/ReviewDocument/review_document.dart';
 
+import '../../../config/provider/snackbar_provider.dart';
+import '../../controller/visiter_controller.dart';
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
 import '../widgets/comman_appbar.dart';
@@ -12,6 +16,7 @@ import '../../../config/constant/constant.dart';
 import '../../controller/processflow_conroller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../widgets/thankyou_widget.dart';
 
 class QuestionPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
@@ -23,16 +28,17 @@ class QuestionPage extends StatefulWidget {
 
 class _QuestionPageState extends State<QuestionPage> {
   int selectedIndex = 3, selectedVaccinatIndex = 3;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController badgeIdController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   final GetAllProcessflowController getAllProcessflowController =
       Get.put(GetAllProcessflowController());
-  bool isFormSubmitted = false, valuefirst = false;
+  final visitorController = Get.put(VisiterController());
+  bool isFormSubmitted = false, valuefirst = false, allUnchecked = true;
   List<String> list = <String>['One', 'Two', 'Three', 'Four'];
   String dropdownValue = "One";
   String accessPoint = "";
   Map<int, List<bool>> isCheckedMap = {};
+  Map<int, String> dropdownValues = {};
+  List<Map<String, dynamic>> selectedAnswers = [];
 
   @override
   void initState() {
@@ -60,6 +66,7 @@ class _QuestionPageState extends State<QuestionPage> {
           showBackButton: true,
           text: "Back",
           onBackPressed: () {
+            getAllProcessflowController.fetchAllProcessFlow();
             Navigator.of(context).pop();
           },
           showLogoutButton: true,
@@ -82,7 +89,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       color: kBlueColor,
                       fontFamily: kCircularStdMedium,
                       fontSize: 13)),
-              Text("Today is $day, $formattedDate at $formattedTime.",
+              Text("Today is $day, $formattedDate",
                   style: const TextStyle(
                       color: kBlueColor,
                       fontFamily: kCircularStdMedium,
@@ -152,9 +159,11 @@ class _QuestionPageState extends State<QuestionPage> {
                                             const SizedBox(height: 5.0),
                                             data.inputType == "checkbox"
                                                 ? buildCheckBoxwidget(
-                                                    data.choice, index)
-                                                : buildDropdownwidget(
-                                                    data.choice)
+                                                    data.choice, index, data.iD)
+                                                : buildDropdownWidget(
+                                                    data.choice,
+                                                    index,
+                                                    data.iD!)
                                           ],
                                         ),
                                       ],
@@ -191,12 +200,46 @@ class _QuestionPageState extends State<QuestionPage> {
                               fontFamily: kCircularStdMedium,
                               fontSize: 14)),
                       onPressed: () {
-                        if (processFlowData!.isDocument == 1) {
-                          Get.to(() => ReviewDocumentPage(
-                                accessPointData: processFlowData,
-                              ));
-                        } else if (processFlowData.isPhoto == 1) {
-                          Get.toNamed(Routes.takePhotoPage);
+                        if (selectedAnswers.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please select value'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {
+                          if (dropdownValues.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Please select value'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } else if (!validateAllQuestions()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Please select at least one checkbox for each question.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } else {
+                            if (processFlowData!.isDocument == 1) {
+                              Get.to(() => ReviewDocumentPage(
+                                    accessPointData: processFlowData,
+                                  ));
+                            } else if (processFlowData.isPhoto == 1) {
+                              Get.toNamed(Routes.takePhotoPage);
+                            } else {
+                              if (getAllProcessflowController
+                                      .processflowList[0].successMsgData ==
+                                  null) {
+                                Get.to(() => const ThankyouWidget());
+                              } else {
+                                Get.toNamed(Routes.thankYouPage);
+                              }
+                            }
+                          }
                         }
                       },
                     ),
@@ -210,73 +253,85 @@ class _QuestionPageState extends State<QuestionPage> {
     );
   }
 
-  Widget buildDropdownwidget(dueData) {
+  Widget buildDropdownWidget(dueData, int index, int questionId) {
     List<String> dropDownList = dueData.split(',');
+    List<String> uniqueDropDownList = dropDownList.toSet().toList();
+
+    // Adding "Select Value" as the default option
+    if (!uniqueDropDownList.contains("Select Value")) {
+      uniqueDropDownList.insert(0, "Select Value");
+    }
+
+    if (!dropdownValues.containsKey(index) ||
+        !uniqueDropDownList.contains(dropdownValues[index])) {
+      dropdownValues[index] = "Select Value";
+    }
+
     return SizedBox(
       height: 50,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          if (dropDownList.isNotEmpty) {
-            List<String> uniqueDropDownList = dropDownList.toSet().toList();
-            if (!uniqueDropDownList.contains(dropdownValue)) {
-              dropdownValue = uniqueDropDownList.first;
-            }
-            return Container(
-              width: Get.width > 500 ? 600 : Get.width - 30,
-              decoration: BoxDecoration(
-                border: Border.all(color: kBorderColor),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: DropdownButton<String>(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                value: dropdownValue,
-                isExpanded: true,
-                icon: Image.asset(
-                  "assets/icons/arrow-bottom-outline.png",
-                  color: kIconColor,
-                  scale: 1.4,
-                ),
-                style: const TextStyle(color: kPrimaryColor),
-                underline: Container(
-                  height: 0,
-                ),
-                onChanged: (String? value) {
-                  setState(() {
-                    dropdownValue = value!;
-                  });
-                },
-                items: uniqueDropDownList
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
+      child: Container(
+        width: Get.width > 500 ? 600 : Get.width - 30,
+        decoration: BoxDecoration(
+          border: Border.all(color: kBorderColor),
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: DropdownButton<String>(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          value: dropdownValues[index],
+          isExpanded: true,
+          icon: Image.asset(
+            "assets/icons/arrow-bottom-outline.png",
+            color: kIconColor,
+            scale: 1.4,
+          ),
+          style: const TextStyle(color: kPrimaryColor),
+          underline: Container(
+            height: 0,
+          ),
+          onChanged: (String? value) {
+            setState(() {
+              dropdownValues[index] = value!;
+              updateSelectedAnswers(questionId, value);
+            });
+          },
+          items:
+              uniqueDropDownList.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
             );
-          } else {
-            return const Center(
-              child: Text(
-                "No dropdown",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: kPrimaryColor,
-                    fontSize: 15,
-                    fontFamily: kCircularStdMedium),
-              ),
-            );
-          }
-        },
+          }).toList(),
+        ),
       ),
     );
   }
 
-  Widget buildCheckBoxwidget(dueData, int index) {
+  void updateSelectedAnswers(int questionId, String selectedValue) {
+    bool found = false;
+    for (var answer in selectedAnswers) {
+      if (answer['questionId'] == questionId) {
+        answer['questionAnswer'] = [selectedValue];
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      selectedAnswers.add({
+        'questionId': questionId,
+        'questionAnswer': [selectedValue],
+      });
+    }
+
+    selectedAnswers.forEach((answer) {
+      print(
+          'questionId: ${answer['questionId']}, questionAnswer: ${answer['questionAnswer']}');
+    });
+    visitorController.saveQue(selectedAnswers);
+  }
+
+  Widget buildCheckBoxwidget(dueData, int index, id) {
     List<String> checkBoxList = dueData.split(',');
 
-    // Initialize isCheckedList for the specific index if not already initialized
     if (!isCheckedMap.containsKey(index)) {
       isCheckedMap[index] = List<bool>.filled(checkBoxList.length, false);
     }
@@ -309,6 +364,7 @@ class _QuestionPageState extends State<QuestionPage> {
                       setState(() {
                         isCheckedMap[index]![checkBoxIndex] = value ?? false;
                       });
+                      // getSelectedCheckBoxes();
                     },
                   ),
                   Text(
@@ -332,6 +388,62 @@ class _QuestionPageState extends State<QuestionPage> {
             }
           },
         ));
+  }
+
+  getSelectedCheckBoxes() {
+    selectedAnswers.clear();
+    setState(() {
+      allUnchecked = true;
+    });
+
+    if (!validateAllQuestions()) {
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content:
+      //         Text('Please select at least one checkbox for each question.'),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      return;
+    }
+
+    isCheckedMap.forEach((index, checkedList) {
+      var questionData =
+          getAllProcessflowController.processflowList[0].questionsData![index];
+      List<String> checkBoxList = questionData.choice!.split(',');
+      List<String> selectedNames = [];
+
+      for (int i = 0; i < checkedList.length; i++) {
+        if (checkedList[i]) {
+          selectedNames.add(checkBoxList[i]);
+          setState(() {
+            allUnchecked = false;
+          });
+        }
+      }
+
+      if (selectedNames.isNotEmpty) {
+        selectedAnswers.add({
+          'questionId': questionData.iD,
+          'questionAnswer': selectedNames,
+        });
+      }
+    });
+    selectedAnswers.forEach((answer) {
+      print(
+          'questionId: ${answer['questionId']}, questionAnswer: ${answer['questionAnswer']}');
+    });
+    visitorController.saveQue(selectedAnswers);
+  }
+
+  bool validateAllQuestions() {
+    bool allValid = true;
+    isCheckedMap.forEach((index, checkedList) {
+      if (checkedList.every((checked) => !checked)) {
+        allValid = false;
+      }
+    });
+    return allValid;
   }
 
   buildradiosymptomsWidget(String text, int index) {

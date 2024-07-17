@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../config/provider/loader_provider.dart';
+import '../../controller/processflow_conroller.dart';
+import '../../services/visiterlog.dart';
 import '../widgets/comman_appbar.dart';
 import '../AccessPoint/access_point.dart';
 import '../../../config/constant/constant.dart';
@@ -12,7 +15,9 @@ import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 
 class ThankYouPage extends StatefulWidget {
-  const ThankYouPage({super.key});
+  const ThankYouPage({
+    super.key,
+  });
 
   @override
   State<ThankYouPage> createState() => _ThankYouPageState();
@@ -23,35 +28,45 @@ class _ThankYouPageState extends State<ThankYouPage> {
   String accessPoint = "";
   late VideoPlayerController _controller;
   bool showOverlay = false, _isPlaying = false, isBuffering = false;
+  final GetAllProcessflowController getAllProcessflowController =
+      Get.put(GetAllProcessflowController());
+  VisiterService visiterService = VisiterService();
+  String extension = "";
   double _sliderValue = 0.0;
   @override
   void initState() {
     super.initState();
+    String ext = "filePath".split('.').last.toLowerCase();
     var data = getStorage.read('accessPoint') ?? "";
     setState(() {
       accessPoint = data;
+      extension = ext;
     });
-    Future.delayed(const Duration(milliseconds: 180), () async {
-      showOverlay = false;
-      _isPlaying = true;
-    });
-    _controller = VideoPlayerController.networkUrl(Uri.parse(
-        'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8'))
-      ..initialize().then((_) {
-        setState(() {});
+    if (extension != "jpg") {
+      Future.delayed(const Duration(milliseconds: 180), () async {
+        showOverlay = false;
+        _isPlaying = true;
       });
-    _controller.addListener(() {
-      if (_controller.value.isPlaying) {
-        setState(() {
-          _sliderValue = _controller.value.position.inMilliseconds.toDouble();
+      _controller = VideoPlayerController.networkUrl(Uri.parse(
+          getAllProcessflowController
+              .processflowList[0].successMsgData!.imageFile
+              .toString()))
+        ..initialize().then((_) {
+          setState(() {});
         });
-      }
-    });
-    _controller.play();
-    Future.delayed(const Duration(milliseconds: 180), () async {
-      showOverlay = false;
-      _isPlaying = true;
-    });
+      _controller.addListener(() {
+        if (_controller.value.isPlaying) {
+          setState(() {
+            _sliderValue = _controller.value.position.inMilliseconds.toDouble();
+          });
+        }
+      });
+      _controller.play();
+      Future.delayed(const Duration(milliseconds: 180), () async {
+        showOverlay = false;
+        _isPlaying = true;
+      });
+    }
   }
 
   @override
@@ -93,7 +108,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 14)),
-            Text("Today is $day, $formattedDate at $formattedTime.",
+            Text("Today is $day, $formattedDate",
                 style: const TextStyle(
                     color: kBlueColor,
                     fontFamily: kCircularStdMedium,
@@ -105,37 +120,52 @@ class _ThankYouPageState extends State<ThankYouPage> {
               scale: 1.5,
             ),
             SizedBox(height: Get.width > 500 ? 25 : 80),
-            const Text("You have checked-in! ",
+            Text(
+                getAllProcessflowController
+                    .processflowList[0].successMsgData!.text
+                    .toString(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: kPrimaryColor,
-                    fontFamily: kCircularStdMedium,
-                    fontSize: 16)),
-            const Text("Thank you!  (customizable screen)",
-                textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     color: kPrimaryColor,
                     fontFamily: kCircularStdMedium,
                     fontSize: 16)),
             SizedBox(height: Get.width > 500 ? 20 : 120),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: Get.width > 500 ? 600 : Get.width,
-                  height: 220,
-                  child: Center(
-                    child: _controller.value.isInitialized
-                        ? VideoPlayer(_controller)
-                        : Container(),
-                  ),
-                ),
-                SizedBox(
-                    width: Get.width > 500 ? 600 : Get.width,
-                    height: 220,
-                    child: _buildControls()),
-              ],
-            ),
+            getAllProcessflowController
+                        .processflowList[0].successMsgData!.imageFile
+                        .toString() ==
+                    ""
+                ? Container()
+                : extension == "jpg" ||
+                        extension == "png" ||
+                        extension == "jpeg"
+                    ? SizedBox(
+                        width: Get.width > 500 ? 600 : Get.width,
+                        height: 220,
+                        child: Image.network(
+                          getAllProcessflowController
+                              .processflowList[0].successMsgData!.imageFile
+                              .toString(),
+                          scale: 2,
+                        ),
+                      )
+                    : Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: Get.width > 500 ? 600 : Get.width,
+                            height: 220,
+                            child: Center(
+                              child: _controller.value.isInitialized
+                                  ? VideoPlayer(_controller)
+                                  : Container(),
+                            ),
+                          ),
+                          SizedBox(
+                              width: Get.width > 500 ? 600 : Get.width,
+                              height: 220,
+                              child: _buildControls()),
+                        ],
+                      ),
             const SizedBox(height: 10),
             SizedBox(
               width: Get.width > 500 ? 600 : Get.width - 20,
@@ -149,7 +179,18 @@ class _ThankYouPageState extends State<ThankYouPage> {
                         fontFamily: kCircularStdMedium,
                         fontSize: 14)),
                 onPressed: () {
-                  Get.offAll(() => const AccessPointPage());
+                  LoaderX.show(context, 60.0, 60.0);
+                  visiterService
+                      .saveVisit(getAllProcessflowController
+                          .processflowList[0].processFlowData!.visitorTypeID
+                          .toString())
+                      .then((value) => {
+                            if (value)
+                              {
+                                LoaderX.hide(),
+                                Get.offAll(() => const AccessPointPage())
+                              }
+                          });
                 },
               ),
             ),
@@ -229,7 +270,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
                         color: Colors.white, fontFamily: kCircularStdNormal),
                   ),
                   SizedBox(
-                    width: 184,
+                    width: 462,
                     height: 20,
                     child: Slider(
                       activeColor: const Color(0xFF3D8DF5),

@@ -1,8 +1,14 @@
 class GetProcessflowModel {
   ProcessFlowData? processFlowData;
   List<QuestionsData>? questionsData;
+  WelcomeMsgData? welcomeMsgData;
+  WelcomeMsgData? successMsgData;
 
-  GetProcessflowModel({this.processFlowData, this.questionsData});
+  GetProcessflowModel(
+      {this.processFlowData,
+      this.questionsData,
+      this.welcomeMsgData,
+      this.successMsgData});
 
   GetProcessflowModel.fromJson(Map<String, dynamic> json) {
     processFlowData = json['processFlowData'] != null
@@ -14,6 +20,12 @@ class GetProcessflowModel {
         questionsData!.add(QuestionsData.fromJson(v));
       });
     }
+    welcomeMsgData = json['welcomeMsgData'] != null
+        ? WelcomeMsgData.fromJson(json['welcomeMsgData'])
+        : null;
+    successMsgData = json['successMsgData'] != null
+        ? WelcomeMsgData.fromJson(json['successMsgData'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +35,12 @@ class GetProcessflowModel {
     }
     if (questionsData != null) {
       data['questionsData'] = questionsData!.map((v) => v.toJson()).toList();
+    }
+    if (welcomeMsgData != null) {
+      data['welcomeMsgData'] = welcomeMsgData!.toJson();
+    }
+    if (successMsgData != null) {
+      data['successMsgData'] = successMsgData!.toJson();
     }
     return data;
   }
@@ -138,6 +156,31 @@ class QuestionsData {
     data['DisplayOrder'] = displayOrder;
     data['InputType'] = inputType;
     data['Choice'] = choice;
+    return data;
+  }
+}
+
+class WelcomeMsgData {
+  int? iD;
+  int? accessPointID;
+  String? text;
+  String? imageFile;
+
+  WelcomeMsgData({this.iD, this.accessPointID, this.text, this.imageFile});
+
+  WelcomeMsgData.fromJson(Map<String, dynamic> json) {
+    iD = json['ID'];
+    accessPointID = json['AccessPointID'];
+    text = json['Text'];
+    imageFile = json['ImageFile'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ID'] = iD;
+    data['AccessPointID'] = accessPointID;
+    data['Text'] = text;
+    data['ImageFile'] = imageFile;
     return data;
   }
 }

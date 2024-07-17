@@ -56,6 +56,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             }
           }
         }
+        if (widget.name == 'phoneno') {
+          if (value.isEmpty) {
+            widget.validationMsg;
+          } else {
+            if (value!.length <= 9 || value!.length >= 11) {
+              return "Phone number Must be more than 10 characters.";
+            }
+          }
+        }
         // if (widget.name == "password") {
         //   if (value.isEmpty) {
         //     widget.validationMsg;

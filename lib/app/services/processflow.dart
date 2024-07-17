@@ -9,11 +9,13 @@ import '../../config/provider/snackbar_provider.dart';
 class ProcessFlowService {
   Future<GetProcessflowModel> getProcessFlow() async {
     var data = getStorage.read('user');
+    var accessPointId = getStorage.read('accessPointId');
     var getUserData = jsonDecode(data);
     var orgId = getUserData['OrganizationID'] ?? "";
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/api/processflow/getProcessFlow?OrgId=$orgId'),
+        Uri.parse(
+            '$baseUrl/api/processflow/getProcessFlow?OrgId=$orgId&&AccessPointId=$accessPointId'),
       );
       if (response.statusCode == 200) {
         var accesspointdata = jsonDecode(response.body);
