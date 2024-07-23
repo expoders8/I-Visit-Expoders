@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ivisit/config/constant/color_constant.dart';
-import 'package:ivisit/config/constant/font_constant.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter/material.dart';
 
-import '../../../config/provider/loader_provider.dart';
-import '../../controller/processflow_conroller.dart';
-import '../../services/visiter_service.dart';
 import '../AccessPoint/access_point.dart';
+import '../../services/visiter_service.dart';
+import '../../../config/constant/font_constant.dart';
+import '../../controller/processflow_conroller.dart';
+import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/loader_provider.dart';
 
 class ThankyouWidget extends StatefulWidget {
   final String? code;

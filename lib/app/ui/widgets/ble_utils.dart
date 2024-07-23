@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -10,21 +8,6 @@ class BleUtils {
   final flutterReactiveBle = FlutterReactiveBle();
 
   static final validCodeUnits = "Access valid".codeUnits;
-
-  scanForMatchingDevice() async {
-    var ddd = flutterReactiveBle
-        .scanForDevices(
-            requireLocationServicesEnabled: false,
-            withServices: [],
-            scanMode: ScanMode.lowLatency)
-        .listen((scanResult) async {}, onDone: () {
-      debugger();
-      debugPrint("BLE-5 onDone");
-      debugPrint("BLE-6");
-    }, onError: (e) {}, cancelOnError: true);
-
-    debugPrint("BLE-8");
-  }
 
   static Future<bool> checkBluetoothPermission() async {
     if (Platform.isAndroid) {

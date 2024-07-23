@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/visitor_types_model.dart';
 import '../../config/constant/constant.dart';
+import '../controller/visiter_controller.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
-import '../controller/visiter_controller.dart';
-import '../models/visitor_types_model.dart';
 
 class VisitorService {
   Future<GetAllVisitorTypeModel> getAllVisitorTypes() async {

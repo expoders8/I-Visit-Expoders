@@ -37,7 +37,6 @@ class _QrScannerPageState extends State<QrScannerPage> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
     return Scaffold(
       backgroundColor: kBackGroundColor,

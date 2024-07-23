@@ -4,19 +4,19 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:face_camera/face_camera.dart';
 
-import '../../controller/processflow_conroller.dart';
-import '../../controller/visiter_controller.dart';
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
-import '../ProcessFlow/process_flow.dart';
 import '../Question/question.dart';
-import '../ReviewDocument/review_document.dart';
-import '../TapYourCard/tap_your_card.dart';
 import '../widgets/comman_appbar.dart';
-import '../../../config/constant/constant.dart';
-import '../../../config/constant/font_constant.dart';
-import '../../../config/constant/color_constant.dart';
 import '../widgets/thankyou_widget.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../TapYourCard/tap_your_card.dart';
+import '../ReviewDocument/review_document.dart';
+import '../../../config/constant/constant.dart';
+import '../../controller/visiter_controller.dart';
+import '../../../config/constant/font_constant.dart';
+import '../../controller/processflow_conroller.dart';
+import '../../../config/constant/color_constant.dart';
 
 class TakePhotoPage extends StatefulWidget {
   final String? text;
@@ -57,7 +57,6 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
     return Scaffold(
       backgroundColor: kBackGroundColor,

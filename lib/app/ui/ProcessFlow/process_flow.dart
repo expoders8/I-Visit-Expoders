@@ -1,23 +1,22 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import 'package:ivisit/app/ui/Question/question.dart';
 
-import '../../../config/constant/constant.dart';
-import '../../controller/processflow_conroller.dart';
-import '../../controller/visiter_controller.dart';
-import '../../routes/app_pages.dart';
 import '../Auth/login.dart';
-import '../ReviewDocument/review_document.dart';
+import '../../routes/app_pages.dart';
 import '../TakePhoto/take_photo.dart';
-import '../TapYourCard/tap_your_card.dart';
 import '../widgets/comman_appbar.dart';
+import '../widgets/thankyou_widget.dart';
 import '../widgets/custom_textfield.dart';
+import '../TapYourCard/tap_your_card.dart';
+import '../ReviewDocument/review_document.dart';
+import '../../../config/constant/constant.dart';
+import '../../controller/visiter_controller.dart';
+import '../../controller/processflow_conroller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
-import '../widgets/thankyou_widget.dart';
 
 class ProcessFlowPage extends StatefulWidget {
   final String? text;
@@ -84,7 +83,6 @@ class _ProcessFlowPageState extends State<ProcessFlowPage> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
     return Scaffold(
       backgroundColor: kBackGroundColor,

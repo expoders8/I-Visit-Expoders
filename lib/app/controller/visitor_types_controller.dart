@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-import '../models/visitor_types_model.dart';
 import '../services/visiter_service.dart';
+import '../models/visitor_types_model.dart';
 
 class GetAllVisitorTypesController extends GetxController {
   var isLoading = true.obs;

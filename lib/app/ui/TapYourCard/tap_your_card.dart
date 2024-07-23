@@ -1,30 +1,25 @@
 import 'dart:async';
-import 'dart:developer';
-
-// import 'package:android_intent_plus/android_intent.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-
-import '../../../config/provider/loader_provider.dart';
-import '../../controller/processflow_conroller.dart';
-import '../../routes/app_pages.dart';
-import '../AccessPoint/access_point.dart';
-import '../Auth/login.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../services/visiter_service.dart';
-import '../../../config/constant/constant.dart';
 import 'package:ivisit/app/ui/TapYourCard/thankyou.dart';
-import 'package:ivisit/config/constant/color_constant.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
-import '../ProcessFlow/process_flow.dart';
-import '../Question/question.dart';
-import '../ReviewDocument/review_document.dart';
-import '../TakePhoto/take_photo.dart';
+import '../Auth/login.dart';
 import '../widgets/ble_utils.dart';
+import '../Question/question.dart';
+import '../../routes/app_pages.dart';
+import '../TakePhoto/take_photo.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
+import '../AccessPoint/access_point.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../../services/visiter_service.dart';
+import '../ReviewDocument/review_document.dart';
+import '../../../config/constant/constant.dart';
+import '../../controller/processflow_conroller.dart';
+import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/loader_provider.dart';
 
 class TapYourCardPage extends StatefulWidget {
   final String? text;

@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../config/constant/constant.dart';
+import '../models/processflowdata_model.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
-import '../models/processflowdata_model.dart';
 
 class ProcessFlowService {
   Future<GetProcessFlowDataModel> getProcessFlow() async {

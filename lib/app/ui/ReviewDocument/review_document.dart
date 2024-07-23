@@ -7,20 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:signature/signature.dart';
 
-import '../../controller/processflow_conroller.dart';
-import '../../controller/visiter_controller.dart';
 import '../Auth/login.dart';
-import '../../routes/app_pages.dart';
-import '../ProcessFlow/process_flow.dart';
 import '../Question/question.dart';
+import '../../routes/app_pages.dart';
 import '../TakePhoto/take_photo.dart';
-import '../TapYourCard/tap_your_card.dart';
 import '../widgets/comman_appbar.dart';
+import '../widgets/thankyou_widget.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../TapYourCard/tap_your_card.dart';
 import '../../models/processflow_model.dart';
 import '../../../config/constant/constant.dart';
+import '../../controller/visiter_controller.dart';
 import '../../../config/constant/font_constant.dart';
+import '../../controller/processflow_conroller.dart';
 import '../../../config/constant/color_constant.dart';
-import '../widgets/thankyou_widget.dart';
 
 class ReviewDocumentPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
@@ -88,7 +88,6 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
     return Scaffold(
       backgroundColor: kBackGroundColor,

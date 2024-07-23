@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-import '../models/processflowdata_model.dart';
 import '../services/processflow.dart';
+import '../models/processflowdata_model.dart';
 
 class GetAllProcessflowController extends GetxController {
   var isLoading = true.obs;

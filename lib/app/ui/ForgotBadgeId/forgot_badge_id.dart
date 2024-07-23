@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 
-import '../../../config/constant/constant.dart';
 import '../Auth/login.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/custom_textfield.dart';
+import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 
@@ -35,7 +35,6 @@ class _ForgotbadgeIdPageState extends State<ForgotbadgeIdPage> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
     return Scaffold(
       backgroundColor: kBackGroundColor,

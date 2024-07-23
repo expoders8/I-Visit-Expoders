@@ -1,19 +1,19 @@
 import 'package:get/get.dart';
 
-import '../ui/AccessPoint/access_point.dart';
 import '../ui/Auth/login.dart';
-import '../ui/ForgotBadgeId/forgot_badge_id.dart';
-import '../ui/ProcessFlow/process_flow.dart';
-import '../ui/QR Scanner/qr_scanner.dart';
 import '../ui/Question/question.dart';
-import '../ui/ReviewDocument/review_document.dart';
 import '../ui/SplasScreen/splas.dart';
-import '../ui/TakePhoto/take_photo.dart';
-import '../ui/TapYourCard/tap_your_card.dart';
-import '../ui/TapYourCard/thankyou.dart';
 import '../ui/ThankYou/thank_you.dart';
+import '../ui/TapYourCard/thankyou.dart';
+import '../ui/TakePhoto/take_photo.dart';
+import '../ui/QR Scanner/qr_scanner.dart';
+import '../ui/AccessPoint/access_point.dart';
+import '../ui/ProcessFlow/process_flow.dart';
 import '../ui/VisitorTypes/visitortype.dart';
+import '../ui/TapYourCard/tap_your_card.dart';
+import '../ui/ForgotBadgeId/forgot_badge_id.dart';
 import '../ui/Welcome Screen/welcome_screen.dart';
+import '../ui/ReviewDocument/review_document.dart';
 
 part 'app_routes.dart';
 

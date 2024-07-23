@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../config/provider/loader_provider.dart';
-import '../../controller/processflow_conroller.dart';
-import '../../services/visiter_service.dart';
 import '../widgets/comman_appbar.dart';
 import '../AccessPoint/access_point.dart';
+import '../../services/visiter_service.dart';
 import '../../../config/constant/constant.dart';
+import '../../controller/processflow_conroller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
+import '../../../config/provider/loader_provider.dart';
 
 class ThankYouPage extends StatefulWidget {
   const ThankYouPage({
@@ -79,7 +79,6 @@ class _ThankYouPageState extends State<ThankYouPage> {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
     return Scaffold(
       backgroundColor: kBackGroundColor,

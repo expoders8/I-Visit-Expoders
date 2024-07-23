@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/constant/constant.dart';
+import '../ui/AccessPoint/access_point.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
-import '../ui/AccessPoint/access_point.dart';
 
 class AuthService {
   login(String organizationId, String email, String password) async {

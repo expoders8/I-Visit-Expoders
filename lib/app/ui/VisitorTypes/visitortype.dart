@@ -1,23 +1,20 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:ivisit/app/ui/Question/question.dart';
 import 'package:ivisit/app/ui/TakePhoto/take_photo.dart';
 import 'package:ivisit/app/ui/TapYourCard/tap_your_card.dart';
 
-import '../../controller/processflow_conroller.dart';
-import '../../controller/visitor_types_controller.dart';
-import '../../routes/app_pages.dart';
-import '../../../config/constant/constant.dart';
-import '../../../config/constant/font_constant.dart';
-import '../../../config/constant/color_constant.dart';
 import '../Auth/login.dart';
-import '../ProcessFlow/process_flow.dart';
-import '../ReviewDocument/review_document.dart';
+import '../../routes/app_pages.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../ReviewDocument/review_document.dart';
+import '../../../config/constant/constant.dart';
+import '../../controller/processflow_conroller.dart';
+import '../../../config/constant/font_constant.dart';
+import '../../../config/constant/color_constant.dart';
+import '../../controller/visitor_types_controller.dart';
 
 class VisitoTypePage extends StatefulWidget {
   const VisitoTypePage({super.key});

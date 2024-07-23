@@ -2,20 +2,21 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../../controller/visiter_controller.dart';
-import '../../routes/app_pages.dart';
+
 import '../Auth/login.dart';
-import '../ProcessFlow/process_flow.dart';
-import '../ReviewDocument/review_document.dart';
+import '../../routes/app_pages.dart';
 import '../TakePhoto/take_photo.dart';
-import '../TapYourCard/tap_your_card.dart';
 import '../widgets/comman_appbar.dart';
+import '../widgets/thankyou_widget.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../TapYourCard/tap_your_card.dart';
 import '../../models/processflow_model.dart';
+import '../ReviewDocument/review_document.dart';
 import '../../../config/constant/constant.dart';
+import '../../controller/visiter_controller.dart';
 import '../../controller/processflow_conroller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
-import '../widgets/thankyou_widget.dart';
 
 class QuestionPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
