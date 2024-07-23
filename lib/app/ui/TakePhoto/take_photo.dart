@@ -8,6 +8,10 @@ import '../../controller/processflow_conroller.dart';
 import '../../controller/visiter_controller.dart';
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../Question/question.dart';
+import '../ReviewDocument/review_document.dart';
+import '../TapYourCard/tap_your_card.dart';
 import '../widgets/comman_appbar.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
@@ -15,7 +19,9 @@ import '../../../config/constant/color_constant.dart';
 import '../widgets/thankyou_widget.dart';
 
 class TakePhotoPage extends StatefulWidget {
-  const TakePhotoPage({super.key});
+  final String? text;
+  final int? index;
+  const TakePhotoPage({super.key, this.text, this.index});
 
   @override
   State<TakePhotoPage> createState() => _TakePhotoPageState();
@@ -29,11 +35,22 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
       Get.put(GetAllProcessflowController());
   @override
   void initState() {
+    getItemAtIndex();
     var data = getStorage.read('accessPoint') ?? "";
     setState(() {
       accessPoint = data;
     });
     super.initState();
+  }
+
+  String getItemAtIndex() {
+    var items = getStorage.read<List<dynamic>>('apiList') ?? [];
+    int index = widget.index!;
+    if (index >= 0 && index < items.length) {
+      return items[index];
+    } else {
+      return 'Index out of range';
+    }
   }
 
   @override
@@ -51,7 +68,13 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
           showBackButton: true,
           text: "Back",
           onBackPressed: () {
-            Navigator.of(context).pop();
+            if (widget.text == "scan") {
+              Get.offAll(() => const TapYourCardPage(
+                    text: "back",
+                  ));
+            } else {
+              Navigator.of(context).pop();
+            }
           },
           showLogoutButton: true,
           onLogoutPressed: () {
@@ -100,14 +123,35 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
                           imageFile = File(image!.path);
                         });
                         visitorController.saveImageData(imageFile!.path);
+                        String selectedItem = getItemAtIndex();
+                        var screenIndex = widget.index! + 1;
 
-                        if (getAllProcessflowController
-                                .processflowList[0].successMsgData ==
-                            null) {
-                          Get.to(() => const ThankyouWidget());
+                        if (selectedItem == "Basic Info") {
+                          Get.to(() => ProcessFlowPage(
+                                index: screenIndex,
+                              ));
+                        } else if (selectedItem == "Document") {
+                          Get.to(() => ReviewDocumentPage(index: screenIndex));
+                        } else if (selectedItem == "Photo") {
+                          Get.to(() => TakePhotoPage(index: screenIndex));
+                        } else if (selectedItem == "Question") {
+                          Get.to(() => QuestionPage(index: screenIndex));
                         } else {
-                          Get.toNamed(Routes.thankYouPage);
+                          if (getAllProcessflowController
+                                  .processflowList[0].successMsgData ==
+                              null) {
+                            Get.to(() => const ThankyouWidget());
+                          } else {
+                            Get.toNamed(Routes.thankYouPage);
+                          }
                         }
+                        // if (getAllProcessflowController
+                        //         .processflowList[0].successMsgData ==
+                        //     null) {
+                        //   Get.to(() => const ThankyouWidget());
+                        // } else {
+                        //   Get.toNamed(Routes.thankYouPage);
+                        // }
                       },
                     )
                   : Stack(

@@ -1,15 +1,14 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ivisit/app/ui/ReviewDocument/review_document.dart';
-
-import '../../../config/provider/snackbar_provider.dart';
 import '../../controller/visiter_controller.dart';
-import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
+import '../Auth/login.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../ReviewDocument/review_document.dart';
+import '../TakePhoto/take_photo.dart';
+import '../TapYourCard/tap_your_card.dart';
 import '../widgets/comman_appbar.dart';
 import '../../models/processflow_model.dart';
 import '../../../config/constant/constant.dart';
@@ -20,7 +19,9 @@ import '../widgets/thankyou_widget.dart';
 
 class QuestionPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
-  const QuestionPage({super.key, this.accessPointData});
+  final String? text;
+  final int? index;
+  const QuestionPage({super.key, this.accessPointData, this.text, this.index});
 
   @override
   State<QuestionPage> createState() => _QuestionPageState();
@@ -42,6 +43,7 @@ class _QuestionPageState extends State<QuestionPage> {
 
   @override
   void initState() {
+    getItemAtIndex();
     var data = getStorage.read('accessPoint') ?? "";
     setState(() {
       accessPoint = data;
@@ -49,14 +51,22 @@ class _QuestionPageState extends State<QuestionPage> {
     super.initState();
   }
 
+  String getItemAtIndex() {
+    var items = getStorage.read<List<dynamic>>('apiList') ?? [];
+    int index = widget.index!;
+    if (index >= 0 && index < items.length) {
+      return items[index];
+    } else {
+      return 'Index out of range';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MMMM dd yyyy').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(now);
     String day = DateFormat('EEEE').format(now);
-    var processFlowData =
-        getAllProcessflowController.processflowList[0].processFlowData;
+
     return Scaffold(
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(
@@ -66,8 +76,14 @@ class _QuestionPageState extends State<QuestionPage> {
           showBackButton: true,
           text: "Back",
           onBackPressed: () {
-            getAllProcessflowController.fetchAllProcessFlow();
-            Navigator.of(context).pop();
+            if (widget.text == "scan") {
+              Get.offAll(() => const TapYourCardPage(
+                    text: "back",
+                  ));
+            } else {
+              getAllProcessflowController.fetchAllProcessFlow();
+              Navigator.of(context).pop();
+            }
           },
           showLogoutButton: true,
           onLogoutPressed: () {
@@ -224,12 +240,20 @@ class _QuestionPageState extends State<QuestionPage> {
                               ),
                             );
                           } else {
-                            if (processFlowData!.isDocument == 1) {
-                              Get.to(() => ReviewDocumentPage(
-                                    accessPointData: processFlowData,
+                            String selectedItem = getItemAtIndex();
+                            var screenIndex = widget.index! + 1;
+
+                            if (selectedItem == "Basic Info") {
+                              Get.to(() => ProcessFlowPage(
+                                    index: screenIndex,
                                   ));
-                            } else if (processFlowData.isPhoto == 1) {
-                              Get.toNamed(Routes.takePhotoPage);
+                            } else if (selectedItem == "Document") {
+                              Get.to(
+                                  () => ReviewDocumentPage(index: screenIndex));
+                            } else if (selectedItem == "Photo") {
+                              Get.to(() => TakePhotoPage(index: screenIndex));
+                            } else if (selectedItem == "Question") {
+                              Get.to(() => QuestionPage(index: screenIndex));
                             } else {
                               if (getAllProcessflowController
                                       .processflowList[0].successMsgData ==
@@ -239,6 +263,21 @@ class _QuestionPageState extends State<QuestionPage> {
                                 Get.toNamed(Routes.thankYouPage);
                               }
                             }
+                            // if (processFlowData!.isDocument == 1) {
+                            //   Get.to(() => ReviewDocumentPage(
+                            //         accessPointData: processFlowData,
+                            //       ));
+                            // } else if (processFlowData.isPhoto == 1) {
+                            //   Get.toNamed(Routes.takePhotoPage);
+                            // } else {
+                            //   if (getAllProcessflowController
+                            //           .processflowList[0].successMsgData ==
+                            //       null) {
+                            //     Get.to(() => const ThankyouWidget());
+                            //   } else {
+                            //     Get.toNamed(Routes.thankYouPage);
+                            //   }
+                            // }
                           }
                         }
                       },

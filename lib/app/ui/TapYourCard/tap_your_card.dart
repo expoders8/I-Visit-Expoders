@@ -5,20 +5,30 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
+import '../../../config/provider/loader_provider.dart';
+import '../../controller/processflow_conroller.dart';
+import '../../routes/app_pages.dart';
+import '../AccessPoint/access_point.dart';
 import '../Auth/login.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../services/visiterlog.dart';
+import '../../services/visiter_service.dart';
 import '../../../config/constant/constant.dart';
 import 'package:ivisit/app/ui/TapYourCard/thankyou.dart';
 import 'package:ivisit/config/constant/color_constant.dart';
 
+import '../ProcessFlow/process_flow.dart';
+import '../Question/question.dart';
+import '../ReviewDocument/review_document.dart';
+import '../TakePhoto/take_photo.dart';
 import '../widgets/ble_utils.dart';
 import '../widgets/comman_appbar.dart';
+import '../widgets/thankyou_widget.dart';
 
 class TapYourCardPage extends StatefulWidget {
-  const TapYourCardPage({super.key});
+  final String? text;
+  const TapYourCardPage({super.key, this.text});
 
   @override
   State<TapYourCardPage> createState() => _TapYourCardPageState();
@@ -30,20 +40,19 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
   String rederCode = "";
   String usbDisConnectStatus = "";
   TextEditingController redersCodeController = TextEditingController();
+  final GetAllProcessflowController getAllProcessflowController =
+      Get.put(GetAllProcessflowController());
   final FocusNode focusNode = FocusNode();
-  VisiterService visiterService = VisiterService();
+  VisitorService visiterService = VisitorService();
+  List<String> screensName = [];
   Timer? _timer;
   final flutterReactiveBle = FlutterReactiveBle();
-
-  @override
-  void dispose() {
-    _timer?.cancel(); // Cancel timer when widget is disposed
-    super.dispose();
-  }
+  StreamSubscription<DiscoveredDevice>? _scanSubscription;
 
   @override
   void initState() {
     _checkPermission();
+    _scanSubscription?.cancel();
     super.initState();
   }
 
@@ -55,7 +64,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
     if (!(await BleUtils.checkLocationPermissions())) {
       return;
     }
-    flutterReactiveBle
+    _scanSubscription = flutterReactiveBle
         .scanForDevices(
             requireLocationServicesEnabled: false,
             withServices: [],
@@ -64,7 +73,18 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
       setState(() {
         usbStatus = scanResult.name;
       });
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
+  }
+
+  @override
+  void dispose() {
+    FocusScope.of(context).unfocus();
+    _timer?.cancel();
+    setState(() {
+      usbStatus = "1";
+    });
+    super.dispose();
   }
 
   void onCodeScanned(String code) {
@@ -90,9 +110,9 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (usbStatus == "") {
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
-    }
+    // if (usbStatus == "") {
+    //   SystemChannels.textInput.invokeMethod('TextInput.hide');
+    // }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
@@ -101,7 +121,11 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
           showBackButton: true,
           text: "Back",
           onBackPressed: () {
-            Navigator.of(context).pop();
+            if (widget.text == "back") {
+              Get.offAll(() => const AccessPointPage());
+            } else {
+              Navigator.of(context).pop();
+            }
           },
           showLogoutButton: true,
           onLogoutPressed: () {
@@ -142,12 +166,120 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
               //   },
               //   child: Text("Connect"),
               // ),
-              //     CupertinoButton(
-              //       onPressed: () {
-              //         _disConnectUSB();
-              //       },
-              //       child: Text("DisConnect"),
-              //     ),
+              // CupertinoButton(
+              //   onPressed: () async {
+              //     getAllProcessflowController.fetchAllProcessFlow();
+              //     screensName.clear();
+              //     var processScreens =
+              //         getAllProcessflowController.processflowList[0].screens;
+              //     if (processScreens!.isNotEmpty) {
+              //       for (var screen in processScreens) {
+              //         if (screen.screenName.toString() != "Authenticate") {
+              //           screensName.add(screen.screenName.toString());
+              //         }
+              //       }
+              //     }
+              //     await visiterService
+              //         .getVisiterLog("161373710746373")
+              //         .then((value) async {
+              //       saveListToLocal(screensName);
+              //       var screenIndex = screensName[0];
+              //       if (value) {
+              //         await visiterService
+              //             .getVisitorByBadgeId("161373710746373")
+              //             .then((val) => {
+              //                   if (val)
+              //                     {
+              //                       if (processScreens.isEmpty)
+              //                         {
+              //                           LoaderX.hide(),
+              //                           if (getAllProcessflowController
+              //                                   .processflowList[0]
+              //                                   .successMsgData ==
+              //                               null)
+              //                             {Get.to(() => const ThankyouWidget())}
+              //                           else
+              //                             {Get.toNamed(Routes.thankYouPage)}
+              //                         }
+              //                       else
+              //                         {
+              //                           if (getAllProcessflowController
+              //                                   .processflowList[0]
+              //                                   .welcomeMsgData ==
+              //                               null)
+              //                             {
+              //                               if (screenIndex == "Basic Info")
+              //                                 {
+              //                                   LoaderX.hide(),
+              //                                   Get.offAll(
+              //                                       () => const ProcessFlowPage(
+              //                                             index: 1,
+              //                                             text: "scan",
+              //                                           ))
+              //                                 }
+              //                               else if (screenIndex == "Document")
+              //                                 {
+              //                                   LoaderX.hide(),
+              //                                   Get.offAll(() =>
+              //                                       const ReviewDocumentPage(
+              //                                         index: 1,
+              //                                         text: "scan",
+              //                                       ))
+              //                                 }
+              //                               else if (screenIndex == "Photo")
+              //                                 {
+              //                                   LoaderX.hide(),
+              //                                   Get.offAll(
+              //                                       () => const TakePhotoPage(
+              //                                             index: 1,
+              //                                             text: "scan",
+              //                                           )),
+              //                                 }
+              //                               else if (screenIndex == "Question")
+              //                                 {
+              //                                   LoaderX.hide(),
+              //                                   Get.offAll(
+              //                                       () => const QuestionPage(
+              //                                             index: 1,
+              //                                             text: "scan",
+              //                                           )),
+              //                                 }
+              //                               else
+              //                                 {
+              //                                   LoaderX.hide(),
+              //                                   if (getAllProcessflowController
+              //                                           .processflowList[0]
+              //                                           .successMsgData ==
+              //                                       null)
+              //                                     {
+              //                                       Get.to(() =>
+              //                                           const ThankyouWidget())
+              //                                     }
+              //                                   else
+              //                                     {
+              //                                       Get.toNamed(
+              //                                           Routes.thankYouPage)
+              //                                     }
+              //                                 }
+              //                             }
+              //                           else
+              //                             {
+              //                               LoaderX.hide(),
+              //                               Get.toNamed(Routes.welcomePage)
+              //                             }
+              //                         }
+              //                     }
+              //                 });
+              //       } else {
+              //         setState(() {
+              //           redersCodeController.clear();
+              //           rederCode = "";
+              //         });
+              //       }
+              //     });
+              //   },
+              //   child: Text("DisConnect"),
+              // ),
               //   ],
               // ),
               SizedBox(
@@ -168,24 +300,118 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                   focusNode: FocusNode(),
                   controller: redersCodeController,
                   onChanged: (value) {
-                    //Future.delayed(const Duration(seconds: 2), () async {
-                    //if (int.tryParse(value) != null) {
                     setState(() {
                       rederCode = redersCodeController.text;
                     });
                     if (_timer?.isActive ?? false) _timer?.cancel();
-                    _timer = Timer(const Duration(seconds: 2), () {
-                      //if (redersCodeController.text.endsWith('\n')) {
+                    _timer = Timer(const Duration(seconds: 2), () async {
                       String badgeID = redersCodeController.text.trim();
-                      visiterService.getVisiterLog(badgeID).then((value) {
+                      LoaderX.show(context, 60.0, 60.0);
+                      getAllProcessflowController.fetchAllProcessFlow();
+                      screensName.clear();
+                      var processScreens = getAllProcessflowController
+                          .processflowList[0].screens;
+                      for (var screen in processScreens!) {
+                        if (screen.screenName.toString() != "Authenticate") {
+                          screensName.add(screen.screenName.toString());
+                        }
+                      }
+                      await visiterService
+                          .getVisiterLog(badgeID)
+                          .then((value) async {
+                        saveListToLocal(screensName);
+                        var screenIndex = screensName[0];
                         if (value) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const ThankyouRFIEADSPage(),
-                            ),
-                          );
+                          await visiterService
+                              .getVisitorByBadgeId(badgeID)
+                              .then((val) => {
+                                    if (val)
+                                      {
+                                        if (processScreens.isEmpty)
+                                          {
+                                            LoaderX.hide(),
+                                            if (getAllProcessflowController
+                                                    .processflowList[0]
+                                                    .successMsgData ==
+                                                null)
+                                              {
+                                                Get.to(() =>
+                                                    const ThankyouWidget())
+                                              }
+                                            else
+                                              {Get.toNamed(Routes.thankYouPage)}
+                                          }
+                                        else
+                                          {
+                                            if (getAllProcessflowController
+                                                    .processflowList[0]
+                                                    .welcomeMsgData ==
+                                                null)
+                                              {
+                                                if (screenIndex == "Basic Info")
+                                                  {
+                                                    LoaderX.hide(),
+                                                    Get.offAll(() =>
+                                                        const ProcessFlowPage(
+                                                          index: 1,
+                                                          text: "scan",
+                                                        ))
+                                                  }
+                                                else if (screenIndex ==
+                                                    "Document")
+                                                  {
+                                                    LoaderX.hide(),
+                                                    Get.offAll(() =>
+                                                        const ReviewDocumentPage(
+                                                          index: 1,
+                                                          text: "scan",
+                                                        ))
+                                                  }
+                                                else if (screenIndex == "Photo")
+                                                  {
+                                                    LoaderX.hide(),
+                                                    Get.offAll(() =>
+                                                        const TakePhotoPage(
+                                                          index: 1,
+                                                          text: "scan",
+                                                        )),
+                                                  }
+                                                else if (screenIndex ==
+                                                    "Question")
+                                                  {
+                                                    LoaderX.hide(),
+                                                    Get.offAll(() =>
+                                                        const QuestionPage(
+                                                          index: 1,
+                                                          text: "scan",
+                                                        )),
+                                                  }
+                                                else
+                                                  {
+                                                    LoaderX.hide(),
+                                                    if (getAllProcessflowController
+                                                            .processflowList[0]
+                                                            .successMsgData ==
+                                                        null)
+                                                      {
+                                                        Get.to(() =>
+                                                            const ThankyouWidget())
+                                                      }
+                                                    else
+                                                      {
+                                                        Get.toNamed(
+                                                            Routes.thankYouPage)
+                                                      }
+                                                  }
+                                              }
+                                            else
+                                              {
+                                                LoaderX.hide(),
+                                                Get.toNamed(Routes.welcomePage)
+                                              }
+                                          }
+                                      }
+                                  });
                         } else {
                           setState(() {
                             redersCodeController.clear();
@@ -193,11 +419,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                           });
                         }
                       });
-                      //}
-                      //}
                     });
-
-                    //});
                   },
                 ),
               ),
@@ -208,6 +430,10 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
         ),
       ),
     );
+  }
+
+  void saveListToLocal(List<dynamic> list) {
+    getStorage.write('apiList', list);
   }
 
   logoutConfirmationDialog() async {

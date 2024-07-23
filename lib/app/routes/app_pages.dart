@@ -12,6 +12,7 @@ import '../ui/TakePhoto/take_photo.dart';
 import '../ui/TapYourCard/tap_your_card.dart';
 import '../ui/TapYourCard/thankyou.dart';
 import '../ui/ThankYou/thank_you.dart';
+import '../ui/VisitorTypes/visitortype.dart';
 import '../ui/Welcome Screen/welcome_screen.dart';
 
 part 'app_routes.dart';
@@ -33,6 +34,10 @@ class AppPages {
     GetPage(
       name: _Paths.accessPointPage,
       page: () => const AccessPointPage(),
+    ),
+    GetPage(
+      name: _Paths.visitoTypePage,
+      page: () => const VisitoTypePage(),
     ),
     GetPage(
       name: _Paths.welcomePage,

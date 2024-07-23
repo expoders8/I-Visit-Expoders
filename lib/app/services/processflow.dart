@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../models/processflow_model.dart';
 import '../../config/constant/constant.dart';
 import '../../config/provider/loader_provider.dart';
 import '../../config/provider/snackbar_provider.dart';
+import '../models/processflowdata_model.dart';
 
 class ProcessFlowService {
-  Future<GetProcessflowModel> getProcessFlow() async {
+  Future<GetProcessFlowDataModel> getProcessFlow() async {
     var data = getStorage.read('user');
     var accessPointId = getStorage.read('accessPointId');
     var getUserData = jsonDecode(data);
@@ -15,13 +15,11 @@ class ProcessFlowService {
     try {
       var response = await http.get(
         Uri.parse(
-            '$baseUrl/api/processflow/getProcessFlow?OrgId=$orgId&&AccessPointId=$accessPointId'),
+            '$baseUrl/api/processflow/getProcessFlowData?OrgId=$orgId&&AccessPointId=$accessPointId'),
       );
       if (response.statusCode == 200) {
         var accesspointdata = jsonDecode(response.body);
-        getStorage.write('IsAuthenticate',
-            accesspointdata['processFlowData']['IsAuthenticate']);
-        return GetProcessflowModel.fromJson(accesspointdata);
+        return GetProcessFlowDataModel.fromJson(accesspointdata);
       } else {
         LoaderX.hide();
         SnackbarUtils.showErrorSnackbar("Server Error",

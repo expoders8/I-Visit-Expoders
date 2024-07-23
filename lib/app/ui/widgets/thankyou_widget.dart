@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../../config/provider/loader_provider.dart';
 import '../../controller/processflow_conroller.dart';
-import '../../services/visiterlog.dart';
+import '../../services/visiter_service.dart';
 import '../AccessPoint/access_point.dart';
 
 class ThankyouWidget extends StatefulWidget {
@@ -20,7 +20,7 @@ class ThankyouWidget extends StatefulWidget {
 class _ThankyouRFIEADSPageState extends State<ThankyouWidget> {
   final GetAllProcessflowController getAllProcessflowController =
       Get.put(GetAllProcessflowController());
-  VisiterService visiterService = VisiterService();
+  VisitorService visiterService = VisitorService();
   @override
   void initState() {
     autoNavigateScreen();

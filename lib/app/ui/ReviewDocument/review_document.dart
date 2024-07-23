@@ -11,6 +11,10 @@ import '../../controller/processflow_conroller.dart';
 import '../../controller/visiter_controller.dart';
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../Question/question.dart';
+import '../TakePhoto/take_photo.dart';
+import '../TapYourCard/tap_your_card.dart';
 import '../widgets/comman_appbar.dart';
 import '../../models/processflow_model.dart';
 import '../../../config/constant/constant.dart';
@@ -20,7 +24,10 @@ import '../widgets/thankyou_widget.dart';
 
 class ReviewDocumentPage extends StatefulWidget {
   final ProcessFlowData? accessPointData;
-  const ReviewDocumentPage({super.key, this.accessPointData});
+  final String? text;
+  final int? index;
+  const ReviewDocumentPage(
+      {super.key, this.accessPointData, this.text, this.index});
 
   @override
   State<ReviewDocumentPage> createState() => _ReviewDocumentPageState();
@@ -43,6 +50,7 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
 
   @override
   void initState() {
+    getItemAtIndex();
     _controller
       ..addListener(() => setState(
             () {
@@ -66,6 +74,16 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
     super.dispose();
   }
 
+  String getItemAtIndex() {
+    var items = getStorage.read<List<dynamic>>('apiList') ?? [];
+    int index = widget.index!;
+    if (index >= 0 && index < items.length) {
+      return items[index];
+    } else {
+      return 'Index out of range';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
@@ -81,7 +99,13 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
           showBackButton: true,
           text: "Back",
           onBackPressed: () {
-            Navigator.of(context).pop();
+            if (widget.text == "scan") {
+              Get.offAll(() => const TapYourCardPage(
+                    text: "back",
+                  ));
+            } else {
+              Navigator.of(context).pop();
+            }
           },
           showLogoutButton: true,
           onLogoutPressed: () {
@@ -180,10 +204,20 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                       if (data != null) {
                         final String base64Signature = base64Encode(data);
                         // Save the signature to your desired location
-                        // For example: visitorController.saveDoc(base64Signature);
+                        visitorController.saveDoc(base64Signature);
+                        String selectedItem = getItemAtIndex();
+                        var screenIndex = widget.index! + 1;
 
-                        if (widget.accessPointData!.isPhoto == 1) {
-                          Get.toNamed(Routes.takePhotoPage);
+                        if (selectedItem == "Basic Info") {
+                          Get.to(() => ProcessFlowPage(
+                                index: screenIndex,
+                              ));
+                        } else if (selectedItem == "Document") {
+                          Get.to(() => ReviewDocumentPage(index: screenIndex));
+                        } else if (selectedItem == "Photo") {
+                          Get.to(() => TakePhotoPage(index: screenIndex));
+                        } else if (selectedItem == "Question") {
+                          Get.to(() => QuestionPage(index: screenIndex));
                         } else {
                           if (getAllProcessflowController
                                   .processflowList[0].successMsgData ==
@@ -193,6 +227,17 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                             Get.toNamed(Routes.thankYouPage);
                           }
                         }
+                        // if (widget.accessPointData!.isPhoto == 1) {
+                        //   Get.toNamed(Routes.takePhotoPage);
+                        // } else {
+                        //   if (getAllProcessflowController
+                        //           .processflowList[0].successMsgData ==
+                        //       null) {
+                        //     Get.to(() => const ThankyouWidget());
+                        //   } else {
+                        //     Get.toNamed(Routes.thankYouPage);
+                        //   }
+                        // }
                       }
                     } else {
                       // Show a message to the user indicating that the signature is required

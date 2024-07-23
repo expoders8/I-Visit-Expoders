@@ -7,7 +7,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../config/provider/loader_provider.dart';
 import '../../controller/processflow_conroller.dart';
-import '../../services/visiterlog.dart';
+import '../../services/visiter_service.dart';
 import '../widgets/comman_appbar.dart';
 import '../AccessPoint/access_point.dart';
 import '../../../config/constant/constant.dart';
@@ -30,7 +30,7 @@ class _ThankYouPageState extends State<ThankYouPage> {
   bool showOverlay = false, _isPlaying = false, isBuffering = false;
   final GetAllProcessflowController getAllProcessflowController =
       Get.put(GetAllProcessflowController());
-  VisiterService visiterService = VisiterService();
+  VisitorService visiterService = VisitorService();
   String extension = "";
   double _sliderValue = 0.0;
   @override

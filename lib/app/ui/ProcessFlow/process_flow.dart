@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,9 @@ import '../../controller/processflow_conroller.dart';
 import '../../controller/visiter_controller.dart';
 import '../../routes/app_pages.dart';
 import '../Auth/login.dart';
+import '../ReviewDocument/review_document.dart';
+import '../TakePhoto/take_photo.dart';
+import '../TapYourCard/tap_your_card.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/custom_textfield.dart';
 import '../../../config/constant/font_constant.dart';
@@ -16,7 +20,9 @@ import '../../../config/constant/color_constant.dart';
 import '../widgets/thankyou_widget.dart';
 
 class ProcessFlowPage extends StatefulWidget {
-  const ProcessFlowPage({super.key});
+  final String? text;
+  final int? index;
+  const ProcessFlowPage({super.key, this.text, this.index});
 
   @override
   State<ProcessFlowPage> createState() => _ProcessFlowPageState();
@@ -43,11 +49,35 @@ class _ProcessFlowPageState extends State<ProcessFlowPage> {
   String accessPoint = "";
   @override
   void initState() {
+    autoValueCheck();
+    getItemAtIndex();
     var data = getStorage.read('accessPoint') ?? "";
     setState(() {
       accessPoint = data;
     });
     super.initState();
+  }
+
+  autoValueCheck() {
+    if (widget.text == "scan") {
+      setState(() {
+        firstNameController.text = visitorController.saveFirstname.value;
+        lastNameController.text = visitorController.saveLastname.value;
+        emailController.text = visitorController.saveEmail.value;
+        titleController.text = visitorController.saveTitle.value;
+        phoneNumberController.text = visitorController.savephoneNumber.value;
+      });
+    }
+  }
+
+  String getItemAtIndex() {
+    var items = getStorage.read<List<dynamic>>('apiList') ?? [];
+    int index = widget.index!;
+    if (index >= 0 && index < items.length) {
+      return items[index];
+    } else {
+      return 'Index out of range';
+    }
   }
 
   @override
@@ -65,7 +95,13 @@ class _ProcessFlowPageState extends State<ProcessFlowPage> {
           showBackButton: true,
           text: "Back",
           onBackPressed: () {
-            Navigator.of(context).pop();
+            if (widget.text == "scan") {
+              Get.offAll(() => const TapYourCardPage(
+                    text: "back",
+                  ));
+            } else {
+              Navigator.of(context).pop();
+            }
           },
           showLogoutButton: true,
           onLogoutPressed: () {
@@ -106,362 +142,217 @@ class _ProcessFlowPageState extends State<ProcessFlowPage> {
                     scale: 1.5,
                   ),
                   const SizedBox(height: 25),
-                  Obx(
-                    () {
-                      if (getAllProcessflowController.isLoading.value) {
-                        return Container(
-                          color: kBackGroundColor,
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: kSelectedIconColor,
-                            ),
-                          ),
-                        );
-                      } else {
-                        if (getAllProcessflowController
-                            .processflowList.isEmpty) {
-                          return Center(
-                            child: SizedBox(
-                              width: Get.width - 80,
-                              child: const Text(
-                                "No ProcessFlow",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: kPrimaryColor,
-                                    fontSize: 15,
-                                    fontFamily: kCircularStdMedium),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: Get.width > 500 ? 600 : Get.width,
+                            child: IntrinsicHeight(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    flex: 5,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        builsTitleWidget("Firstname"),
+                                        const SizedBox(height: 5.0),
+                                        CustomTextFormField(
+                                          hintText: 'First Name',
+                                          maxLines: 1,
+                                          ctrl: firstNameController,
+                                          name: "firstname",
+                                          formSubmitted: isFormSubmitted,
+                                          validationMsg:
+                                              'Firstname is Required',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    flex: 5,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        builsTitleWidget("Lastname"),
+                                        const SizedBox(height: 5.0),
+                                        CustomTextFormField(
+                                          hintText: 'Last Name',
+                                          maxLines: 1,
+                                          ctrl: lastNameController,
+                                          name: "lastname",
+                                          formSubmitted: isFormSubmitted,
+                                          validationMsg: 'Lastname is Required',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          );
-                        } else {
-                          return SizedBox(
-                            height: Get.height,
-                            width: Get.width,
-                            child: ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              itemCount: 1,
-                              itemBuilder: (context, index) {
-                                var accessPointData =
-                                    getAllProcessflowController
-                                        .processflowList[0].processFlowData;
-                                var queData = getAllProcessflowController
-                                    .processflowList[0].questionsData;
+                          ),
+                          const SizedBox(height: 8.0),
+                          builsTitleWidget("Email"),
+                          const SizedBox(height: 5.0),
+                          SizedBox(
+                            width: Get.width > 500 ? 600 : Get.width,
+                            child: CustomTextFormField(
+                              hintText: 'Email',
+                              maxLines: 1,
+                              ctrl: emailController,
+                              name: "email",
+                              formSubmitted: isFormSubmitted,
+                              validationMsg: 'Email is Required',
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          builsTitleWidget("Company"),
+                          const SizedBox(height: 5.0),
+                          SizedBox(
+                            width: Get.width > 500 ? 600 : Get.width,
+                            child: CustomTextFormField(
+                              hintText: 'Company Name',
+                              maxLines: 1,
+                              ctrl: companyController,
+                              name: "Companyname",
+                              formSubmitted: isFormSubmitted,
+                              validationMsg: 'Company Name is Required',
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          builsTitleWidget("Phone number"),
+                          const SizedBox(height: 5.0),
+                          SizedBox(
+                            width: Get.width > 500 ? 600 : Get.width,
+                            child: CustomTextFormField(
+                              hintText: 'Phone number',
+                              maxLines: 1,
+                              ctrl: phoneNumberController,
+                              keyboardType: TextInputType.phone,
+                              name: "phoneno",
+                              formSubmitted: isFormSubmitted,
+                              validationMsg: 'Phone number is Required',
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          builsTitleWidget("Title"),
+                          const SizedBox(height: 5.0),
+                          SizedBox(
+                            width: Get.width > 500 ? 600 : Get.width,
+                            child: CustomTextFormField(
+                              hintText: 'Title',
+                              maxLines: 1,
+                              ctrl: titleController,
+                              name: "title",
+                              formSubmitted: isFormSubmitted,
+                              validationMsg: 'Title is Required',
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          builsTitleWidget("Host"),
+                          const SizedBox(height: 5.0),
+                          SizedBox(
+                            width: Get.width > 500 ? 600 : Get.width,
+                            child: CustomTextFormField(
+                              hintText: 'Host',
+                              maxLines: 1,
+                              ctrl: hostController,
+                              name: "host",
+                              formSubmitted: isFormSubmitted,
+                              validationMsg: 'Host is Required',
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: Get.width > 500 ? 600 : Get.width - 20,
+                            child: CupertinoButton(
+                              borderRadius: BorderRadius.circular(25),
+                              color: kPrimaryColor,
+                              child: const Text("Next",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kWhiteColor,
+                                      fontFamily: kCircularStdMedium,
+                                      fontSize: 14)),
+                              onPressed: () {
+                                setState(() {
+                                  isFormSubmitted = true;
+                                });
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                Future.delayed(
+                                    const Duration(milliseconds: 100),
+                                    () async {
+                                  if (_processFormKey.currentState!
+                                      .validate()) {
+                                    visitorController.saveProcessFlow(
+                                        firstNameController.text,
+                                        lastNameController.text,
+                                        emailController.text,
+                                        titleController.text,
+                                        companyController.text,
+                                        phoneNumberController.text,
+                                        hostController.text);
+                                    String selectedItem = getItemAtIndex();
+                                    var screenIndex = widget.index! + 1;
 
-                                if (queData!.isNotEmpty) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          accessPointData!.isName == 1
-                                              ? SizedBox(
-                                                  width: Get.width > 500
-                                                      ? 600
-                                                      : Get.width,
-                                                  child: IntrinsicHeight(
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Flexible(
-                                                          flex: 5,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              builsTitleWidget(
-                                                                  "Firstname"),
-                                                              const SizedBox(
-                                                                  height: 5.0),
-                                                              CustomTextFormField(
-                                                                hintText:
-                                                                    'First Name',
-                                                                maxLines: 1,
-                                                                ctrl:
-                                                                    firstNameController,
-                                                                name:
-                                                                    "firstname",
-                                                                formSubmitted:
-                                                                    isFormSubmitted,
-                                                                validationMsg:
-                                                                    'Firstname is Required',
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 10),
-                                                        Expanded(
-                                                          flex: 5,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              builsTitleWidget(
-                                                                  "Lastname"),
-                                                              const SizedBox(
-                                                                  height: 5.0),
-                                                              CustomTextFormField(
-                                                                hintText:
-                                                                    'Last Name',
-                                                                maxLines: 1,
-                                                                ctrl:
-                                                                    lastNameController,
-                                                                name:
-                                                                    "lastname",
-                                                                formSubmitted:
-                                                                    isFormSubmitted,
-                                                                validationMsg:
-                                                                    'Lastname is Required',
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                              : Container(),
-                                          accessPointData.isEmail == 1
-                                              ? const SizedBox(height: 8.0)
-                                              : Container(),
-                                          accessPointData.isEmail == 1
-                                              ? builsTitleWidget("Email")
-                                              : Container(),
-                                          accessPointData.isEmail == 1
-                                              ? const SizedBox(height: 5.0)
-                                              : Container(),
-                                          accessPointData.isEmail == 1
-                                              ? SizedBox(
-                                                  width: Get.width > 500
-                                                      ? 600
-                                                      : Get.width,
-                                                  child: CustomTextFormField(
-                                                    hintText: 'Email',
-                                                    maxLines: 1,
-                                                    ctrl: emailController,
-                                                    name: "email",
-                                                    formSubmitted:
-                                                        isFormSubmitted,
-                                                    validationMsg:
-                                                        'Email is Required',
-                                                  ),
-                                                )
-                                              : Container(),
-                                          accessPointData.isCompany == 1
-                                              ? const SizedBox(height: 8.0)
-                                              : Container(),
-                                          accessPointData.isCompany == 1
-                                              ? builsTitleWidget("Company")
-                                              : Container(),
-                                          accessPointData.isCompany == 1
-                                              ? const SizedBox(height: 5.0)
-                                              : Container(),
-                                          accessPointData.isCompany == 1
-                                              ? SizedBox(
-                                                  width: Get.width > 500
-                                                      ? 600
-                                                      : Get.width,
-                                                  child: CustomTextFormField(
-                                                    hintText: 'Company Name',
-                                                    maxLines: 1,
-                                                    ctrl: companyController,
-                                                    name: "Companyname",
-                                                    formSubmitted:
-                                                        isFormSubmitted,
-                                                    validationMsg:
-                                                        'Company Name is Required',
-                                                  ),
-                                                )
-                                              : Container(),
-                                          accessPointData.isPhone == 1
-                                              ? const SizedBox(height: 8.0)
-                                              : Container(),
-                                          accessPointData.isPhone == 1
-                                              ? builsTitleWidget("Phone number")
-                                              : Container(),
-                                          accessPointData.isPhone == 1
-                                              ? const SizedBox(height: 5.0)
-                                              : Container(),
-                                          accessPointData.isPhone == 1
-                                              ? SizedBox(
-                                                  width: Get.width > 500
-                                                      ? 600
-                                                      : Get.width,
-                                                  child: CustomTextFormField(
-                                                    hintText: 'Phone number',
-                                                    maxLines: 1,
-                                                    ctrl: phoneNumberController,
-                                                    keyboardType:
-                                                        TextInputType.phone,
-                                                    name: "phoneno",
-                                                    formSubmitted:
-                                                        isFormSubmitted,
-                                                    validationMsg:
-                                                        'Phone number is Required',
-                                                  ),
-                                                )
-                                              : Container(),
-                                          accessPointData.isTitle == 1
-                                              ? const SizedBox(height: 8.0)
-                                              : Container(),
-                                          accessPointData.isTitle == 1
-                                              ? builsTitleWidget("Title")
-                                              : Container(),
-                                          accessPointData.isTitle == 1
-                                              ? const SizedBox(height: 5.0)
-                                              : Container(),
-                                          accessPointData.isTitle == 1
-                                              ? SizedBox(
-                                                  width: Get.width > 500
-                                                      ? 600
-                                                      : Get.width,
-                                                  child: CustomTextFormField(
-                                                    hintText: 'Title',
-                                                    maxLines: 1,
-                                                    ctrl: titleController,
-                                                    name: "title",
-                                                    formSubmitted:
-                                                        isFormSubmitted,
-                                                    validationMsg:
-                                                        'Title is Required',
-                                                  ),
-                                                )
-                                              : Container(),
-                                          accessPointData.isHost == 1
-                                              ? const SizedBox(height: 8.0)
-                                              : Container(),
-                                          accessPointData.isHost == 1
-                                              ? builsTitleWidget("Host")
-                                              : Container(),
-                                          accessPointData.isHost == 1
-                                              ? const SizedBox(height: 5.0)
-                                              : Container(),
-                                          accessPointData.isHost == 1
-                                              ? SizedBox(
-                                                  width: Get.width > 500
-                                                      ? 600
-                                                      : Get.width,
-                                                  child: CustomTextFormField(
-                                                    hintText: 'Host',
-                                                    maxLines: 1,
-                                                    ctrl: hostController,
-                                                    name: "host",
-                                                    formSubmitted:
-                                                        isFormSubmitted,
-                                                    validationMsg:
-                                                        'Host is Required',
-                                                  ),
-                                                )
-                                              : Container(),
-                                          const SizedBox(height: 20),
-                                          SizedBox(
-                                            width: Get.width > 500
-                                                ? 600
-                                                : Get.width - 20,
-                                            child: CupertinoButton(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              color: kPrimaryColor,
-                                              child: const Text("Next",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: kWhiteColor,
-                                                      fontFamily:
-                                                          kCircularStdMedium,
-                                                      fontSize: 14)),
-                                              onPressed: () {
-                                                setState(() {
-                                                  isFormSubmitted = true;
-                                                });
-                                                FocusScope.of(context)
-                                                    .requestFocus(FocusNode());
-                                                Future.delayed(
-                                                    const Duration(
-                                                        milliseconds: 100),
-                                                    () async {
-                                                  if (_processFormKey
-                                                      .currentState!
-                                                      .validate()) {
-                                                    visitorController
-                                                        .saveProcessFlow(
-                                                            firstNameController
-                                                                .text,
-                                                            lastNameController
-                                                                .text,
-                                                            emailController
-                                                                .text,
-                                                            titleController
-                                                                .text,
-                                                            companyController
-                                                                .text,
-                                                            phoneNumberController
-                                                                .text,
-                                                            hostController
-                                                                .text);
-                                                    if (accessPointData
-                                                            .isQuestion ==
-                                                        1) {
-                                                      Get.to(() => QuestionPage(
-                                                          accessPointData:
-                                                              accessPointData));
-                                                    } else if (accessPointData
-                                                            .isDocument ==
-                                                        1) {
-                                                      Get.toNamed(Routes
-                                                          .reviewDocumentPage);
-                                                    } else if (accessPointData
-                                                            .isPhoto ==
-                                                        1) {
-                                                      Get.toNamed(
-                                                          Routes.takePhotoPage);
-                                                    } else {
-                                                      if (getAllProcessflowController
-                                                              .processflowList[
-                                                                  0]
-                                                              .successMsgData ==
-                                                          null) {
-                                                        Get.to(() =>
-                                                            const ThankyouWidget());
-                                                      } else {
-                                                        Get.toNamed(Routes
-                                                            .thankYouPage);
-                                                      }
-                                                    }
-                                                  }
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                } else {
-                                  return const Center(
-                                    child: Text(
-                                      "No ProcessFlow",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: kPrimaryColor,
-                                          fontSize: 15,
-                                          fontFamily: kCircularStdMedium),
-                                    ),
-                                  );
-                                }
+                                    if (selectedItem == "Basic Info") {
+                                      Get.to(() => ProcessFlowPage(
+                                            index: screenIndex,
+                                          ));
+                                    } else if (selectedItem == "Document") {
+                                      Get.to(() => ReviewDocumentPage(
+                                          index: screenIndex));
+                                    } else if (selectedItem == "Photo") {
+                                      Get.to(() =>
+                                          TakePhotoPage(index: screenIndex));
+                                    } else if (selectedItem == "Question") {
+                                      Get.to(() =>
+                                          QuestionPage(index: screenIndex));
+                                    } else {
+                                      if (getAllProcessflowController
+                                              .processflowList[0]
+                                              .successMsgData ==
+                                          null) {
+                                        Get.to(() => const ThankyouWidget());
+                                      } else {
+                                        Get.toNamed(Routes.thankYouPage);
+                                      }
+                                    }
+                                    // if (accessPointData.isQuestion == 1) {
+                                    //   Get.to(() => QuestionPage(
+                                    //       accessPointData: accessPointData));
+                                    // } else if (accessPointData.isDocument ==
+                                    //     1) {
+                                    //   Get.toNamed(Routes.reviewDocumentPage);
+                                    // } else if (accessPointData.isPhoto == 1) {
+                                    //   Get.toNamed(Routes.takePhotoPage);
+                                    // } else {
+                                    //   if (getAllProcessflowController
+                                    //           .processflowList[0]
+                                    //           .successMsgData ==
+                                    //       null) {
+                                    //     Get.to(() => const ThankyouWidget());
+                                    //   } else {
+                                    //     Get.toNamed(Routes.thankYouPage);
+                                    //   }
+                                    // }
+                                  }
+                                });
                               },
                             ),
-                          );
-                        }
-                      }
-                    },
-                  ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

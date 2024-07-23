@@ -8,26 +8,27 @@ import 'package:ivisit/app/ui/TakePhoto/take_photo.dart';
 import 'package:ivisit/app/ui/TapYourCard/tap_your_card.dart';
 
 import '../../controller/processflow_conroller.dart';
+import '../../controller/visitor_types_controller.dart';
 import '../../routes/app_pages.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
-import '../../controller/accesspoint_controller.dart';
 import '../Auth/login.dart';
 import '../ProcessFlow/process_flow.dart';
 import '../ReviewDocument/review_document.dart';
+import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
 
-class AccessPointPage extends StatefulWidget {
-  const AccessPointPage({super.key});
+class VisitoTypePage extends StatefulWidget {
+  const VisitoTypePage({super.key});
 
   @override
-  State<AccessPointPage> createState() => _AccessPointPageState();
+  State<VisitoTypePage> createState() => _AccessPointPageState();
 }
 
-class _AccessPointPageState extends State<AccessPointPage> {
-  final GetAllAccessPointController getAllAccessPointController =
-      Get.put(GetAllAccessPointController());
+class _AccessPointPageState extends State<VisitoTypePage> {
+  final GetAllVisitorTypesController getAllVisitorTypesController =
+      Get.put(GetAllVisitorTypesController());
   final GetAllProcessflowController getAllProcessflowController =
       Get.put(GetAllProcessflowController());
   final double width = Get.width;
@@ -40,76 +41,17 @@ class _AccessPointPageState extends State<AccessPointPage> {
       backgroundColor: kBackGroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: kTapColor3,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Container(
-                            width: width / 2,
-                            color: kTapColor,
-                            child: const Center(
-                                child: Text(
-                              "i-Visits",
-                              style: TextStyle(
-                                  color: kWhiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            )),
-                          ),
-                        ),
-                        Container(
-                          width: width / 5,
-                          color: kTapColor1,
-                        ),
-                        Container(
-                          width: width / 5,
-                          color: kTapColor2,
-                        ),
-                        Container(
-                          height: 80,
-                          color: kTapColor3,
-                          child: CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: logoutConfirmationDialog,
-                            child: const Row(
-                              children: [
-                                SizedBox(width: 3),
-                                Icon(
-                                  Icons.logout_rounded,
-                                  color: kPrimaryColor,
-                                ),
-                                SizedBox(width: 6),
-                                Text(
-                                  "LogOut",
-                                  style: TextStyle(
-                                      color: kPrimaryColor,
-                                      fontFamily: kCircularStdMedium,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        child: CommonAppBar(
+          width: MediaQuery.of(context).size.width,
+          showBackButton: true,
+          text: "Back",
+          onBackPressed: () {
+            Navigator.of(context).pop();
+          },
+          showLogoutButton: true,
+          onLogoutPressed: () {
+            logoutConfirmationDialog();
+          },
         ),
       ),
       body: Row(
@@ -123,7 +65,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
               children: [
                 const SizedBox(height: 15),
                 const Text(
-                    "Tap below on the Access Point this device \nwill be located in.",
+                    "Tap below on the visitor Types this device \nwill be located in.",
                     style: TextStyle(
                         color: kPrimaryColor,
                         fontFamily: kCircularStdMedium,
@@ -133,7 +75,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
                 Expanded(
                   child: Obx(
                     () {
-                      if (getAllAccessPointController.isLoading.value) {
+                      if (getAllVisitorTypesController.isLoading.value) {
                         return Container(
                           color: kBackGroundColor,
                           child: const Center(
@@ -143,13 +85,12 @@ class _AccessPointPageState extends State<AccessPointPage> {
                           ),
                         );
                       } else {
-                        if (getAllAccessPointController
-                            .accessPointList.isEmpty) {
+                        if (getAllVisitorTypesController.visitorList.isEmpty) {
                           return Center(
                             child: SizedBox(
                               width: Get.width - 80,
                               child: const Text(
-                                "No AccessPoint",
+                                "No Visitor Types",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: kPrimaryColor,
@@ -161,11 +102,11 @@ class _AccessPointPageState extends State<AccessPointPage> {
                         } else {
                           return ListView.builder(
                             scrollDirection: Axis.vertical,
-                            itemCount: getAllAccessPointController
-                                .accessPointList[0].accesspoints!.length,
+                            itemCount: getAllVisitorTypesController
+                                .visitorList[0].visitortypes!.length,
                             itemBuilder: (context, index) {
-                              var accessPointData = getAllAccessPointController
-                                  .accessPointList[0].accesspoints;
+                              var accessPointData = getAllVisitorTypesController
+                                  .visitorList[0].visitortypes;
 
                               if (accessPointData!.isNotEmpty) {
                                 var data = accessPointData[index];
@@ -174,7 +115,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
                               } else {
                                 return const Center(
                                   child: Text(
-                                    "No AccessPoint",
+                                    "No Visitor Types",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: kPrimaryColor,
@@ -225,9 +166,89 @@ class _AccessPointPageState extends State<AccessPointPage> {
             ),
           ),
           onPressed: () {
-            getStorage.write('accessPoint', name);
+            getStorage.write('visitorName', name);
             getStorage.write('accessPointId', id);
-            Get.toNamed(Routes.visitoTypePage);
+            getAllProcessflowController.fetchAllProcessFlow();
+
+            Future.delayed(const Duration(seconds: 2), () async {
+              screensName.clear();
+              var processScreens =
+                  getAllProcessflowController.processflowList[0].screens;
+              if (processScreens!.isNotEmpty) {
+                for (var screen in processScreens) {
+                  screensName.add(screen.screenName.toString());
+                }
+              }
+
+              if (processScreens.isEmpty) {
+                if (getAllProcessflowController
+                        .processflowList[0].successMsgData ==
+                    null) {
+                  Get.to(() => const ThankyouWidget());
+                } else {
+                  Get.toNamed(Routes.thankYouPage);
+                }
+              } else {
+                var checkAuthenticate = screensName.contains("Authenticate");
+                if (checkAuthenticate) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const TapYourCardPage(),
+                    ),
+                  );
+                } else {
+                  saveListToLocal(screensName);
+                  var screenIndex = screensName[0];
+                  if (getAllProcessflowController
+                          .processflowList[0].welcomeMsgData ==
+                      null) {
+                    if (screenIndex == "Basic Info") {
+                      Get.to(() => const ProcessFlowPage(
+                            index: 1,
+                          ));
+                    } else if (screenIndex == "Document") {
+                      Get.to(() => const ReviewDocumentPage(
+                            index: 1,
+                          ));
+                    } else if (screenIndex == "Photo") {
+                      Get.to(() => const TakePhotoPage(
+                            index: 1,
+                          ));
+                    } else if (screenIndex == "Question") {
+                      Get.to(() => const QuestionPage(
+                            index: 1,
+                          ));
+                    } else {
+                      if (getAllProcessflowController
+                              .processflowList[0].successMsgData ==
+                          null) {
+                        Get.to(() => const ThankyouWidget());
+                      } else {
+                        Get.toNamed(Routes.thankYouPage);
+                      }
+                    }
+                  } else {
+                    Get.toNamed(Routes.welcomePage);
+                  }
+                }
+              }
+
+              // if (screen.screenName == 'Basic Info') {
+              //   Get.toNamed(Routes.processFlowPage);
+              // }
+              // if (screen.screenName == 'Document') {
+              //   Get.toNamed(Routes.reviewDocumentPage);
+              // }
+              // if (screen.screenName == 'Photo') {
+              //   Get.toNamed(Routes.takePhotoPage);
+              // }
+              // if (screen.screenName == 'Question') {
+              //   Get.toNamed(Routes.questionPage);
+              // }
+              // } else {
+              //   Get.toNamed(Routes.welcomePage);
+              // }
+            });
           },
           child: Text(
             name,

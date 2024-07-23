@@ -10,7 +10,12 @@ import '../../routes/app_pages.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../Auth/login.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../Question/question.dart';
+import '../ReviewDocument/review_document.dart';
+import '../TakePhoto/take_photo.dart';
 import '../widgets/comman_appbar.dart';
+import '../widgets/thankyou_widget.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -235,7 +240,34 @@ class _WelcomePageState extends State<WelcomePage> {
                           fontFamily: kCircularStdMedium,
                           fontSize: 14)),
                   onPressed: () {
-                    Get.toNamed(Routes.processFlowPage);
+                    var screenList =
+                        getStorage.read<List<dynamic>>('apiList') ?? [];
+                    var screenIndex = screenList[0];
+                    if (screenIndex == "Basic Info") {
+                      Get.to(() => const ProcessFlowPage(
+                            index: 1,
+                          ));
+                    } else if (screenIndex == "Document") {
+                      Get.to(() => const ReviewDocumentPage(
+                            index: 1,
+                          ));
+                    } else if (screenIndex == "Photo") {
+                      Get.to(() => const TakePhotoPage(
+                            index: 1,
+                          ));
+                    } else if (screenIndex == "Question") {
+                      Get.to(() => const QuestionPage(
+                            index: 1,
+                          ));
+                    } else {
+                      if (getAllProcessflowController
+                              .processflowList[0].successMsgData ==
+                          null) {
+                        Get.to(() => const ThankyouWidget());
+                      } else {
+                        Get.toNamed(Routes.thankYouPage);
+                      }
+                    }
                   },
                 ),
               ),

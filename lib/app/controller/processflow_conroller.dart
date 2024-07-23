@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 
-import '../models/processflow_model.dart';
+import '../models/processflowdata_model.dart';
 import '../services/processflow.dart';
 
 class GetAllProcessflowController extends GetxController {
   var isLoading = true.obs;
-  var processflowList = <GetProcessflowModel>[].obs;
+  var processflowList = <GetProcessFlowDataModel>[].obs;
   ProcessFlowService processFlowService = ProcessFlowService();
 
   @override
