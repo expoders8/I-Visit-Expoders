@@ -82,7 +82,6 @@ class _QuestionPageState extends State<QuestionPage> {
                     text: "back",
                   ));
             } else {
-              getAllProcessflowController.fetchAllProcessFlow();
               Navigator.of(context).pop();
             }
           },
@@ -264,21 +263,6 @@ class _QuestionPageState extends State<QuestionPage> {
                                 Get.toNamed(Routes.thankYouPage);
                               }
                             }
-                            // if (processFlowData!.isDocument == 1) {
-                            //   Get.to(() => ReviewDocumentPage(
-                            //         accessPointData: processFlowData,
-                            //       ));
-                            // } else if (processFlowData.isPhoto == 1) {
-                            //   Get.toNamed(Routes.takePhotoPage);
-                            // } else {
-                            //   if (getAllProcessflowController
-                            //           .processflowList[0].successMsgData ==
-                            //       null) {
-                            //     Get.to(() => const ThankyouWidget());
-                            //   } else {
-                            //     Get.toNamed(Routes.thankYouPage);
-                            //   }
-                            // }
                           }
                         }
                       },

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:ivisit/app/ui/Question/question.dart';
@@ -30,7 +32,6 @@ class _AccessPointPageState extends State<VisitoTypePage> {
       Get.put(GetAllProcessflowController());
   final double width = Get.width;
   List<String> screensName = [];
-  var dynamicList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +108,8 @@ class _AccessPointPageState extends State<VisitoTypePage> {
 
                               if (accessPointData!.isNotEmpty) {
                                 var data = accessPointData[index];
-                                return buildButtonWidget(
-                                    data.name.toString(), data.iD);
+                                return buildButtonWidget(data.name.toString(),
+                                    data.iD, data.authMethod);
                               } else {
                                 return const Center(
                                   child: Text(
@@ -128,11 +129,6 @@ class _AccessPointPageState extends State<VisitoTypePage> {
                     },
                   ),
                 ),
-                // buildButtonWidget("FRONT DESK"),
-                // const SizedBox(height: 25),
-                // buildButtonWidget("SECURITY DESK"),
-                // const SizedBox(height: 25),
-                // buildButtonWidget("DELIVERY LOBBY")
               ],
             ),
           ),
@@ -145,7 +141,7 @@ class _AccessPointPageState extends State<VisitoTypePage> {
     getStorage.write('apiList', list);
   }
 
-  buildButtonWidget(String name, id) {
+  buildButtonWidget(String name, id, authMethod) {
     Size size = MediaQuery.of(context).size;
 
     return Padding(
@@ -163,15 +159,14 @@ class _AccessPointPageState extends State<VisitoTypePage> {
             ),
           ),
           onPressed: () {
-            getStorage.write('visitorName', name);
-            getStorage.write('accessPointId', id);
+            getStorage.write('visitorTypeId', id);
             getAllProcessflowController.fetchAllProcessFlow();
 
             Future.delayed(const Duration(seconds: 2), () async {
               screensName.clear();
               var processScreens =
-                  getAllProcessflowController.processflowList[0].screens;
-              if (processScreens!.isNotEmpty) {
+                  getAllProcessflowController.processflowList[0].screens ?? [];
+              if (processScreens.isNotEmpty) {
                 for (var screen in processScreens) {
                   screensName.add(screen.screenName.toString());
                 }
@@ -179,18 +174,24 @@ class _AccessPointPageState extends State<VisitoTypePage> {
 
               if (processScreens.isEmpty) {
                 if (getAllProcessflowController
-                        .processflowList[0].successMsgData ==
+                        .processflowList[0].welcomeMsgData ==
                     null) {
-                  Get.to(() => const ThankyouWidget());
+                  if (getAllProcessflowController
+                          .processflowList[0].successMsgData ==
+                      null) {
+                    Get.to(() => const ThankyouWidget());
+                  } else {
+                    Get.toNamed(Routes.thankYouPage);
+                  }
                 } else {
-                  Get.toNamed(Routes.thankYouPage);
+                  Get.toNamed(Routes.welcomePage);
                 }
               } else {
                 var checkAuthenticate = screensName.contains("Authenticate");
                 if (checkAuthenticate) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const TapYourCardPage(),
+                      builder: (context) => TapYourCardPage(text: authMethod),
                     ),
                   );
                 } else {
@@ -229,22 +230,6 @@ class _AccessPointPageState extends State<VisitoTypePage> {
                   }
                 }
               }
-
-              // if (screen.screenName == 'Basic Info') {
-              //   Get.toNamed(Routes.processFlowPage);
-              // }
-              // if (screen.screenName == 'Document') {
-              //   Get.toNamed(Routes.reviewDocumentPage);
-              // }
-              // if (screen.screenName == 'Photo') {
-              //   Get.toNamed(Routes.takePhotoPage);
-              // }
-              // if (screen.screenName == 'Question') {
-              //   Get.toNamed(Routes.questionPage);
-              // }
-              // } else {
-              //   Get.toNamed(Routes.welcomePage);
-              // }
             });
           },
           child: Text(

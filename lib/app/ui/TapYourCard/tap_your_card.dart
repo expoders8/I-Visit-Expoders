@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ivisit/app/ui/TapYourCard/thankyou.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:ivisit/config/constant/font_constant.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../Auth/login.dart';
 import '../widgets/ble_utils.dart';
@@ -33,6 +37,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
   String usbStatus = "";
   String activeID = "";
   String rederCode = "";
+  final qrKey = GlobalKey(debugLabel: 'QR');
   String usbDisConnectStatus = "";
   TextEditingController redersCodeController = TextEditingController();
   final GetAllProcessflowController getAllProcessflowController =
@@ -47,6 +52,8 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
   @override
   void initState() {
     _checkPermission();
+    getAllProcessflowController.fetchAllProcessFlow();
+
     _scanSubscription?.cancel();
     super.initState();
   }
@@ -133,297 +140,427 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 25,
-              ),
-              // Text("usbStatus: $usbStatus"),
-              // Text("GetActiveID :$activeID"),
-              // Text("USBDisconnect :$usbDisConnectStatus"),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              // CupertinoButton(
-              //   onPressed: () async {
-              //     var ddd = flutterReactiveBle
-              //         .scanForDevices(
-              //             requireLocationServicesEnabled: false,
-              //             withServices: [],
-              //             scanMode: ScanMode.lowLatency)
-              //         .listen((scanResult) async {
-              //       setState(() {
-              //         usbStatus = scanResult.name;
-              //       });
-              //       debugger();
-              //     }, onDone: () {
-              //       debugPrint("BLE-5 onDone");
-              //       debugPrint("BLE-6");
-              //     }, onError: (e) {}, cancelOnError: true);
-              //   },
-              //   child: Text("Connect"),
-              // ),
-              // CupertinoButton(
-              //   onPressed: () async {
-              //     getAllProcessflowController.fetchAllProcessFlow();
-              //     screensName.clear();
-              //     var processScreens =
-              //         getAllProcessflowController.processflowList[0].screens;
-              //     if (processScreens!.isNotEmpty) {
-              //       for (var screen in processScreens) {
-              //         if (screen.screenName.toString() != "Authenticate") {
-              //           screensName.add(screen.screenName.toString());
-              //         }
-              //       }
-              //     }
-              //     await visiterService
-              //         .getVisiterLog("161373710746373")
-              //         .then((value) async {
-              //       saveListToLocal(screensName);
-              //       var screenIndex = screensName[0];
-              //       if (value) {
-              //         await visiterService
-              //             .getVisitorByBadgeId("161373710746373")
-              //             .then((val) => {
-              //                   if (val)
-              //                     {
-              //                       if (processScreens.isEmpty)
-              //                         {
-              //                           LoaderX.hide(),
-              //                           if (getAllProcessflowController
-              //                                   .processflowList[0]
-              //                                   .successMsgData ==
-              //                               null)
-              //                             {Get.to(() => const ThankyouWidget())}
-              //                           else
-              //                             {Get.toNamed(Routes.thankYouPage)}
-              //                         }
-              //                       else
-              //                         {
-              //                           if (getAllProcessflowController
-              //                                   .processflowList[0]
-              //                                   .welcomeMsgData ==
-              //                               null)
-              //                             {
-              //                               if (screenIndex == "Basic Info")
-              //                                 {
-              //                                   LoaderX.hide(),
-              //                                   Get.offAll(
-              //                                       () => const ProcessFlowPage(
-              //                                             index: 1,
-              //                                             text: "scan",
-              //                                           ))
-              //                                 }
-              //                               else if (screenIndex == "Document")
-              //                                 {
-              //                                   LoaderX.hide(),
-              //                                   Get.offAll(() =>
-              //                                       const ReviewDocumentPage(
-              //                                         index: 1,
-              //                                         text: "scan",
-              //                                       ))
-              //                                 }
-              //                               else if (screenIndex == "Photo")
-              //                                 {
-              //                                   LoaderX.hide(),
-              //                                   Get.offAll(
-              //                                       () => const TakePhotoPage(
-              //                                             index: 1,
-              //                                             text: "scan",
-              //                                           )),
-              //                                 }
-              //                               else if (screenIndex == "Question")
-              //                                 {
-              //                                   LoaderX.hide(),
-              //                                   Get.offAll(
-              //                                       () => const QuestionPage(
-              //                                             index: 1,
-              //                                             text: "scan",
-              //                                           )),
-              //                                 }
-              //                               else
-              //                                 {
-              //                                   LoaderX.hide(),
-              //                                   if (getAllProcessflowController
-              //                                           .processflowList[0]
-              //                                           .successMsgData ==
-              //                                       null)
-              //                                     {
-              //                                       Get.to(() =>
-              //                                           const ThankyouWidget())
-              //                                     }
-              //                                   else
-              //                                     {
-              //                                       Get.toNamed(
-              //                                           Routes.thankYouPage)
-              //                                     }
-              //                                 }
-              //                             }
-              //                           else
-              //                             {
-              //                               LoaderX.hide(),
-              //                               Get.toNamed(Routes.welcomePage)
-              //                             }
-              //                         }
-              //                     }
-              //                 });
-              //       } else {
-              //         setState(() {
-              //           redersCodeController.clear();
-              //           rederCode = "";
-              //         });
-              //       }
-              //     });
-              //   },
-              //   child: Text("DisConnect"),
-              // ),
-              //   ],
-              // ),
-              SizedBox(
-                  height: 280, //350
-                  width: 280, // 350
-                  child: Image.asset("assets/images/rfid2.png")),
-              Container(
-                width: 0,
-                height: 0,
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey), // Border color
-                  borderRadius: BorderRadius.circular(25.0), // Border radius
-                ),
-                child: TextField(
-                  // maxLines: 2,
-                  autofocus: true,
-                  focusNode: FocusNode(),
-                  controller: redersCodeController,
-                  onChanged: (value) {
-                    setState(() {
-                      rederCode = redersCodeController.text;
-                    });
-                    if (_timer?.isActive ?? false) _timer?.cancel();
-                    _timer = Timer(const Duration(seconds: 2), () async {
-                      String badgeID = redersCodeController.text.trim();
-                      LoaderX.show(context, 60.0, 60.0);
-                      getAllProcessflowController.fetchAllProcessFlow();
-                      screensName.clear();
-                      var processScreens = getAllProcessflowController
-                          .processflowList[0].screens;
-                      for (var screen in processScreens!) {
-                        if (screen.screenName.toString() != "Authenticate") {
-                          screensName.add(screen.screenName.toString());
-                        }
-                      }
-                      await visiterService
-                          .getVisiterLog(badgeID)
-                          .then((value) async {
-                        saveListToLocal(screensName);
-                        var screenIndex = screensName[0];
-                        if (value) {
-                          await visiterService
-                              .getVisitorByBadgeId(badgeID)
-                              .then((val) => {
-                                    if (val)
-                                      {
-                                        if (processScreens.isEmpty)
-                                          {
-                                            LoaderX.hide(),
-                                            if (getAllProcessflowController
-                                                    .processflowList[0]
-                                                    .successMsgData ==
-                                                null)
-                                              {
-                                                Get.to(() =>
-                                                    const ThankyouWidget())
-                                              }
-                                            else
-                                              {Get.toNamed(Routes.thankYouPage)}
-                                          }
-                                        else
-                                          {
-                                            if (getAllProcessflowController
-                                                    .processflowList[0]
-                                                    .welcomeMsgData ==
-                                                null)
-                                              {
-                                                if (screenIndex == "Basic Info")
-                                                  {
-                                                    LoaderX.hide(),
-                                                    Get.offAll(() =>
-                                                        const ProcessFlowPage(
-                                                          index: 1,
-                                                          text: "scan",
-                                                        ))
-                                                  }
-                                                else if (screenIndex ==
-                                                    "Document")
-                                                  {
-                                                    LoaderX.hide(),
-                                                    Get.offAll(() =>
-                                                        const ReviewDocumentPage(
-                                                          index: 1,
-                                                          text: "scan",
-                                                        ))
-                                                  }
-                                                else if (screenIndex == "Photo")
-                                                  {
-                                                    LoaderX.hide(),
-                                                    Get.offAll(() =>
-                                                        const TakePhotoPage(
-                                                          index: 1,
-                                                          text: "scan",
-                                                        )),
-                                                  }
-                                                else if (screenIndex ==
-                                                    "Question")
-                                                  {
-                                                    LoaderX.hide(),
-                                                    Get.offAll(() =>
-                                                        const QuestionPage(
-                                                          index: 1,
-                                                          text: "scan",
-                                                        )),
-                                                  }
-                                                else
-                                                  {
-                                                    LoaderX.hide(),
-                                                    if (getAllProcessflowController
-                                                            .processflowList[0]
-                                                            .successMsgData ==
-                                                        null)
-                                                      {
-                                                        Get.to(() =>
-                                                            const ThankyouWidget())
-                                                      }
-                                                    else
-                                                      {
-                                                        Get.toNamed(
-                                                            Routes.thankYouPage)
-                                                      }
-                                                  }
-                                              }
-                                            else
-                                              {
-                                                LoaderX.hide(),
-                                                Get.toNamed(Routes.welcomePage)
-                                              }
-                                          }
-                                      }
-                                  });
-                        } else {
+              widget.text == "QRCode"
+                  ? Container()
+                  : const SizedBox(
+                      height: 25,
+                    ),
+              widget.text == "QRCode"
+                  ? SizedBox(
+                      width: Get.width - 400,
+                      height: Get.height - 120,
+                      child: QRView(
+                        key: qrKey,
+                        onQRViewCreated: onQRViewCreated,
+                        overlay: QrScannerOverlayShape(
+                            borderColor: kWhiteColor,
+                            borderRadius: 14,
+                            borderLength: 30,
+                            borderWidth: 5,
+                            cutOutHeight: Get.width > 500 ? 150 : 260,
+                            cutOutWidth: Get.width > 500 ? 190 : 260),
+                      ),
+                    )
+                  : SizedBox(
+                      height: 280, //350
+                      width: 280, // 350
+                      child: Image.asset("assets/images/rfid2.png")),
+              widget.text == "RFID"
+                  ? Container(
+                      width: 0,
+                      height: 0,
+                      padding:
+                          const EdgeInsets.only(left: 15, right: 15, top: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey), // Border color
+                        borderRadius:
+                            BorderRadius.circular(25.0), // Border radius
+                      ),
+                      child: TextField(
+                        // maxLines: 2,
+                        autofocus: true,
+                        focusNode: FocusNode(),
+                        controller: redersCodeController,
+                        onChanged: (value) {
                           setState(() {
-                            redersCodeController.clear();
-                            rederCode = "";
+                            rederCode = redersCodeController.text;
                           });
-                        }
-                      });
-                    });
-                  },
-                ),
-              ),
+                          if (_timer?.isActive ?? false) _timer?.cancel();
+                          _timer = Timer(const Duration(seconds: 2), () async {
+                            String badgeID = redersCodeController.text.trim();
+                            LoaderX.show(context, 60.0, 60.0);
+                            screensName.clear();
+                            var processScreens = getAllProcessflowController
+                                .processflowList[0].screens;
+                            for (var screen in processScreens!) {
+                              if (screen.screenName.toString() !=
+                                  "Authenticate") {
+                                screensName.add(screen.screenName.toString());
+                              }
+                            }
+                            await visiterService
+                                .getVisiterLog(badgeID)
+                                .then((value) async {
+                              saveListToLocal(screensName);
+                              var screenIndex = screensName[0];
+                              if (value) {
+                                await visiterService
+                                    .getVisitorByBadgeId(badgeID)
+                                    .then((val) => {
+                                          if (val)
+                                            {
+                                              if (processScreens.isEmpty)
+                                                {
+                                                  LoaderX.hide(),
+                                                  if (getAllProcessflowController
+                                                          .processflowList[0]
+                                                          .successMsgData ==
+                                                      null)
+                                                    {
+                                                      Get.to(() =>
+                                                          const ThankyouWidget())
+                                                    }
+                                                  else
+                                                    {
+                                                      Get.toNamed(
+                                                          Routes.thankYouPage)
+                                                    }
+                                                }
+                                              else
+                                                {
+                                                  if (getAllProcessflowController
+                                                          .processflowList[0]
+                                                          .welcomeMsgData ==
+                                                      null)
+                                                    {
+                                                      if (screenIndex ==
+                                                          "Basic Info")
+                                                        {
+                                                          LoaderX.hide(),
+                                                          Get.offAll(() =>
+                                                              const ProcessFlowPage(
+                                                                index: 1,
+                                                                text: "scan",
+                                                              ))
+                                                        }
+                                                      else if (screenIndex ==
+                                                          "Document")
+                                                        {
+                                                          LoaderX.hide(),
+                                                          Get.offAll(() =>
+                                                              const ReviewDocumentPage(
+                                                                index: 1,
+                                                                text: "scan",
+                                                              ))
+                                                        }
+                                                      else if (screenIndex ==
+                                                          "Photo")
+                                                        {
+                                                          LoaderX.hide(),
+                                                          Get.offAll(() =>
+                                                              const TakePhotoPage(
+                                                                index: 1,
+                                                                text: "scan",
+                                                              )),
+                                                        }
+                                                      else if (screenIndex ==
+                                                          "Question")
+                                                        {
+                                                          LoaderX.hide(),
+                                                          Get.offAll(() =>
+                                                              const QuestionPage(
+                                                                index: 1,
+                                                                text: "scan",
+                                                              )),
+                                                        }
+                                                      else
+                                                        {
+                                                          LoaderX.hide(),
+                                                          if (getAllProcessflowController
+                                                                  .processflowList[
+                                                                      0]
+                                                                  .successMsgData ==
+                                                              null)
+                                                            {
+                                                              Get.to(() =>
+                                                                  const ThankyouWidget())
+                                                            }
+                                                          else
+                                                            {
+                                                              Get.toNamed(Routes
+                                                                  .thankYouPage)
+                                                            }
+                                                        }
+                                                    }
+                                                  else
+                                                    {
+                                                      LoaderX.hide(),
+                                                      Get.toNamed(
+                                                          Routes.welcomePage)
+                                                    }
+                                                }
+                                            }
+                                        });
+                              } else {
+                                setState(() {
+                                  redersCodeController.clear();
+                                  rederCode = "";
+                                });
+                              }
+                            });
+                          });
+                        },
+                      ),
+                    )
+                  : widget.text == "RFIDNone"
+                      ? Column(
+                          children: [
+                            Container(
+                              width: 0,
+                              height: 0,
+                              padding: const EdgeInsets.only(
+                                  left: 15, right: 15, top: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.grey), // Border color
+                                borderRadius: BorderRadius.circular(
+                                    25.0), // Border radius
+                              ),
+                              child: TextField(
+                                // maxLines: 2,
+                                autofocus: true,
+                                focusNode: FocusNode(),
+                                controller: redersCodeController,
+                                onChanged: (value) {
+                                  setState(() {
+                                    rederCode = redersCodeController.text;
+                                  });
+                                  if (_timer?.isActive ?? false)
+                                    _timer?.cancel();
+                                  _timer = Timer(const Duration(seconds: 2),
+                                      () async {
+                                    String badgeID =
+                                        redersCodeController.text.trim();
+                                    LoaderX.show(context, 60.0, 60.0);
+                                    getAllProcessflowController
+                                        .fetchAllProcessFlow();
+                                    screensName.clear();
+                                    Future.delayed(const Duration(seconds: 3),
+                                        () async {
+                                      var processScreens =
+                                          getAllProcessflowController
+                                              .processflowList[0].screens;
+                                      for (var screen in processScreens!) {
+                                        if (screen.screenName.toString() !=
+                                            "Authenticate") {
+                                          screensName.add(
+                                              screen.screenName.toString());
+                                        }
+                                      }
+                                      await visiterService
+                                          .getVisiterLog(badgeID)
+                                          .then((value) async {
+                                        saveListToLocal(screensName);
+                                        var screenIndex = screensName[0];
+                                        if (value) {
+                                          await visiterService
+                                              .getVisitorByBadgeId(badgeID)
+                                              .then((val) => {
+                                                    if (val)
+                                                      {
+                                                        if (processScreens
+                                                            .isEmpty)
+                                                          {
+                                                            LoaderX.hide(),
+                                                            if (getAllProcessflowController
+                                                                    .processflowList[
+                                                                        0]
+                                                                    .successMsgData ==
+                                                                null)
+                                                              {
+                                                                Get.to(() =>
+                                                                    const ThankyouWidget())
+                                                              }
+                                                            else
+                                                              {
+                                                                Get.toNamed(Routes
+                                                                    .thankYouPage)
+                                                              }
+                                                          }
+                                                        else
+                                                          {
+                                                            if (getAllProcessflowController
+                                                                    .processflowList[
+                                                                        0]
+                                                                    .welcomeMsgData ==
+                                                                null)
+                                                              {
+                                                                if (screenIndex ==
+                                                                    "Basic Info")
+                                                                  {
+                                                                    LoaderX
+                                                                        .hide(),
+                                                                    Get.offAll(
+                                                                        () =>
+                                                                            const ProcessFlowPage(
+                                                                              index: 1,
+                                                                              text: "scan",
+                                                                            ))
+                                                                  }
+                                                                else if (screenIndex ==
+                                                                    "Document")
+                                                                  {
+                                                                    LoaderX
+                                                                        .hide(),
+                                                                    Get.offAll(
+                                                                        () =>
+                                                                            const ReviewDocumentPage(
+                                                                              index: 1,
+                                                                              text: "scan",
+                                                                            ))
+                                                                  }
+                                                                else if (screenIndex ==
+                                                                    "Photo")
+                                                                  {
+                                                                    LoaderX
+                                                                        .hide(),
+                                                                    Get.offAll(
+                                                                        () =>
+                                                                            const TakePhotoPage(
+                                                                              index: 1,
+                                                                              text: "scan",
+                                                                            )),
+                                                                  }
+                                                                else if (screenIndex ==
+                                                                    "Question")
+                                                                  {
+                                                                    LoaderX
+                                                                        .hide(),
+                                                                    Get.offAll(
+                                                                        () =>
+                                                                            const QuestionPage(
+                                                                              index: 1,
+                                                                              text: "scan",
+                                                                            )),
+                                                                  }
+                                                                else
+                                                                  {
+                                                                    LoaderX
+                                                                        .hide(),
+                                                                    if (getAllProcessflowController
+                                                                            .processflowList[
+                                                                                0]
+                                                                            .successMsgData ==
+                                                                        null)
+                                                                      {
+                                                                        Get.to(() =>
+                                                                            const ThankyouWidget())
+                                                                      }
+                                                                    else
+                                                                      {
+                                                                        Get.toNamed(
+                                                                            Routes.thankYouPage)
+                                                                      }
+                                                                  }
+                                                              }
+                                                            else
+                                                              {
+                                                                LoaderX.hide(),
+                                                                Get.toNamed(Routes
+                                                                    .welcomePage)
+                                                              }
+                                                          }
+                                                      }
+                                                  });
+                                        } else {
+                                          setState(() {
+                                            redersCodeController.clear();
+                                            rederCode = "";
+                                          });
+                                        }
+                                      });
+                                    });
+                                  });
+                                },
+                              ),
+                            ),
+                            const Text(
+                              "You don't have RFID? ",
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontFamily: kCircularStdNormal),
+                            ),
+                            const SizedBox(height: 5),
+                            SizedBox(
+                              width: 200,
+                              child: CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: kPrimaryColor,
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Continue",
+                                        style: TextStyle(color: kWhiteColor),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Icon(Icons.arrow_right_alt_rounded)
+                                    ],
+                                  ),
+                                  onPressed: skipScreen),
+                            ),
+                          ],
+                        )
+                      : widget.text == "QRNone"
+                          ? Column(
+                              children: [
+                                const Text(
+                                  "You don't have QR?",
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontFamily: kCircularStdNormal),
+                                ),
+                                const SizedBox(height: 5),
+                                SizedBox(
+                                  width: 200,
+                                  child: CupertinoButton(
+                                    padding: EdgeInsets.zero,
+                                    borderRadius: BorderRadius.circular(25),
+                                    color: kPrimaryColor,
+                                    child: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Continue",
+                                          style: TextStyle(color: kWhiteColor),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Icon(Icons.arrow_right_alt_rounded)
+                                      ],
+                                    ),
+                                    onPressed: skipScreen,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
               const SizedBox(height: 20),
               Text(rederCode),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void onQRViewCreated(QRViewController controller) {
+    controller.scannedDataStream.listen(
+      (scanData) {
+        controller.dispose();
+        skipScreen();
+      },
     );
   }
 
@@ -466,6 +603,56 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
         ],
       ),
     );
+  }
+
+  skipScreen() {
+    screensName.clear();
+    var processScreens = getAllProcessflowController.processflowList[0].screens;
+    if (processScreens!.isNotEmpty) {
+      for (var screen in processScreens) {
+        screensName.add(screen.screenName.toString());
+      }
+    }
+    if (processScreens.isEmpty) {
+      if (getAllProcessflowController.processflowList[0].successMsgData ==
+          null) {
+        Get.to(() => const ThankyouWidget());
+      } else {
+        Get.toNamed(Routes.thankYouPage);
+      }
+    } else {
+      saveListToLocal(screensName);
+      var screenIndex = screensName[0];
+      if (getAllProcessflowController.processflowList[0].welcomeMsgData ==
+          null) {
+        if (screenIndex == "Basic Info") {
+          Get.to(() => const ProcessFlowPage(
+                index: 1,
+              ));
+        } else if (screenIndex == "Document") {
+          Get.to(() => const ReviewDocumentPage(
+                index: 1,
+              ));
+        } else if (screenIndex == "Photo") {
+          Get.to(() => const TakePhotoPage(
+                index: 1,
+              ));
+        } else if (screenIndex == "Question") {
+          Get.to(() => const QuestionPage(
+                index: 1,
+              ));
+        } else {
+          if (getAllProcessflowController.processflowList[0].successMsgData ==
+              null) {
+            Get.to(() => const ThankyouWidget());
+          } else {
+            Get.toNamed(Routes.thankYouPage);
+          }
+        }
+      } else {
+        Get.toNamed(Routes.welcomePage);
+      }
+    }
   }
 
   static const MethodChannel platform = MethodChannel('com.tnetic.ivisit');

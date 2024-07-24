@@ -28,19 +28,27 @@ class _ThankyouRFIEADSPageState extends State<ThankyouWidget> {
   }
 
   autoNavigateScreen() {
-    visiterService
-        .saveVisit(getAllProcessflowController
-            .processflowList[0].processFlowData!.visitorTypeID
-            .toString())
-        .then((value) => {
-              if (value)
-                {
-                  Future.delayed(const Duration(seconds: 3), () {
-                    LoaderX.hide();
-                    Get.offAll(() => const AccessPointPage());
-                  })
-                }
-            });
+    if (getAllProcessflowController.processflowList[0].processFlowData !=
+        null) {
+      visiterService
+          .saveVisit(getAllProcessflowController
+              .processflowList[0].processFlowData!.visitorTypeID
+              .toString())
+          .then((value) => {
+                if (value)
+                  {
+                    Future.delayed(const Duration(seconds: 3), () {
+                      LoaderX.hide();
+                      Get.offAll(() => const AccessPointPage());
+                    })
+                  }
+              });
+    } else {
+      Future.delayed(const Duration(seconds: 3), () {
+        LoaderX.hide();
+        Get.offAll(() => const AccessPointPage());
+      });
+    }
   }
 
   @override

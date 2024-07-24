@@ -42,7 +42,6 @@ class _ProcessFlowPageState extends State<ProcessFlowPage> {
   List<String> list = <String>['One', 'Two', 'Three', 'Four'];
   List<String> purpose = <String>['One', 'Two', 'Three', 'Four'];
   String dropdownValue = "One";
-  String purposeValue = "One";
   bool isFormSubmitted = false;
 
   String accessPoint = "";
@@ -324,24 +323,6 @@ class _ProcessFlowPageState extends State<ProcessFlowPage> {
                                         Get.toNamed(Routes.thankYouPage);
                                       }
                                     }
-                                    // if (accessPointData.isQuestion == 1) {
-                                    //   Get.to(() => QuestionPage(
-                                    //       accessPointData: accessPointData));
-                                    // } else if (accessPointData.isDocument ==
-                                    //     1) {
-                                    //   Get.toNamed(Routes.reviewDocumentPage);
-                                    // } else if (accessPointData.isPhoto == 1) {
-                                    //   Get.toNamed(Routes.takePhotoPage);
-                                    // } else {
-                                    //   if (getAllProcessflowController
-                                    //           .processflowList[0]
-                                    //           .successMsgData ==
-                                    //       null) {
-                                    //     Get.to(() => const ThankyouWidget());
-                                    //   } else {
-                                    //     Get.toNamed(Routes.thankYouPage);
-                                    //   }
-                                    // }
                                   }
                                 });
                               },

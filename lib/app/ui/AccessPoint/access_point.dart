@@ -20,11 +20,7 @@ class AccessPointPage extends StatefulWidget {
 class _AccessPointPageState extends State<AccessPointPage> {
   final GetAllAccessPointController getAllAccessPointController =
       Get.put(GetAllAccessPointController());
-  final GetAllProcessflowController getAllProcessflowController =
-      Get.put(GetAllProcessflowController());
   final double width = Get.width;
-  List<String> screensName = [];
-  var dynamicList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -182,11 +178,6 @@ class _AccessPointPageState extends State<AccessPointPage> {
                     },
                   ),
                 ),
-                // buildButtonWidget("FRONT DESK"),
-                // const SizedBox(height: 25),
-                // buildButtonWidget("SECURITY DESK"),
-                // const SizedBox(height: 25),
-                // buildButtonWidget("DELIVERY LOBBY")
               ],
             ),
           ),

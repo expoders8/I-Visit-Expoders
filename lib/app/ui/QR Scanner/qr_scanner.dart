@@ -88,10 +88,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
                     fontSize: 16)),
             const SizedBox(height: 10),
             CupertinoButton(
-              onPressed: () {
-                getAllProcessflowController.fetchAllProcessFlow();
-                Get.toNamed(Routes.processFlowPage);
-              },
+              onPressed: () {},
               child: const Text("Scan Below",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -128,8 +125,6 @@ class _QrScannerPageState extends State<QrScannerPage> {
     controller.scannedDataStream.listen(
       (scanData) {
         controller.dispose();
-        getAllProcessflowController.fetchAllProcessFlow();
-        Get.toNamed(Routes.processFlowPage);
       },
     );
   }

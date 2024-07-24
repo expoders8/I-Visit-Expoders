@@ -10,20 +10,20 @@ class ProcessFlowService {
   Future<GetProcessFlowDataModel> getProcessFlow() async {
     var data = getStorage.read('user');
     var accessPointId = getStorage.read('accessPointId');
+    var visitorTypeId = getStorage.read('visitorTypeId');
     var getUserData = jsonDecode(data);
     var orgId = getUserData['OrganizationID'] ?? "";
     try {
       var response = await http.get(
         Uri.parse(
-            '$baseUrl/api/processflow/getProcessFlowData?OrgId=$orgId&&AccessPointId=$accessPointId'),
+            '$baseUrl/api/processflow/getProcessFlowData?OrgId=$orgId&&AccessPointId=$accessPointId&&VisitorTypeId=$visitorTypeId'),
       );
-      if (response.statusCode == 200) {
-        var accesspointdata = jsonDecode(response.body);
-        return GetProcessFlowDataModel.fromJson(accesspointdata);
+      var decodedData = jsonDecode(response.body);
+      if (decodedData['success']) {
+        return GetProcessFlowDataModel.fromJson(decodedData);
       } else {
         LoaderX.hide();
-        SnackbarUtils.showErrorSnackbar("Server Error",
-            "Error while Accesspoint, Please try after some time.");
+        SnackbarUtils.showErrorSnackbar(decodedData['error'], "");
         return Future.error("Server Error");
       }
     } catch (e) {

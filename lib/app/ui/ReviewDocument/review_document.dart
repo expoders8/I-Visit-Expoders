@@ -226,17 +226,6 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                             Get.toNamed(Routes.thankYouPage);
                           }
                         }
-                        // if (widget.accessPointData!.isPhoto == 1) {
-                        //   Get.toNamed(Routes.takePhotoPage);
-                        // } else {
-                        //   if (getAllProcessflowController
-                        //           .processflowList[0].successMsgData ==
-                        //       null) {
-                        //     Get.to(() => const ThankyouWidget());
-                        //   } else {
-                        //     Get.toNamed(Routes.thankYouPage);
-                        //   }
-                        // }
                       }
                     } else {
                       // Show a message to the user indicating that the signature is required

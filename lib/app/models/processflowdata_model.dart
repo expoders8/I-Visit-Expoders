@@ -1,24 +1,27 @@
 class GetProcessFlowDataModel {
+  bool? success;
   ProcessFlowData? processFlowData;
   List<QuestionsData>? questionsData;
   WelcomeMsgData? welcomeMsgData;
-  WelcomeMsgData? successMsgData;
-
+  SuccessMsgData? successMsgData;
   List<Screens>? screens;
 
-  GetProcessFlowDataModel(
-      {this.processFlowData,
-      this.questionsData,
-      this.welcomeMsgData,
-      this.successMsgData,
-      this.screens});
+  GetProcessFlowDataModel({
+    this.success,
+    this.processFlowData,
+    this.questionsData,
+    this.welcomeMsgData,
+    this.successMsgData,
+    this.screens,
+  });
 
   GetProcessFlowDataModel.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
     processFlowData = json['processFlowData'] != null
         ? ProcessFlowData.fromJson(json['processFlowData'])
         : null;
     if (json['questionsData'] != null) {
-      questionsData = <QuestionsData>[];
+      questionsData = [];
       json['questionsData'].forEach((v) {
         questionsData!.add(QuestionsData.fromJson(v));
       });
@@ -27,10 +30,10 @@ class GetProcessFlowDataModel {
         ? WelcomeMsgData.fromJson(json['welcomeMsgData'])
         : null;
     successMsgData = json['successMsgData'] != null
-        ? WelcomeMsgData.fromJson(json['successMsgData'])
+        ? SuccessMsgData.fromJson(json['successMsgData'])
         : null;
     if (json['screens'] != null) {
-      screens = <Screens>[];
+      screens = [];
       json['screens'].forEach((v) {
         screens!.add(Screens.fromJson(v));
       });
@@ -39,6 +42,7 @@ class GetProcessFlowDataModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
     if (processFlowData != null) {
       data['processFlowData'] = processFlowData!.toJson();
     }
@@ -134,14 +138,21 @@ class QuestionsData {
 
 class WelcomeMsgData {
   int? iD;
+  int? locationID;
   int? accessPointID;
   String? text;
   String? imageFile;
 
-  WelcomeMsgData({this.iD, this.accessPointID, this.text, this.imageFile});
+  WelcomeMsgData(
+      {this.iD,
+      this.locationID,
+      this.accessPointID,
+      this.text,
+      this.imageFile});
 
   WelcomeMsgData.fromJson(Map<String, dynamic> json) {
     iD = json['ID'];
+    locationID = json['LocationID'];
     accessPointID = json['AccessPointID'];
     text = json['Text'];
     imageFile = json['ImageFile'];
@@ -150,6 +161,40 @@ class WelcomeMsgData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['ID'] = iD;
+    data['LocationID'] = locationID;
+    data['AccessPointID'] = accessPointID;
+    data['Text'] = text;
+    data['ImageFile'] = imageFile;
+    return data;
+  }
+}
+
+class SuccessMsgData {
+  int? iD;
+  int? locationID;
+  int? accessPointID;
+  String? text;
+  String? imageFile;
+
+  SuccessMsgData(
+      {this.iD,
+      this.locationID,
+      this.accessPointID,
+      this.text,
+      this.imageFile});
+
+  SuccessMsgData.fromJson(Map<String, dynamic> json) {
+    iD = json['ID'];
+    locationID = json['LocationID'];
+    accessPointID = json['AccessPointID'];
+    text = json['Text'];
+    imageFile = json['ImageFile'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ID'] = iD;
+    data['LocationID'] = locationID;
     data['AccessPointID'] = accessPointID;
     data['Text'] = text;
     data['ImageFile'] = imageFile;

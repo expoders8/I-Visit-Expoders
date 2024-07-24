@@ -144,13 +144,6 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
                             Get.toNamed(Routes.thankYouPage);
                           }
                         }
-                        // if (getAllProcessflowController
-                        //         .processflowList[0].successMsgData ==
-                        //     null) {
-                        //   Get.to(() => const ThankyouWidget());
-                        // } else {
-                        //   Get.toNamed(Routes.thankYouPage);
-                        // }
                       },
                     )
                   : Stack(
