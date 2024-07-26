@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:developer';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ivisit/app/ui/TapYourCard/thankyou.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:ivisit/config/constant/font_constant.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:ivisit/app/ui/TapYourCard/thankyou.dart';
+import 'package:ivisit/config/constant/font_constant.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import '../Auth/login.dart';
 import '../widgets/ble_utils.dart';
@@ -497,6 +496,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                   padding: EdgeInsets.zero,
                                   borderRadius: BorderRadius.circular(25),
                                   color: kPrimaryColor,
+                                  onPressed: skipScreen,
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -507,8 +507,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                       SizedBox(width: 5),
                                       Icon(Icons.arrow_right_alt_rounded)
                                     ],
-                                  ),
-                                  onPressed: skipScreen),
+                                  )),
                             ),
                           ],
                         )
@@ -528,6 +527,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                     padding: EdgeInsets.zero,
                                     borderRadius: BorderRadius.circular(25),
                                     color: kPrimaryColor,
+                                    onPressed: skipScreen,
                                     child: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -540,7 +540,6 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                         Icon(Icons.arrow_right_alt_rounded)
                                       ],
                                     ),
-                                    onPressed: skipScreen,
                                   ),
                                 ),
                               ],

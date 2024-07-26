@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../Auth/login.dart';
-import '../../routes/app_pages.dart';
 import '../widgets/comman_appbar.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
