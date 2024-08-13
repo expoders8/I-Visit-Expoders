@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
 import '../Auth/login.dart';
+import '../CompanyInfo/company_info.dart';
 import '../Question/question.dart';
 import '../../routes/app_pages.dart';
 import '../TakePhoto/take_photo.dart';
@@ -242,7 +243,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     var screenList =
                         getStorage.read<List<dynamic>>('apiList') ?? [];
                     var screenIndex = screenList[0];
-                    if (screenIndex == "Basic Info") {
+                    if (screenIndex == "Personal Info") {
                       Get.to(() => const ProcessFlowPage(
                             index: 1,
                           ));
@@ -258,6 +259,8 @@ class _WelcomePageState extends State<WelcomePage> {
                       Get.to(() => const QuestionPage(
                             index: 1,
                           ));
+                    } else if (screenIndex == "Company Info") {
+                      Get.to(() => const CompanyInfoPage(index: 1));
                     } else {
                       if (getAllProcessflowController
                               .processflowList[0].successMsgData ==

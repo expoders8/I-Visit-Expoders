@@ -6,7 +6,7 @@ import 'package:ivisit/app/ui/Question/question.dart';
 
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
-import '../CompanyInfo/company_info.dart';
+import '../ProcessFlow/process_flow.dart';
 import '../TakePhoto/take_photo.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
@@ -19,16 +19,16 @@ import '../../controller/processflow_conroller.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 
-class ProcessFlowPage extends StatefulWidget {
+class CompanyInfoPage extends StatefulWidget {
   final String? text;
   final int? index;
-  const ProcessFlowPage({super.key, this.text, this.index});
+  const CompanyInfoPage({super.key, this.text, this.index});
 
   @override
-  State<ProcessFlowPage> createState() => _ProcessFlowPageState();
+  State<CompanyInfoPage> createState() => _ProcessFlowPageState();
 }
 
-class _ProcessFlowPageState extends State<ProcessFlowPage> {
+class _ProcessFlowPageState extends State<CompanyInfoPage> {
   final visitorController = Get.put(VisiterController());
   TextEditingController emailController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
@@ -147,112 +147,88 @@ class _ProcessFlowPageState extends State<ProcessFlowPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isName ==
+                                      .screens![0].fields!.isCompany ==
                                   0
                               ? Container()
-                              : SizedBox(
-                                  width: Get.width > 500 ? 600 : Get.width,
-                                  child: IntrinsicHeight(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Flexible(
-                                          flex: 5,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              builsTitleWidget("Firstname"),
-                                              const SizedBox(height: 5.0),
-                                              CustomTextFormField(
-                                                hintText: 'First Name',
-                                                maxLines: 1,
-                                                ctrl: firstNameController,
-                                                name: "firstname",
-                                                formSubmitted: isFormSubmitted,
-                                                validationMsg:
-                                                    'Firstname is Required',
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          flex: 5,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              builsTitleWidget("Lastname"),
-                                              const SizedBox(height: 5.0),
-                                              CustomTextFormField(
-                                                hintText: 'Last Name',
-                                                maxLines: 1,
-                                                ctrl: lastNameController,
-                                                name: "lastname",
-                                                formSubmitted: isFormSubmitted,
-                                                validationMsg:
-                                                    'Lastname is Required',
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                          const SizedBox(height: 8.0),
+                              : builsTitleWidget("Company"),
                           getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isEmail ==
-                                  0
-                              ? Container()
-                              : builsTitleWidget("Email"),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isEmail ==
+                                      .screens![0].fields!.isCompany ==
                                   0
                               ? Container()
                               : const SizedBox(height: 5.0),
                           getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isEmail ==
+                                      .screens![0].fields!.isCompany ==
                                   0
                               ? Container()
                               : SizedBox(
                                   width: Get.width > 500 ? 600 : Get.width,
                                   child: CustomTextFormField(
-                                    hintText: 'Email',
+                                    hintText: 'Company Name',
                                     maxLines: 1,
-                                    ctrl: emailController,
-                                    name: "email",
+                                    ctrl: companyController,
+                                    name: "Companyname",
                                     formSubmitted: isFormSubmitted,
-                                    validationMsg: 'Email is Required',
+                                    validationMsg: 'Company Name is Required',
                                   ),
                                 ),
-                          const SizedBox(height: 8.0),
                           getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isPhone ==
+                                      .screens![0].fields!.isCompany ==
                                   0
                               ? Container()
-                              : builsTitleWidget("Phone number"),
+                              : const SizedBox(height: 8.0),
                           getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isPhone ==
+                                      .screens![0].fields!.isTitle ==
+                                  0
+                              ? Container()
+                              : builsTitleWidget("Title"),
+                          getAllProcessflowController.processflowList[0]
+                                      .screens![0].fields!.isTitle ==
                                   0
                               ? Container()
                               : const SizedBox(height: 5.0),
                           getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isPhone ==
+                                      .screens![0].fields!.isTitle ==
                                   0
                               ? Container()
                               : SizedBox(
                                   width: Get.width > 500 ? 600 : Get.width,
                                   child: CustomTextFormField(
-                                    hintText: 'Phone number',
+                                    hintText: 'Title',
                                     maxLines: 1,
-                                    ctrl: phoneNumberController,
-                                    keyboardType: TextInputType.phone,
-                                    name: "phoneno",
+                                    ctrl: titleController,
+                                    name: "title",
                                     formSubmitted: isFormSubmitted,
-                                    validationMsg: 'Phone number is Required',
+                                    validationMsg: 'Title is Required',
+                                  ),
+                                ),
+                          getAllProcessflowController.processflowList[0]
+                                      .screens![0].fields!.isTitle ==
+                                  0
+                              ? Container()
+                              : const SizedBox(height: 8.0),
+                          getAllProcessflowController.processflowList[0]
+                                      .screens![0].fields!.isHost ==
+                                  0
+                              ? Container()
+                              : builsTitleWidget("Host"),
+                          getAllProcessflowController.processflowList[0]
+                                      .screens![0].fields!.isHost ==
+                                  0
+                              ? Container()
+                              : const SizedBox(height: 5.0),
+                          getAllProcessflowController.processflowList[0]
+                                      .screens![0].fields!.isHost ==
+                                  0
+                              ? Container()
+                              : SizedBox(
+                                  width: Get.width > 500 ? 600 : Get.width,
+                                  child: CustomTextFormField(
+                                    hintText: 'Host',
+                                    maxLines: 1,
+                                    ctrl: hostController,
+                                    name: "host",
+                                    formSubmitted: isFormSubmitted,
+                                    validationMsg: 'Host is Required',
                                   ),
                                 ),
                           const SizedBox(height: 20),
@@ -278,12 +254,10 @@ class _ProcessFlowPageState extends State<ProcessFlowPage> {
                                     () async {
                                   if (_processFormKey.currentState!
                                       .validate()) {
-                                    visitorController.saveProcessFlow(
-                                      firstNameController.text,
-                                      lastNameController.text,
-                                      emailController.text,
-                                      phoneNumberController.text,
-                                    );
+                                    visitorController.saveCompanyInfo(
+                                        companyController.text,
+                                        titleController.text,
+                                        hostController.text);
                                     String selectedItem = getItemAtIndex();
                                     var screenIndex = widget.index! + 1;
 

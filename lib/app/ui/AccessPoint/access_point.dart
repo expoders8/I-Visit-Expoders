@@ -2,12 +2,21 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../controller/processflow_conroller.dart';
+import '../../controller/visitor_types_controller.dart';
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
 import '../../../config/constant/constant.dart';
 import '../../../config/constant/font_constant.dart';
 import '../../../config/constant/color_constant.dart';
 import '../../controller/accesspoint_controller.dart';
+import '../CompanyInfo/company_info.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../Question/question.dart';
+import '../ReviewDocument/review_document.dart';
+import '../TakePhoto/take_photo.dart';
+import '../TapYourCard/tap_your_card.dart';
+import '../widgets/thankyou_widget.dart';
 
 class AccessPointPage extends StatefulWidget {
   const AccessPointPage({super.key});
@@ -19,7 +28,24 @@ class AccessPointPage extends StatefulWidget {
 class _AccessPointPageState extends State<AccessPointPage> {
   final GetAllAccessPointController getAllAccessPointController =
       Get.put(GetAllAccessPointController());
+  final GetAllVisitorTypesController getAllVisitorTypesController =
+      Get.put(GetAllVisitorTypesController());
+  final GetAllProcessflowController getAllProcessflowController =
+      Get.put(GetAllProcessflowController());
   final double width = Get.width;
+  List<String> screensName = [];
+  bool checkData = false;
+  @override
+  void initState() {
+    super.initState();
+    ever(getAllAccessPointController.accessPointList, (_) {
+      setState(() {
+        checkData = getAllAccessPointController.accessPointList.isNotEmpty &&
+            getAllAccessPointController
+                .accessPointList[0].accesspoints!.isNotEmpty;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,14 +134,16 @@ class _AccessPointPageState extends State<AccessPointPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 15),
-                const Text(
-                    "Tap below on the Access Point this device \nwill be located in.",
-                    style: TextStyle(
-                        color: kPrimaryColor,
-                        fontFamily: kCircularStdMedium,
-                        fontSize: 15),
-                    textAlign: TextAlign.center),
+                SizedBox(height: checkData ? 15 : 0),
+                checkData
+                    ? const Text(
+                        "Tap below on the Access Point this device \nwill be located in.",
+                        style: TextStyle(
+                            color: kPrimaryColor,
+                            fontFamily: kCircularStdMedium,
+                            fontSize: 15),
+                        textAlign: TextAlign.center)
+                    : Container(),
                 const SizedBox(height: 15),
                 Expanded(
                   child: Obx(
@@ -136,7 +164,7 @@ class _AccessPointPageState extends State<AccessPointPage> {
                             child: SizedBox(
                               width: Get.width - 80,
                               child: const Text(
-                                "No AccessPoint",
+                                "There are NO active Access Points available. Please consult with your i-Visits Administrator.",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: kPrimaryColor,
@@ -146,32 +174,51 @@ class _AccessPointPageState extends State<AccessPointPage> {
                             ),
                           );
                         } else {
-                          return ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: getAllAccessPointController
-                                .accessPointList[0].accesspoints!.length,
-                            itemBuilder: (context, index) {
-                              var accessPointData = getAllAccessPointController
-                                  .accessPointList[0].accesspoints;
+                          if (getAllAccessPointController
+                              .accessPointList[0].accesspoints!.isEmpty) {
+                            return Center(
+                              child: SizedBox(
+                                width: Get.width - 80,
+                                child: const Text(
+                                  "There are NO active Access Points available. Please consult with your i-Visits Administrator.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontSize: 15,
+                                      fontFamily: kCircularStdMedium),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: getAllAccessPointController
+                                  .accessPointList[0].accesspoints!.length,
+                              itemBuilder: (context, index) {
+                                var accessPointData =
+                                    getAllAccessPointController
+                                        .accessPointList[0].accesspoints;
 
-                              if (accessPointData!.isNotEmpty) {
-                                var data = accessPointData[index];
-                                return buildButtonWidget(
-                                    data.name.toString(), data.iD);
-                              } else {
-                                return const Center(
-                                  child: Text(
-                                    "No AccessPoint",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: kPrimaryColor,
-                                        fontSize: 15,
-                                        fontFamily: kCircularStdMedium),
-                                  ),
-                                );
-                              }
-                            },
-                          );
+                                if (accessPointData!.isNotEmpty) {
+                                  var data = accessPointData[index];
+
+                                  return buildButtonWidget(
+                                      data.name.toString(), data.iD);
+                                } else {
+                                  return const Center(
+                                    child: Text(
+                                      "There are NO active Access Points available. Please consult with your i-Visits Administrator.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: kPrimaryColor,
+                                          fontSize: 15,
+                                          fontFamily: kCircularStdMedium),
+                                    ),
+                                  );
+                                }
+                              },
+                            );
+                          }
                         }
                       }
                     },
@@ -191,35 +238,121 @@ class _AccessPointPageState extends State<AccessPointPage> {
 
   buildButtonWidget(String name, id) {
     Size size = MediaQuery.of(context).size;
-
+    checkData = true;
     return Padding(
       padding:
           const EdgeInsets.only(left: 18.0, right: 18.0, top: 10, bottom: 25),
       child: SizedBox(
-        width: size.width > 500 ? 100 : Get.width - 50,
-        height: 70,
-        child: OutlinedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+          width: size.width > 500 ? 100 : Get.width - 50,
+          height: 70,
+          child: OutlinedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
               ),
             ),
-          ),
-          onPressed: () {
-            getStorage.write('accessPoint', name);
-            getStorage.write('accessPointId', id);
-            Get.toNamed(Routes.visitoTypePage);
-          },
-          child: Text(
-            name,
-            style: const TextStyle(
-                color: kPrimaryColor,
-                fontSize: 15,
-                fontFamily: kCircularStdMedium),
-          ),
-        ),
-      ),
+            onPressed: () {
+              getStorage.write('accessPoint', name);
+              getStorage.write('accessPointId', id);
+              getAllVisitorTypesController.fetchAllVisitorTypes();
+              Future.delayed(const Duration(seconds: 2), () async {
+                var visitorTypes =
+                    getAllVisitorTypesController.visitorList[0].visitortypes;
+                if (visitorTypes!.length > 1) {
+                  Get.toNamed(Routes.visitoTypePage);
+                } else {
+                  getStorage.write('visitorTypeId', visitorTypes[0].iD);
+                  getAllProcessflowController.fetchAllProcessFlow();
+
+                  Future.delayed(const Duration(seconds: 2), () async {
+                    screensName.clear();
+                    var processScreens = getAllProcessflowController
+                            .processflowList[0].screens ??
+                        [];
+                    if (processScreens.isNotEmpty) {
+                      for (var screen in processScreens) {
+                        screensName.add(screen.screenName.toString());
+                      }
+                    }
+
+                    if (processScreens.isEmpty) {
+                      if (getAllProcessflowController
+                              .processflowList[0].welcomeMsgData ==
+                          null) {
+                        if (getAllProcessflowController
+                                .processflowList[0].successMsgData ==
+                            null) {
+                          Get.to(() => const ThankyouWidget());
+                        } else {
+                          Get.toNamed(Routes.thankYouPage);
+                        }
+                      } else {
+                        Get.toNamed(Routes.welcomePage);
+                      }
+                    } else {
+                      var checkAuthenticate =
+                          screensName.contains("Authenticate");
+                      if (checkAuthenticate) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => TapYourCardPage(
+                                text: visitorTypes[0].authMethod),
+                          ),
+                        );
+                      } else {
+                        saveListToLocal(screensName);
+                        var screenIndex = screensName[0];
+                        if (getAllProcessflowController
+                                .processflowList[0].welcomeMsgData ==
+                            null) {
+                          if (screenIndex == "Personal Info") {
+                            Get.to(() => const ProcessFlowPage(
+                                  index: 1,
+                                ));
+                          } else if (screenIndex == "Document") {
+                            Get.to(() => const ReviewDocumentPage(
+                                  index: 1,
+                                ));
+                          } else if (screenIndex == "Photo") {
+                            Get.to(() => const TakePhotoPage(
+                                  index: 1,
+                                ));
+                          } else if (screenIndex == "Question") {
+                            Get.to(() => const QuestionPage(
+                                  index: 1,
+                                ));
+                          } else if (screenIndex == "Company Info") {
+                            Get.to(() => const CompanyInfoPage(
+                                  index: 1,
+                                ));
+                          } else {
+                            if (getAllProcessflowController
+                                    .processflowList[0].successMsgData ==
+                                null) {
+                              Get.to(() => const ThankyouWidget());
+                            } else {
+                              Get.toNamed(Routes.thankYouPage);
+                            }
+                          }
+                        } else {
+                          Get.toNamed(Routes.welcomePage);
+                        }
+                      }
+                    }
+                  });
+                }
+              });
+            },
+            child: Text(
+              name,
+              style: const TextStyle(
+                  color: kPrimaryColor,
+                  fontSize: 15,
+                  fontFamily: kCircularStdMedium),
+            ),
+          )),
     );
   }
 

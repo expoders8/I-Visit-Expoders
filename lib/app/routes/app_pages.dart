@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../ui/Auth/login.dart';
+import '../ui/CompanyInfo/company_info.dart';
 import '../ui/Question/question.dart';
 import '../ui/SplasScreen/splas.dart';
 import '../ui/ThankYou/thank_you.dart';
@@ -34,6 +35,10 @@ class AppPages {
     GetPage(
       name: _Paths.accessPointPage,
       page: () => const AccessPointPage(),
+    ),
+    GetPage(
+      name: _Paths.companyInfoPage,
+      page: () => const CompanyInfoPage(),
     ),
     GetPage(
       name: _Paths.visitoTypePage,

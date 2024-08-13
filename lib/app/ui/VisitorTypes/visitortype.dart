@@ -6,6 +6,7 @@ import 'package:ivisit/app/ui/TapYourCard/tap_your_card.dart';
 
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
+import '../CompanyInfo/company_info.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
 import '../ProcessFlow/process_flow.dart';
@@ -61,7 +62,7 @@ class _AccessPointPageState extends State<VisitoTypePage> {
               children: [
                 const SizedBox(height: 15),
                 const Text(
-                    "Tap below on the visitor Types this device \nwill be located in.",
+                    "TAP on the button that best describes your purpose \nfor today's visit.",
                     style: TextStyle(
                         color: kPrimaryColor,
                         fontFamily: kCircularStdMedium,
@@ -198,7 +199,7 @@ class _AccessPointPageState extends State<VisitoTypePage> {
                   if (getAllProcessflowController
                           .processflowList[0].welcomeMsgData ==
                       null) {
-                    if (screenIndex == "Basic Info") {
+                    if (screenIndex == "Personal Info") {
                       Get.to(() => const ProcessFlowPage(
                             index: 1,
                           ));
@@ -214,6 +215,8 @@ class _AccessPointPageState extends State<VisitoTypePage> {
                       Get.to(() => const QuestionPage(
                             index: 1,
                           ));
+                    } else if (screenIndex == "Company Info") {
+                      Get.to(() => const CompanyInfoPage(index: 1));
                     } else {
                       if (getAllProcessflowController
                               .processflowList[0].successMsgData ==

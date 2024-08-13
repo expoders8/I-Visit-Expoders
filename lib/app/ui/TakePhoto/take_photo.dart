@@ -6,6 +6,7 @@ import 'package:face_camera/face_camera.dart';
 
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
+import '../CompanyInfo/company_info.dart';
 import '../Question/question.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
@@ -125,7 +126,7 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
                         String selectedItem = getItemAtIndex();
                         var screenIndex = widget.index! + 1;
 
-                        if (selectedItem == "Basic Info") {
+                        if (selectedItem == "Personal Info") {
                           Get.to(() => ProcessFlowPage(
                                 index: screenIndex,
                               ));
@@ -135,6 +136,8 @@ class _TakePhotoPageState extends State<TakePhotoPage> {
                           Get.to(() => TakePhotoPage(index: screenIndex));
                         } else if (selectedItem == "Question") {
                           Get.to(() => QuestionPage(index: screenIndex));
+                        } else if (selectedItem == "Company Info") {
+                          Get.to(() => CompanyInfoPage(index: screenIndex));
                         } else {
                           if (getAllProcessflowController
                                   .processflowList[0].successMsgData ==

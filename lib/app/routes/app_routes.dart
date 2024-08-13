@@ -9,6 +9,7 @@ abstract class Routes {
   static const questionPage = _Paths.questionPage;
   static const thankYouPage = _Paths.thankYouPage;
   static const takePhotoPage = _Paths.takePhotoPage;
+  static const companyInfoPage = _Paths.companyInfoPage;
   static const qrScannerPage = _Paths.qrScannerPage;
   static const visitoTypePage = _Paths.visitoTypePage;
   static const accessPointPage = _Paths.accessPointPage;
@@ -26,6 +27,7 @@ abstract class _Paths {
   static const questionPage = '/questionPage';
   static const thankYouPage = '/thankYouPage';
   static const takePhotoPage = '/takePhotoPage';
+  static const companyInfoPage = '/companyInfoPage';
   static const qrScannerPage = '/qrScannerPage';
   static const visitoTypePage = '/visitoTypePage';
   static const accessPointPage = '/accessPointPage';

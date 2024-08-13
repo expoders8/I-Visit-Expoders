@@ -9,6 +9,7 @@ import 'package:ivisit/config/constant/font_constant.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import '../Auth/login.dart';
+import '../CompanyInfo/company_info.dart';
 import '../widgets/ble_utils.dart';
 import '../Question/question.dart';
 import '../../routes/app_pages.dart';
@@ -233,7 +234,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                                       null)
                                                     {
                                                       if (screenIndex ==
-                                                          "Basic Info")
+                                                          "Personal Info")
                                                         {
                                                           LoaderX.hide(),
                                                           Get.offAll(() =>
@@ -271,6 +272,13 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                                                 index: 1,
                                                                 text: "scan",
                                                               )),
+                                                        }
+                                                      else if (screenIndex ==
+                                                          "Company Info")
+                                                        {
+                                                          Get.to(() =>
+                                                              const CompanyInfoPage(
+                                                                  index: 1))
                                                         }
                                                       else
                                                         {
@@ -395,7 +403,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                                                 null)
                                                               {
                                                                 if (screenIndex ==
-                                                                    "Basic Info")
+                                                                    "Personal Info")
                                                                   {
                                                                     LoaderX
                                                                         .hide(),
@@ -441,6 +449,16 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                                                               index: 1,
                                                                               text: "scan",
                                                                             )),
+                                                                  }
+                                                                else if (screenIndex ==
+                                                                    "Company Info")
+                                                                  {
+                                                                    LoaderX
+                                                                        .hide(),
+                                                                    Get.to(() =>
+                                                                        const CompanyInfoPage(
+                                                                            index:
+                                                                                1))
                                                                   }
                                                                 else
                                                                   {
@@ -624,7 +642,7 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
       var screenIndex = screensName[0];
       if (getAllProcessflowController.processflowList[0].welcomeMsgData ==
           null) {
-        if (screenIndex == "Basic Info") {
+        if (screenIndex == "Personal Info") {
           Get.to(() => const ProcessFlowPage(
                 index: 1,
               ));
@@ -640,6 +658,8 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
           Get.to(() => const QuestionPage(
                 index: 1,
               ));
+        } else if (screenIndex == "Company Info") {
+          Get.to(() => const CompanyInfoPage(index: 1));
         } else {
           if (getAllProcessflowController.processflowList[0].successMsgData ==
               null) {

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:signature/signature.dart';
 
 import '../Auth/login.dart';
+import '../CompanyInfo/company_info.dart';
 import '../Question/question.dart';
 import '../../routes/app_pages.dart';
 import '../TakePhoto/take_photo.dart';
@@ -207,7 +208,7 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                         String selectedItem = getItemAtIndex();
                         var screenIndex = widget.index! + 1;
 
-                        if (selectedItem == "Basic Info") {
+                        if (selectedItem == "Personal Info") {
                           Get.to(() => ProcessFlowPage(
                                 index: screenIndex,
                               ));
@@ -217,6 +218,8 @@ class _ReviewDocumentPageState extends State<ReviewDocumentPage> {
                           Get.to(() => TakePhotoPage(index: screenIndex));
                         } else if (selectedItem == "Question") {
                           Get.to(() => QuestionPage(index: screenIndex));
+                        } else if (selectedItem == "Company Info") {
+                          Get.to(() => CompanyInfoPage(index: screenIndex));
                         } else {
                           if (getAllProcessflowController
                                   .processflowList[0].successMsgData ==

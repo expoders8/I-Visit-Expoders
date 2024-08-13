@@ -12,14 +12,17 @@ class VisiterController extends GetxController {
   RxString saveImagePath = "".obs;
   RxList saveQue = [].obs;
 
-  void saveProcessFlow(String firstname, String lastName, String email,
-      String title, String company, String phoneNumber, String host) {
+  void saveProcessFlow(
+      String firstname, String lastName, String email, String phoneNumber) {
     saveFirstname.value = firstname;
     saveLastname.value = lastName;
     saveEmail.value = email;
-    saveTitle.value = title;
-    saveCompany.value = company;
     savephoneNumber.value = phoneNumber;
+  }
+
+  void saveCompanyInfo(String company, String title, String host) {
+    saveCompany.value = company;
+    saveTitle.value = title;
     saveHost.value = host;
   }
 
