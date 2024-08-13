@@ -5,13 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
 import '../Auth/login.dart';
-import '../CompanyInfo/company_info.dart';
 import '../Question/question.dart';
 import '../../routes/app_pages.dart';
 import '../TakePhoto/take_photo.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
 import '../ProcessFlow/process_flow.dart';
+import '../CompanyInfo/company_info.dart';
 import '../../../config/constant/constant.dart';
 import '../ReviewDocument/review_document.dart';
 import '../../controller/processflow_conroller.dart';

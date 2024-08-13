@@ -6,9 +6,9 @@ import 'package:ivisit/app/ui/TapYourCard/tap_your_card.dart';
 
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
-import '../CompanyInfo/company_info.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
+import '../CompanyInfo/company_info.dart';
 import '../ProcessFlow/process_flow.dart';
 import '../ReviewDocument/review_document.dart';
 import '../../../config/constant/constant.dart';

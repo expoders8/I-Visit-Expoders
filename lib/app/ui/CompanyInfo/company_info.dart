@@ -6,10 +6,10 @@ import 'package:ivisit/app/ui/Question/question.dart';
 
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
-import '../ProcessFlow/process_flow.dart';
 import '../TakePhoto/take_photo.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
+import '../ProcessFlow/process_flow.dart';
 import '../widgets/custom_textfield.dart';
 import '../TapYourCard/tap_your_card.dart';
 import '../ReviewDocument/review_document.dart';
@@ -43,13 +43,16 @@ class _ProcessFlowPageState extends State<CompanyInfoPage> {
   List<String> list = <String>['One', 'Two', 'Three', 'Four'];
   List<String> purpose = <String>['One', 'Two', 'Three', 'Four'];
   String dropdownValue = "One";
-  bool isFormSubmitted = false;
+  bool isFormSubmitted = false, isLoder = true;
+  List<String> screensName = [];
+  int isPurposeOfVisit = 0, isCompany = 0, isPersonToVisir = 0;
 
   String accessPoint = "";
   @override
   void initState() {
     autoValueCheck();
     getItemAtIndex();
+    getAllProcessflowController.fetchAllProcessFlow();
     var data = getStorage.read('accessPoint') ?? "";
     setState(() {
       accessPoint = data;
@@ -67,6 +70,24 @@ class _ProcessFlowPageState extends State<CompanyInfoPage> {
         phoneNumberController.text = visitorController.savephoneNumber.value;
       });
     }
+
+    Future.delayed(const Duration(seconds: 2), () async {
+      screensName.clear();
+      var processScreens =
+          getAllProcessflowController.processflowList[0].screens ?? [];
+      if (processScreens.isNotEmpty) {
+        for (var screen in processScreens) {
+          if (screen.screenName == "Company Info") {
+            setState(() {
+              isCompany = screen.fields!.isCompany!;
+              isPurposeOfVisit = screen.fields!.isTitle!;
+              isPersonToVisir = screen.fields!.isHost!;
+              isLoder = false;
+            });
+          }
+        }
+      }
+    });
   }
 
   String getItemAtIndex() {
@@ -140,162 +161,160 @@ class _ProcessFlowPageState extends State<CompanyInfoPage> {
                     scale: 1.5,
                   ),
                   const SizedBox(height: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isCompany ==
-                                  0
-                              ? Container()
-                              : builsTitleWidget("Company"),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isCompany ==
-                                  0
-                              ? Container()
-                              : const SizedBox(height: 5.0),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isCompany ==
-                                  0
-                              ? Container()
-                              : SizedBox(
-                                  width: Get.width > 500 ? 600 : Get.width,
-                                  child: CustomTextFormField(
-                                    hintText: 'Company Name',
-                                    maxLines: 1,
-                                    ctrl: companyController,
-                                    name: "Companyname",
-                                    formSubmitted: isFormSubmitted,
-                                    validationMsg: 'Company Name is Required',
-                                  ),
-                                ),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isCompany ==
-                                  0
-                              ? Container()
-                              : const SizedBox(height: 8.0),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isTitle ==
-                                  0
-                              ? Container()
-                              : builsTitleWidget("Title"),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isTitle ==
-                                  0
-                              ? Container()
-                              : const SizedBox(height: 5.0),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isTitle ==
-                                  0
-                              ? Container()
-                              : SizedBox(
-                                  width: Get.width > 500 ? 600 : Get.width,
-                                  child: CustomTextFormField(
-                                    hintText: 'Title',
-                                    maxLines: 1,
-                                    ctrl: titleController,
-                                    name: "title",
-                                    formSubmitted: isFormSubmitted,
-                                    validationMsg: 'Title is Required',
-                                  ),
-                                ),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isTitle ==
-                                  0
-                              ? Container()
-                              : const SizedBox(height: 8.0),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isHost ==
-                                  0
-                              ? Container()
-                              : builsTitleWidget("Host"),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isHost ==
-                                  0
-                              ? Container()
-                              : const SizedBox(height: 5.0),
-                          getAllProcessflowController.processflowList[0]
-                                      .screens![0].fields!.isHost ==
-                                  0
-                              ? Container()
-                              : SizedBox(
-                                  width: Get.width > 500 ? 600 : Get.width,
-                                  child: CustomTextFormField(
-                                    hintText: 'Host',
-                                    maxLines: 1,
-                                    ctrl: hostController,
-                                    name: "host",
-                                    formSubmitted: isFormSubmitted,
-                                    validationMsg: 'Host is Required',
-                                  ),
-                                ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            width: Get.width > 500 ? 600 : Get.width - 20,
-                            child: CupertinoButton(
-                              borderRadius: BorderRadius.circular(25),
-                              color: kPrimaryColor,
-                              child: const Text("Next",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: kWhiteColor,
-                                      fontFamily: kCircularStdMedium,
-                                      fontSize: 14)),
-                              onPressed: () {
-                                setState(() {
-                                  isFormSubmitted = true;
-                                });
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                Future.delayed(
-                                    const Duration(milliseconds: 100),
-                                    () async {
-                                  if (_processFormKey.currentState!
-                                      .validate()) {
-                                    visitorController.saveCompanyInfo(
-                                        companyController.text,
-                                        titleController.text,
-                                        hostController.text);
-                                    String selectedItem = getItemAtIndex();
-                                    var screenIndex = widget.index! + 1;
-
-                                    if (selectedItem == "Personal Info") {
-                                      Get.to(() => ProcessFlowPage(
-                                            index: screenIndex,
-                                          ));
-                                    } else if (selectedItem == "Document") {
-                                      Get.to(() => ReviewDocumentPage(
-                                          index: screenIndex));
-                                    } else if (selectedItem == "Photo") {
-                                      Get.to(() =>
-                                          TakePhotoPage(index: screenIndex));
-                                    } else if (selectedItem == "Question") {
-                                      Get.to(() =>
-                                          QuestionPage(index: screenIndex));
-                                    } else if (selectedItem == "Company Info") {
-                                      Get.to(() =>
-                                          CompanyInfoPage(index: screenIndex));
-                                    } else {
-                                      if (getAllProcessflowController
-                                              .processflowList[0]
-                                              .successMsgData ==
-                                          null) {
-                                        Get.to(() => const ThankyouWidget());
-                                      } else {
-                                        Get.toNamed(Routes.thankYouPage);
-                                      }
-                                    }
-                                  }
-                                });
-                              },
+                  isLoder
+                      ? Container(
+                          color: kBackGroundColor,
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: kSelectedIconColor,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  )
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                isCompany == 0
+                                    ? Container()
+                                    : builsTitleWidget("Company Name"),
+                                isCompany == 0
+                                    ? Container()
+                                    : const SizedBox(height: 5.0),
+                                isCompany == 0
+                                    ? Container()
+                                    : SizedBox(
+                                        width:
+                                            Get.width > 500 ? 600 : Get.width,
+                                        child: CustomTextFormField(
+                                          hintText: 'Company Name',
+                                          maxLines: 1,
+                                          ctrl: companyController,
+                                          name: "Companyname",
+                                          formSubmitted: isFormSubmitted,
+                                          validationMsg:
+                                              'Company Name is Required',
+                                        ),
+                                      ),
+                                isCompany == 0
+                                    ? Container()
+                                    : const SizedBox(height: 8.0),
+                                isPurposeOfVisit == 0
+                                    ? Container()
+                                    : builsTitleWidget("Purpose Of Visit"),
+                                isPurposeOfVisit == 0
+                                    ? Container()
+                                    : const SizedBox(height: 5.0),
+                                isPurposeOfVisit == 0
+                                    ? Container()
+                                    : SizedBox(
+                                        width:
+                                            Get.width > 500 ? 600 : Get.width,
+                                        child: CustomTextFormField(
+                                          hintText: 'Purpose Of Visit',
+                                          maxLines: 1,
+                                          ctrl: titleController,
+                                          name: "title",
+                                          formSubmitted: isFormSubmitted,
+                                          validationMsg:
+                                              'Purpose Of Visit is Required',
+                                        ),
+                                      ),
+                                isPurposeOfVisit == 0
+                                    ? Container()
+                                    : const SizedBox(height: 8.0),
+                                isPersonToVisir == 0
+                                    ? Container()
+                                    : builsTitleWidget("Person To Visit"),
+                                isPersonToVisir == 0
+                                    ? Container()
+                                    : const SizedBox(height: 5.0),
+                                isPersonToVisir == 0
+                                    ? Container()
+                                    : SizedBox(
+                                        width:
+                                            Get.width > 500 ? 600 : Get.width,
+                                        child: CustomTextFormField(
+                                          hintText: 'Person To Visit',
+                                          maxLines: 1,
+                                          ctrl: hostController,
+                                          name: "host",
+                                          formSubmitted: isFormSubmitted,
+                                          validationMsg:
+                                              'Person To Visit is Required',
+                                        ),
+                                      ),
+                                const SizedBox(height: 20),
+                                SizedBox(
+                                  width: Get.width > 500 ? 600 : Get.width - 20,
+                                  child: CupertinoButton(
+                                    borderRadius: BorderRadius.circular(25),
+                                    color: kPrimaryColor,
+                                    child: const Text("Next",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: kWhiteColor,
+                                            fontFamily: kCircularStdMedium,
+                                            fontSize: 14)),
+                                    onPressed: () {
+                                      setState(() {
+                                        isFormSubmitted = true;
+                                      });
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
+                                      Future.delayed(
+                                          const Duration(milliseconds: 100),
+                                          () async {
+                                        if (_processFormKey.currentState!
+                                            .validate()) {
+                                          visitorController.saveCompanyInfo(
+                                              companyController.text,
+                                              titleController.text,
+                                              hostController.text);
+                                          String selectedItem =
+                                              getItemAtIndex();
+                                          var screenIndex = widget.index! + 1;
+
+                                          if (selectedItem == "Personal Info") {
+                                            Get.to(() => ProcessFlowPage(
+                                                  index: screenIndex,
+                                                ));
+                                          } else if (selectedItem ==
+                                              "Document") {
+                                            Get.to(() => ReviewDocumentPage(
+                                                index: screenIndex));
+                                          } else if (selectedItem == "Photo") {
+                                            Get.to(() => TakePhotoPage(
+                                                index: screenIndex));
+                                          } else if (selectedItem ==
+                                              "Question") {
+                                            Get.to(() => QuestionPage(
+                                                index: screenIndex));
+                                          } else if (selectedItem ==
+                                              "Company Info") {
+                                            Get.to(() => CompanyInfoPage(
+                                                index: screenIndex));
+                                          } else {
+                                            if (getAllProcessflowController
+                                                    .processflowList[0]
+                                                    .successMsgData ==
+                                                null) {
+                                              Get.to(
+                                                  () => const ThankyouWidget());
+                                            } else {
+                                              Get.toNamed(Routes.thankYouPage);
+                                            }
+                                          }
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
                 ],
               ),
             ),

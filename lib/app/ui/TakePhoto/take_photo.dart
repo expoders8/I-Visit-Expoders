@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:face_camera/face_camera.dart';
 
 import '../Auth/login.dart';
-import '../../routes/app_pages.dart';
-import '../CompanyInfo/company_info.dart';
 import '../Question/question.dart';
+import '../../routes/app_pages.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
+import '../CompanyInfo/company_info.dart';
 import '../ProcessFlow/process_flow.dart';
 import '../TapYourCard/tap_your_card.dart';
 import '../ReviewDocument/review_document.dart';

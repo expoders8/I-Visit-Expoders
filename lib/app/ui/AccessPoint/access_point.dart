@@ -2,21 +2,21 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../controller/processflow_conroller.dart';
-import '../../controller/visitor_types_controller.dart';
 import '../Auth/login.dart';
-import '../../routes/app_pages.dart';
-import '../../../config/constant/constant.dart';
-import '../../../config/constant/font_constant.dart';
-import '../../../config/constant/color_constant.dart';
-import '../../controller/accesspoint_controller.dart';
-import '../CompanyInfo/company_info.dart';
-import '../ProcessFlow/process_flow.dart';
 import '../Question/question.dart';
-import '../ReviewDocument/review_document.dart';
+import '../../routes/app_pages.dart';
 import '../TakePhoto/take_photo.dart';
-import '../TapYourCard/tap_your_card.dart';
 import '../widgets/thankyou_widget.dart';
+import '../ProcessFlow/process_flow.dart';
+import '../CompanyInfo/company_info.dart';
+import '../TapYourCard/tap_your_card.dart';
+import '../../../config/constant/constant.dart';
+import '../ReviewDocument/review_document.dart';
+import '../../../config/constant/font_constant.dart';
+import '../../controller/processflow_conroller.dart';
+import '../../controller/accesspoint_controller.dart';
+import '../../../config/constant/color_constant.dart';
+import '../../controller/visitor_types_controller.dart';
 
 class AccessPointPage extends StatefulWidget {
   const AccessPointPage({super.key});

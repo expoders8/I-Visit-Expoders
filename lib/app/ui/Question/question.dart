@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 
 import '../Auth/login.dart';
 import '../../routes/app_pages.dart';
-import '../CompanyInfo/company_info.dart';
 import '../TakePhoto/take_photo.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
+import '../CompanyInfo/company_info.dart';
 import '../ProcessFlow/process_flow.dart';
 import '../TapYourCard/tap_your_card.dart';
 import '../../models/processflow_model.dart';

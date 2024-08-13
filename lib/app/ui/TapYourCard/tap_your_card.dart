@@ -9,13 +9,13 @@ import 'package:ivisit/config/constant/font_constant.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import '../Auth/login.dart';
-import '../CompanyInfo/company_info.dart';
 import '../widgets/ble_utils.dart';
 import '../Question/question.dart';
 import '../../routes/app_pages.dart';
 import '../TakePhoto/take_photo.dart';
 import '../widgets/comman_appbar.dart';
 import '../widgets/thankyou_widget.dart';
+import '../CompanyInfo/company_info.dart';
 import '../AccessPoint/access_point.dart';
 import '../ProcessFlow/process_flow.dart';
 import '../../services/visiter_service.dart';
@@ -278,7 +278,9 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                                         {
                                                           Get.to(() =>
                                                               const CompanyInfoPage(
-                                                                  index: 1))
+                                                                index: 1,
+                                                                text: "scan",
+                                                              ))
                                                         }
                                                       else
                                                         {
@@ -457,8 +459,11 @@ class _TapYourCardPageState extends State<TapYourCardPage> {
                                                                         .hide(),
                                                                     Get.to(() =>
                                                                         const CompanyInfoPage(
-                                                                            index:
-                                                                                1))
+                                                                          index:
+                                                                              1,
+                                                                          text:
+                                                                              "scan",
+                                                                        ))
                                                                   }
                                                                 else
                                                                   {
